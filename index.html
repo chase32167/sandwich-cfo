@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Сэндвич-панели ЦФО — Аналитика рынка</title>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --bg: #0d0f12;
+    --bg2: #13161b;
+    --bg3: #1a1e25;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --accent: #3b82f6;
+    --accent2: #10b981;
+    --accent3: #f59e0b;
+    --text: #e8eaf0;
+    --text2: #8b92a5;
+    --text3: #555d6e;
+    --font: 'Geologica', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; }
+
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px; position: sticky; top: 0; z-index: 100;
+    background: rgba(13,15,18,0.92); backdrop-filter: blur(12px);
+  }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-icon { width: 28px; height: 28px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; }
+  .logo-text { font-size: 14px; font-weight: 500; letter-spacing: -0.01em; }
+  .logo-sub { font-size: 11px; color: var(--text3); font-family: var(--mono); margin-left: 4px; }
+  .tag { font-size: 11px; font-family: var(--mono); color: var(--text3); background: var(--bg3); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border); }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent2); display: inline-block; margin-right: 5px; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  .container { max-width: 1300px; margin: 0 auto; padding: 2rem; }
+
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+  .metric { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; position: relative; overflow: hidden; transition: border-color 0.2s; animation: fadeIn 0.4s ease both; }
+  .metric:nth-child(1){animation-delay:0.05s} .metric:nth-child(2){animation-delay:0.1s} .metric:nth-child(3){animation-delay:0.15s} .metric:nth-child(4){animation-delay:0.2s}
+  .metric:hover { border-color: var(--border2); }
+  .metric::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+  .metric.blue::before{background:var(--accent)} .metric.green::before{background:var(--accent2)} .metric.amber::before{background:var(--accent3)} .metric.gray::before{background:var(--text3)}
+  .metric-label { font-size: 11px; color: var(--text3); font-family: var(--mono); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .metric-value { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; }
+  .metric-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+  .tabs { display: flex; gap: 2px; margin-bottom: 1.5rem; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 4px; width: fit-content; }
+  .tab { padding: 7px 18px; font-size: 13px; font-family: var(--font); cursor: pointer; border: none; background: transparent; color: var(--text2); border-radius: 7px; transition: all 0.15s; }
+  .tab:hover { color: var(--text); }
+  .tab.active { background: var(--bg3); color: var(--text); font-weight: 500; border: 1px solid var(--border2); }
+  .section { display: none; } .section.active { display: block; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; transition: border-color 0.2s; }
+  .card:hover { border-color: var(--border2); }
+  .card-title { font-size: 12px; font-family: var(--mono); color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 10px 12px; font-size: 11px; font-family: var(--mono); color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid var(--border); font-weight: 400; }
+  td { padding: 11px 12px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .company-name { font-weight: 500; color: var(--accent); text-decoration: none; }
+  .company-name:hover { text-decoration: underline; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-family: var(--mono); font-weight: 500; }
+  .badge-blue { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.25); }
+  .badge-green { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
+  .badge-amber { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); }
+  .badge-gray { background: rgba(255,255,255,0.06); color: var(--text2); border: 1px solid var(--border2); }
+  .badge-red { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.25); }
+  .stars { color: var(--accent3); font-size: 12px; letter-spacing: 1px; }
+
+  .filter-row { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; align-items: center; }
+  .filter-label { font-size: 11px; color: var(--text3); font-family: var(--mono); }
+  .filter-row select { font-size: 12px; font-family: var(--mono); padding: 6px 10px; background: var(--bg3); border: 1px solid var(--border2); border-radius: 7px; color: var(--text2); cursor: pointer; outline: none; }
+  .filter-row select:focus { border-color: var(--accent); color: var(--text); }
+
+  .type-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; position: relative; overflow: hidden; }
+  .type-card.rec { border-color: rgba(59,130,246,0.35); }
+  .type-card-accent { position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .type-card h3 { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .type-card .price { font-size: 22px; font-weight: 700; font-family: var(--mono); margin: 10px 0; }
+  .type-card .price span { font-size: 13px; font-weight: 400; color: var(--text3); }
+  .prop-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .prop-row:last-child { border-bottom: none; }
+  .prop-label { color: var(--text3); }
+  .rec-badge { position: absolute; top: 14px; right: 12px; font-size: 10px; font-family: var(--mono); background: rgba(59,130,246,0.2); color: #60a5fa; padding: 2px 7px; border-radius: 4px; border: 1px solid rgba(59,130,246,0.3); }
+
+  .chart-wrap { position: relative; width: 100%; }
+
+  .agent-wrap { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .agent-header { padding: 14px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .agent-avatar { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg, var(--accent), #6366f1); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .agent-info h3 { font-size: 13px; font-weight: 500; }
+  .agent-info p { font-size: 11px; color: var(--text3); font-family: var(--mono); }
+  .chat-area { height: 380px; overflow-y: auto; padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
+  .chat-area::-webkit-scrollbar { width: 4px; }
+  .chat-area::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+  .msg { max-width: 82%; padding: 10px 14px; border-radius: 10px; font-size: 13px; line-height: 1.65; }
+  .msg.user { background: var(--accent); color: #fff; align-self: flex-end; border-bottom-right-radius: 3px; }
+  .msg.ai { background: var(--bg3); border: 1px solid var(--border2); color: var(--text); align-self: flex-start; border-bottom-left-radius: 3px; }
+  .msg-role { font-size: 10px; font-family: var(--mono); opacity: 0.6; margin-bottom: 3px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text3); animation: bounce 1.2s infinite; }
+  .dot:nth-child(2){animation-delay:0.2s} .dot:nth-child(3){animation-delay:0.4s}
+  @keyframes bounce { 0%,80%,100%{transform:scale(0.8);opacity:0.5} 40%{transform:scale(1.2);opacity:1} }
+  .chat-footer { padding: 12px 20px; border-top: 1px solid var(--border); }
+  .quick-btns { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .qbtn { font-size: 11px; font-family: var(--mono); padding: 4px 10px; background: var(--bg3); border: 1px solid var(--border2); border-radius: 5px; color: var(--text3); cursor: pointer; transition: all 0.15s; }
+  .qbtn:hover { color: var(--text); border-color: var(--accent); }
+  .input-row { display: flex; gap: 8px; }
+  .input-row input { flex: 1; background: var(--bg3); border: 1px solid var(--border2); border-radius: 8px; padding: 9px 14px; color: var(--text); font-size: 13px; font-family: var(--font); outline: none; }
+  .input-row input:focus { border-color: var(--accent); }
+  .input-row input::placeholder { color: var(--text3); }
+  .send-btn { padding: 9px 18px; background: var(--accent); border: none; border-radius: 8px; color: #fff; font-size: 13px; font-family: var(--font); cursor: pointer; font-weight: 500; transition: opacity 0.15s; }
+  .send-btn:hover { opacity: 0.85; }
+  .send-btn:disabled { opacity: 0.4; cursor: default; }
+
+  footer { border-top: 1px solid var(--border); padding: 1.5rem 2rem; text-align: center; font-size: 11px; color: var(--text3); font-family: var(--mono); margin-top: 2rem; }
+
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+  @media(max-width:900px){ .metrics{grid-template-columns:1fr 1fr} .grid-2{grid-template-columns:1fr} }
+  @media(max-width:600px){ .metrics{grid-template-columns:1fr} .container{padding:1rem} header{padding:0 1rem} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">СП</div>
+    <span class="logo-text">Сэндвич-панели ЦФО</span>
+    <span class="logo-sub">/ аналитика рынка</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:16px">
+    <span class="tag">ЦФО · апрель 2026</span>
+    <span style="font-size:12px;color:var(--text3)"><span class="status-dot"></span>онлайн</span>
+  </div>
+</header>
+
+<div class="container">
+  <div class="metrics">
+    <div class="metric blue"><div class="metric-label">Поставщиков найдено</div><div class="metric-value">8</div><div class="metric-sub">ЦФО + доставка по России</div></div>
+    <div class="metric green"><div class="metric-label">Мин. цена ППС</div><div class="metric-value">1 599 ₽</div><div class="metric-sub">за м² · розница</div></div>
+    <div class="metric amber"><div class="metric-label">Мин. цена ППУ</div><div class="metric-value">1 890 ₽</div><div class="metric-sub">за м² · розница</div></div>
+    <div class="metric gray"><div class="metric-label">Для гаража</div><div class="metric-value">ППС / ППУ</div><div class="metric-sub">минвата — не рекомендуется</div></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('suppliers')">Поставщики</button>
+    <button class="tab" onclick="showTab('prices')">Типы и цены</button>
+    <button class="tab" onclick="showTab('charts')">Аналитика</button>
+    <button class="tab" onclick="showTab('agent')">AI-агент</button>
+  </div>
+
+  <!-- SUPPLIERS -->
+  <div id="suppliers" class="section active">
+    <div class="card">
+      <div class="filter-row">
+        <span class="filter-label">Фильтр:</span>
+        <select id="fType" onchange="filterTable()"><option value="">Все типы</option><option value="ППС">ППС</option><option value="ППУ">ППУ</option><option value="ПИР">ПИР</option><option value="Мин.вата">Мин.вата</option></select>
+        <select id="fCity" onchange="filterTable()"><option value="">Все города</option><option value="Москва">Москва</option><option value="МО">МО</option><option value="Воронеж">Воронеж</option><option value="Чехов">Чехов</option></select>
+        <select id="fSort" onchange="filterTable()"><option value="">По умолчанию</option><option value="price_asc">Цена ↑</option><option value="price_desc">Цена ↓</option><option value="rating">По рейтингу</option></select>
+      </div>
+      <div class="table-wrap">
+        <table><thead><tr><th>Компания</th><th>Город</th><th>Типы панелей</th><th>Цена от, ₽/м²</th><th>Мин. заказ</th><th>Рейтинг</th><th>Статус</th></tr></thead><tbody id="suppBody"></tbody></table>
+      </div>
+      <div style="margin-top:12px;font-size:11px;color:var(--text3);font-family:var(--mono)">* Цены актуальны на апрель 2026. Финальная стоимость уточняется у менеджера.</div>
+    </div>
+  </div>
+
+  <!-- PRICES -->
+  <div id="prices" class="section">
+    <div class="grid-2" style="margin-bottom:1rem">
+      <div class="type-card rec">
+        <div class="type-card-accent" style="background:var(--accent)"></div>
+        <div class="rec-badge">для гаража</div>
+        <h3>ППС — пенополистирол</h3>
+        <div class="price">от 1 599 ₽<span> / м²</span></div>
+        <div class="prop-row"><span class="prop-label">Влагостойкость</span><span class="badge badge-green">Хорошая</span></div>
+        <div class="prop-row"><span class="prop-label">Пожаростойкость</span><span class="badge badge-amber">Умеренная</span></div>
+        <div class="prop-row"><span class="prop-label">Для гаража</span><span class="badge badge-green">Рекомендовано</span></div>
+        <div style="margin-top:10px;font-size:11px;color:var(--text3)">10–20% дешевле аналогов. Оптимальный выбор по цене.</div>
+      </div>
+      <div class="type-card rec">
+        <div class="type-card-accent" style="background:var(--accent2)"></div>
+        <div class="rec-badge" style="background:rgba(16,185,129,0.2);color:#34d399;border-color:rgba(16,185,129,0.3)">премиум</div>
+        <h3>ППУ — пенополиуретан</h3>
+        <div class="price">от 1 890 ₽<span> / м²</span></div>
+        <div class="prop-row"><span class="prop-label">Влагостойкость</span><span class="badge badge-green">Отличная</span></div>
+        <div class="prop-row"><span class="prop-label">Пожаростойкость</span><span class="badge badge-amber">Класс Г2</span></div>
+        <div class="prop-row"><span class="prop-label">Для гаража</span><span class="badge badge-green">Премиум выбор</span></div>
+        <div style="margin-top:10px;font-size:11px;color:var(--text3)">Закрытая ячейка — не пропускает влагу. Долговечнее.</div>
+      </div>
+      <div class="type-card">
+        <div class="type-card-accent" style="background:var(--accent3)"></div>
+        <h3>ПИР (PIR) — полиизоцианурат</h3>
+        <div class="price">от 2 340 ₽<span> / м²</span></div>
+        <div class="prop-row"><span class="prop-label">Влагостойкость</span><span class="badge badge-green">Отличная</span></div>
+        <div class="prop-row"><span class="prop-label">Пожаростойкость</span><span class="badge badge-green">Лучшая</span></div>
+        <div class="prop-row"><span class="prop-label">Для крупных объектов</span><span class="badge badge-blue">Приоритет</span></div>
+        <div style="margin-top:10px;font-size:11px;color:var(--text3)">Лучший теплоизолятор. Для складов, ТЦ, производств.</div>
+      </div>
+      <div class="type-card">
+        <div class="type-card-accent" style="background:var(--text3)"></div>
+        <h3>Минеральная вата</h3>
+        <div class="price">от 2 180 ₽<span> / м²</span></div>
+        <div class="prop-row"><span class="prop-label">Влагостойкость</span><span class="badge badge-red">Слабая</span></div>
+        <div class="prop-row"><span class="prop-label">Пожаростойкость</span><span class="badge badge-green">Не горит</span></div>
+        <div class="prop-row"><span class="prop-label">Для гаража</span><span class="badge badge-red">Не рекомендуется</span></div>
+        <div style="margin-top:10px;font-size:11px;color:var(--text3)">Намокает → теряет свойства. Лучше для офисов, жилья.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Цены по толщине · ППС стеновые · Москва / МО</div>
+      <table>
+        <thead><tr><th>Толщина</th><th>Применение</th><th>Цена ориентир</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge badge-gray">50 мм</span></td><td>Южный климат, временные постройки</td><td style="font-family:var(--mono);color:var(--accent2)">1 599 – 1 900 ₽/м²</td></tr>
+          <tr><td><span class="badge badge-blue">80 мм</span></td><td>Гараж, навес, хозпостройка</td><td style="font-family:var(--mono);color:var(--accent2)">1 899 – 2 100 ₽/м²</td></tr>
+          <tr><td><span class="badge badge-blue">100 мм</span></td><td>Склад, производство — умеренный климат</td><td style="font-family:var(--mono);color:var(--accent2)">1 968 – 2 200 ₽/м²</td></tr>
+          <tr><td><span class="badge badge-amber">120–150 мм</span></td><td>Отапливаемые объекты</td><td style="font-family:var(--mono);color:var(--accent2)">2 036 – 2 450 ₽/м²</td></tr>
+          <tr><td><span class="badge badge-amber">200+ мм</span></td><td>Холодильные камеры, спецобъекты</td><td style="font-family:var(--mono);color:var(--accent2)">2 300 – 2 800 ₽/м²</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div id="charts" class="section">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Цены по поставщикам · ₽/м²</div>
+        <div style="display:flex;gap:14px;margin-bottom:12px;font-size:11px;color:var(--text3);font-family:var(--mono)">
+          <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#3b82f6;margin-right:4px"></span>ППС</span>
+          <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#10b981;margin-right:4px"></span>ППУ</span>
+        </div>
+        <div class="chart-wrap" style="height:260px"><canvas id="priceChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Сравнение характеристик</div>
+        <div style="display:flex;gap:14px;margin-bottom:12px;font-size:11px;color:var(--text3);font-family:var(--mono)">
+          <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;border:2px solid #3b82f6;margin-right:4px"></span>ППС</span>
+          <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;border:2px solid #10b981;margin-right:4px"></span>ППУ</span>
+        </div>
+        <div class="chart-wrap" style="height:260px"><canvas id="radarChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AGENT -->
+  <div id="agent" class="section">
+    <div class="agent-wrap">
+      <div class="agent-header">
+        <div class="agent-avatar">🤖</div>
+        <div class="agent-info">
+          <h3>AI-аналитик рынка сэндвич-панелей ЦФО</h3>
+          <p>Знает поставщиков, цены, технические характеристики · Powered by Claude</p>
+        </div>
+      </div>
+      <div class="chat-area" id="chatArea">
+        <div class="msg ai"><div class="msg-role">AI-АНАЛИТИК</div>Добро пожаловать! Я специализируюсь на рынке сэндвич-панелей в ЦФО. Знаю актуальных поставщиков, их цены, условия поставки и технические характеристики. Задайте любой вопрос.</div>
+      </div>
+      <div class="chat-footer">
+        <div class="quick-btns">
+          <button class="qbtn" onclick="askQ('Какой поставщик лучший по цена/качество для гаража?')">Лучший для гаража?</button>
+          <button class="qbtn" onclick="askQ('Сравни DoorHan и КлимПанель по ключевым параметрам')">DoorHan vs КлимПанель</button>
+          <button class="qbtn" onclick="askQ('Какая толщина нужна для отапливаемого склада в Москве?')">Толщина для склада</button>
+          <button class="qbtn" onclick="askQ('Что лучше для крупного объекта: ПИР или ППУ?')">ПИР vs ППУ</button>
+          <button class="qbtn" onclick="askQ('Где есть склад в наличии для срочной отгрузки в ЦФО?')">Склад в наличии</button>
+        </div>
+        <div class="input-row">
+          <input type="text" id="agentInput" placeholder="Задайте вопрос по рынку..." onkeydown="if(event.key==='Enter')sendMsg()">
+          <button class="send-btn" id="sendBtn" onclick="sendMsg()">Отправить</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>sandwich-cfo · аналитика рынка · ЦФО · данные актуальны на апрель 2026</footer>
+
+<script>
+const suppliers = [
+  {name:'DoorHan',url:'https://doorhan-panel.ru/',city:'Москва',types:['ППС','ППУ','ПИР','Мин.вата'],price:1890,minOrder:'1 м²',rating:5,status:'Производитель'},
+  {name:'КлимПанель',url:'https://www.s-paneli.ru/',city:'Чехов',types:['ППС','Мин.вата'],price:969,minOrder:'25 м²',rating:4,status:'Производитель'},
+  {name:'МосПанели',url:'https://mospaneli.ru/',city:'Москва',types:['ППС','ПИР'],price:1599,minOrder:'от 1 м²',rating:4,status:'Производитель'},
+  {name:'Веста СПК',url:'https://sandwich-paneli.com/',city:'Москва',types:['ППУ','Мин.вата'],price:1890,minOrder:'25 м²',rating:4,status:'Производитель'},
+  {name:'ТеплоПрофиль',url:'https://tprofil.ru/',city:'МО',types:['ППС','ППУ','ПИР','Мин.вата'],price:2097,minOrder:'любой',rating:4,status:'Производитель'},
+  {name:'ВЕКТРА',url:'https://vektragroup.ru/',city:'МО',types:['ППС','ПИР','Мин.вата'],price:1800,minOrder:'оптом',rating:4,status:'Поставщик'},
+  {name:'Гермес-Панель',url:'https://germes-panel.ru/',city:'МО',types:['ППС','Мин.вата'],price:2000,minOrder:'от 1 м²',rating:4,status:'Производитель'},
+  {name:'СтальПрофильГрупп',url:'#',city:'Воронеж',types:['ППС','Мин.вата'],price:1750,minOrder:'оптом',rating:5,status:'Производитель'},
+];
+
+function renderTable(data) {
+  document.getElementById('suppBody').innerHTML = data.map(s=>`
+    <tr>
+      <td><a class="company-name" href="${s.url}" target="_blank">${s.name}</a></td>
+      <td style="color:var(--text2)">${s.city}</td>
+      <td>${s.types.map(t=>`<span class="badge badge-blue" style="margin-right:3px">${t}</span>`).join('')}</td>
+      <td style="font-family:var(--mono);font-weight:500;color:var(--accent2)">${s.price.toLocaleString('ru')} ₽</td>
+      <td style="color:var(--text3);font-family:var(--mono)">${s.minOrder}</td>
+      <td class="stars">${'★'.repeat(s.rating)}${'☆'.repeat(5-s.rating)}</td>
+      <td><span class="badge ${s.status==='Производитель'?'badge-green':'badge-amber'}">${s.status}</span></td>
+    </tr>`).join('');
+}
+renderTable(suppliers);
+
+function filterTable(){
+  const t=document.getElementById('fType').value, c=document.getElementById('fCity').value, s=document.getElementById('fSort').value;
+  let data=suppliers.filter(x=>(!t||x.types.includes(t))&&(!c||x.city===c));
+  if(s==='price_asc')data.sort((a,b)=>a.price-b.price);
+  if(s==='price_desc')data.sort((a,b)=>b.price-a.price);
+  if(s==='rating')data.sort((a,b)=>b.rating-a.rating);
+  renderTable(data);
+}
+
+let chartsReady=false;
+function showTab(id){
+  document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.getAttribute('onclick').includes(`'${id}'`)));
+  document.querySelectorAll('.section').forEach(el=>el.classList.toggle('active',el.id===id));
+  if(id==='charts'&&!chartsReady){chartsReady=true;initCharts();}
+}
+
+function initCharts(){
+  const gc='rgba(255,255,255,0.05)',tc='#555d6e';
+  new Chart(document.getElementById('priceChart'),{
+    type:'bar',
+    data:{
+      labels:['DoorHan','КлимПанель','МосПанели','Веста СПК','ТеплоПрофиль','ВЕКТРА','Гермес','СтальПроф'],
+      datasets:[
+        {label:'ППС',data:[null,969,1599,null,2097,1800,2000,1750],backgroundColor:'rgba(59,130,246,0.7)',borderRadius:4,borderSkipped:false},
+        {label:'ППУ',data:[1890,null,null,1890,2097,null,null,null],backgroundColor:'rgba(16,185,129,0.7)',borderRadius:4,borderSkipped:false}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{y:{min:800,ticks:{callback:v=>v.toLocaleString('ru')+'₽',color:tc,font:{size:10}},grid:{color:gc},border:{color:'transparent'}},
+              x:{ticks:{color:tc,font:{size:10},maxRotation:35},grid:{display:false},border:{color:'transparent'}}}}
+  });
+  new Chart(document.getElementById('radarChart'),{
+    type:'radar',
+    data:{
+      labels:['Цена','Влагостойкость','Теплоизоляция','Монтаж','Долговечность'],
+      datasets:[
+        {label:'ППС',data:[5,3,3,4,3],borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,0.1)',pointBackgroundColor:'#3b82f6',borderWidth:1.5},
+        {label:'ППУ',data:[3,5,5,4,5],borderColor:'#10b981',backgroundColor:'rgba(16,185,129,0.1)',pointBackgroundColor:'#10b981',borderWidth:1.5}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{r:{min:0,max:5,ticks:{stepSize:1,color:tc,font:{size:10},backdropColor:'transparent'},grid:{color:gc},pointLabels:{color:tc,font:{size:11}},angleLines:{color:gc}}}}
+  });
+}
+
+const SYSTEM=`Ты специализированный AI-агент по рынку сэндвич-панелей в ЦФО.
+Поставщики:
+- DoorHan (Москва): ППС, ППУ, ПИР, Мин.вата. От 1890 руб/м². Заводы в Москве и Воронеже.
+- КлимПанель (Чехов МО): ППС, Мин.вата. От 969 руб/м². Новое производство с 2025г.
+- МосПанели (Москва): ППС, ПИР. От 1599 руб/м². ГОСТ 32603-2021. До 7500 м²/сут.
+- Веста СПК (Москва): ППУ, Мин.вата. От 1890 руб/м². С 2008 года.
+- ТеплоПрофиль (МО): все типы. От 2097 руб/м². Нержавеющие панели, холодильные камеры.
+- ВЕКТРА (МО): ППС, ПИР, Мин.вата. От 1800 руб/м². Хранение до 7 дней бесплатно.
+- Гермес-Панель (МО): ППС, Мин.вата. От 2000 руб/м².
+- СтальПрофильГрупп (Воронеж): ППС, Мин.вата. От 1750 руб/м².
+Рекомендации: гараж — ППС (бюджет) или ППУ (качество), минвата не рекомендуется. Крупные объекты — ПИР или ППУ. Толщина для гаража в Москве: 80-100 мм. Приоритет клиента: цена → качество → наличие.
+Отвечай кратко, по делу, на русском. Конкретные рекомендации с цифрами.`;
+
+let history=[];
+async function sendMsg(){
+  const inp=document.getElementById('agentInput'),btn=document.getElementById('sendBtn');
+  const msg=inp.value.trim(); if(!msg)return;
+  inp.value=''; btn.disabled=true;
+  addMsg('user',msg); history.push({role:'user',content:msg});
+  const tid=addTyping();
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:SYSTEM,messages:history})});
+    const data=await res.json();
+    const reply=data.content?.[0]?.text||'Ошибка ответа.';
+    history.push({role:'assistant',content:reply});
+    removeTyping(tid); addMsg('ai',reply);
+  }catch(e){ removeTyping(tid); addMsg('ai','Ошибка соединения. Попробуйте снова.'); }
+  btn.disabled=false;
+}
+function askQ(q){showTab('agent');document.getElementById('agentInput').value=q;setTimeout(sendMsg,50);}
+function addMsg(role,text){
+  const area=document.getElementById('chatArea'),d=document.createElement('div');
+  d.className=`msg ${role}`;
+  d.innerHTML=`<div class="msg-role">${role==='user'?'ВЫ':'AI-АНАЛИТИК'}</div>${text.replace(/\n/g,'<br>')}`;
+  area.appendChild(d); area.scrollTop=area.scrollHeight;
+}
+let tc=0;
+function addTyping(){
+  const id='t'+tc++,area=document.getElementById('chatArea'),d=document.createElement('div');
+  d.id=id; d.className='msg ai';
+  d.innerHTML=`<div class="msg-role">AI-АНАЛИТИК</div><div style="display:flex;gap:4px"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+  area.appendChild(d); area.scrollTop=area.scrollHeight; return id;
+}
+function removeTyping(id){document.getElementById(id)?.remove();}
+</script>
+</body>
+</html>
