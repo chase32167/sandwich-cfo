@@ -183,11 +183,16 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
         <select id="fRegion" onchange="filterTable()"><option value="">Все регионы</option><option>Москва</option><option>МО</option><option>Воронеж</option><option>Липецк</option><option>Тула</option><option>Рязань</option><option>Курск</option><option>Владимир</option></select>
         <select id="fStatus" onchange="filterTable()"><option value="">Все статусы</option><option>Производитель</option><option>Поставщик</option><option>Дилер</option></select>
         <select id="fSort" onchange="filterTable()"><option value="">По умолч.</option><option value="price_asc">Цена ↑</option><option value="price_desc">Цена ↓</option><option value="rating">Рейтинг ↓</option><option value="thick_desc">Макс. толщина ↓</option></select>
+        <label id="fHideBULabel" style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;font-family:var(--mono);color:var(--text2);background:var(--bg3);border:1px solid var(--bu-border);border-radius:7px;padding:5px 10px;user-select:none;white-space:nowrap;transition:all .15s;" title="КлимПанель (остатки б/у) и ВЕКТРА (перепродажа б/у)">
+          <input type="checkbox" id="fHideBU" onchange="filterTable()" style="accent-color:var(--bu);width:13px;height:13px;cursor:pointer;flex-shrink:0;">
+          <span>Скрыть б/у</span><span style="font-size:9px;color:var(--bu);margin-left:2px">🔴</span>
+        </label>
       </div>
       <div class="legend-row">
         <span><span class="legend-dot" style="background:rgba(59,130,246,.5)"></span>стеновые</span>
         <span><span class="legend-dot" style="background:rgba(245,158,11,.5)"></span>кровельные</span>
         <span><span class="legend-dot" style="background:rgba(16,185,129,.5)"></span>стены+кровля</span>
+        <span><span class="legend-dot" style="background:rgba(244,63,94,.4)"></span><span style="color:var(--bu)">б/у есть</span> — строка выделена · 2 поставщика</span>
       </div>
       <div style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:10px" id="countLabel">Показано: 30 компаний</div>
       <div class="table-wrap">
@@ -479,9 +484,9 @@ const suppliers=[
   {name:'ГК ТехноСтиль',url:'https://www.ts-panel.ru/',city:'Москва/Тула',region:'Москва',types:['ППС','ППУ','ПИР','Мин.вата'],panelType:'both',thickMin:50,thickMax:300,widthWall:'1000/1190',widthRoof:'1000',length:'1500–13500мм',price:1650,minOrder:'любой',rating:5,status:'Производитель'},
   {name:'Baustof',url:'https://www.baustof.ru/catalog/sendvich-paneli/',city:'Москва',region:'Москва',types:['ППС','ПИР','Мин.вата'],panelType:'both',thickMin:50,thickMax:250,widthWall:'1000/1190',widthRoof:'1000',length:'до 14000мм',price:1800,minOrder:'любой',rating:4,status:'Дилер'},
   {name:'Stamet b2b',url:'https://ps-imc.ru/catalog/sendvich_paneli/',city:'Москва/Подольск',region:'Москва',types:['ППС','Мин.вата'],panelType:'both',thickMin:40,thickMax:250,widthWall:'1000/1016',widthRoof:'1000',length:'до 12000мм',price:1230,minOrder:'от 1 м²',rating:4,status:'Производитель'},
-  {name:'КлимПанель',url:'https://www.s-paneli.ru/',city:'Чехов',region:'МО',types:['ППС','Мин.вата'],panelType:'both',thickMin:40,thickMax:250,widthWall:'1000/1190/1200',widthRoof:'1000',length:'1500–14000мм',price:969,minOrder:'от 25 м²',rating:4,status:'Производитель'},
+  {name:'КлимПанель',url:'https://www.s-paneli.ru/',city:'Чехов',region:'МО',types:['ППС','Мин.вата'],panelType:'both',thickMin:40,thickMax:250,widthWall:'1000/1190/1200',widthRoof:'1000',length:'1500–14000мм',price:969,minOrder:'от 25 м²',rating:4,status:'Производитель',bu:true,buNote:'Продают остатки и б/у панели'},
   {name:'ТеплоПрофиль',url:'https://tprofil.ru/',city:'МО',region:'МО',types:['ППС','ППУ','ПИР','Мин.вата'],panelType:'both',thickMin:50,thickMax:200,widthWall:'1190',widthRoof:'1000',length:'до 13000мм',price:2097,minOrder:'любой',rating:4,status:'Производитель'},
-  {name:'ВЕКТРА',url:'https://vektragroup.ru/',city:'МО',region:'МО',types:['ППС','ПИР','Мин.вата'],panelType:'both',thickMin:50,thickMax:200,widthWall:'1000',widthRoof:'1000',length:'2000–14000мм',price:1800,minOrder:'оптом',rating:4,status:'Поставщик'},
+  {name:'ВЕКТРА',url:'https://vektragroup.ru/',city:'МО',region:'МО',types:['ППС','ПИР','Мин.вата'],panelType:'both',thickMin:50,thickMax:200,widthWall:'1000',widthRoof:'1000',length:'2000–14000мм',price:1800,minOrder:'оптом',rating:4,status:'Поставщик',bu:true,buNote:'Хранение и перепродажа б/у панелей'},
   {name:'Гермес-Панель',url:'https://germes-panel.ru/',city:'Раменское',region:'МО',types:['ППС','ПИР','Мин.вата'],panelType:'both',thickMin:50,thickMax:250,widthWall:'1000/1190',widthRoof:'1000',length:'до 13500мм',price:2000,minOrder:'от 1 м²',rating:4,status:'Производитель'},
   {name:'ТД Стройкапитал',url:'https://steell.ru/sendvich-paneli/',city:'Лобня',region:'МО',types:['ППС','Мин.вата'],panelType:'both',thickMin:50,thickMax:200,widthWall:'1000/1190',widthRoof:'1000',length:'до 12000мм',price:1720,minOrder:'от 3 дней',rating:4,status:'Поставщик'},
   {name:'ГК СтилПан',url:'https://steelpan.ru/',city:'Сергиев Посад',region:'МО',types:['ППС','Мин.вата'],panelType:'both',thickMin:50,thickMax:250,widthWall:'1000/1190',widthRoof:'1000',length:'до 13000мм',price:1750,minOrder:'любой',rating:4,status:'Производитель'},
@@ -506,8 +511,8 @@ const panelBadge={'both':'badge-both','wall':'badge-wall','roof':'badge-roof'};
 function renderTable(data){
   document.getElementById('countLabel').textContent='Показано: '+data.length+' компаний';
   document.getElementById('suppBody').innerHTML=data.map(s=>`
-    <tr>
-      <td><a class="alink" href="${s.url}" target="_blank">${s.name}</a></td>
+    <tr${s.bu?' class="bu-row" title="'+s.buNote+'"':''}>
+      <td><a class="alink" href="${s.url}" target="_blank">${s.name}</a>${s.bu?'&nbsp;<span class="badge badge-bu" title="'+s.buNote+'">б/у есть</span>':''}</td>
       <td style="color:var(--text2);font-size:11px">${s.city}</td>
       <td>${s.types.map(t=>`<span class="badge badge-blue" style="margin-right:3px;margin-bottom:2px">${t}</span>`).join('')}</td>
       <td><span class="badge ${panelBadge[s.panelType]}">${panelLabels[s.panelType]}</span></td>
@@ -530,7 +535,11 @@ function filterTable(){
   const r=document.getElementById('fRegion').value;
   const st=document.getElementById('fStatus').value;
   const s=document.getElementById('fSort').value;
-  let d=suppliers.filter(x=>(!t||x.types.includes(t))&&(!p||x.panelType===p||x.panelType==='both')&&(!th||x.thickMax>=th)&&(!r||x.region===r)&&(!st||x.status===st));
+  const hideBU=document.getElementById('fHideBU').checked;
+  const lbl=document.getElementById('fHideBULabel');
+  if(hideBU){lbl.style.background='var(--bu-bg)';lbl.style.color='var(--bu)';lbl.style.borderColor='var(--bu)';}
+  else{lbl.style.background='var(--bg3)';lbl.style.color='var(--text2)';lbl.style.borderColor='var(--bu-border)';}
+  let d=suppliers.filter(x=>(!t||x.types.includes(t))&&(!p||x.panelType===p||x.panelType==='both')&&(!th||x.thickMax>=th)&&(!r||x.region===r)&&(!st||x.status===st)&&(!hideBU||!x.bu));
   if(s==='price_asc')d.sort((a,b)=>a.price-b.price);
   if(s==='price_desc')d.sort((a,b)=>b.price-a.price);
   if(s==='rating')d.sort((a,b)=>b.rating-a.rating);
