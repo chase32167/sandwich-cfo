@@ -164,7 +164,7 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
   </div>
 
   <div class="tabs">
-    <button class="tab active" onclick="showTab('suppliers')">Поставщики (30)</button>
+    <button class="tab active" onclick="showTab('suppliers')">Поставщики (37)</button>
     <button class="tab bu-tab" onclick="showTab('bu')">🔴 Б/У панели</button>
     <button class="tab" onclick="showTab('avito')">Авито Live</button>
     <button class="tab" onclick="showTab('prices')">Типы и цены</button>
@@ -503,6 +503,13 @@ const suppliers=[
   {name:'МстройПанель',url:'https://kursk.sjendvich-panel.ru/',city:'Курск',region:'Курск',types:['ППС','ППУ','ПИР','Мин.вата'],panelType:'both',thickMin:50,thickMax:250,widthWall:'1000/1190',widthRoof:'1000',length:'1500–12000мм',price:1360,minOrder:'от 1 дня',rating:4,status:'Производитель'},
   {name:'Тепло-Кус',url:'https://kursk.rsk-uteplitel.ru/',city:'Курск',region:'Курск',types:['ППС','Мин.вата'],panelType:'both',thickMin:50,thickMax:250,widthWall:'1000/1190',widthRoof:'1000',length:'до 13500мм',price:1226,minOrder:'любой',rating:4,status:'Производитель'},
   {name:'Stamet (Владимир)',url:'https://ps-imc.ru/',city:'Владимир',region:'Владимир',types:['ППС','Мин.вата'],panelType:'both',thickMin:40,thickMax:250,widthWall:'1000/1016',widthRoof:'1000',length:'до 12000мм',price:1230,minOrder:'от 1 м²',rating:4,status:'Производитель'},
+  {name:'ГК ТехноСтиль',url:'https://www.ts-panel.ru/',city:'Москва',region:'Москва',types:['ППС','ПИР','Мин.вата'],panelType:'both',thickMin:50,thickMax:300,widthWall:'1190',widthRoof:'1000',length:'2000–14000мм',price:1900,minOrder:'любой',rating:5,status:'Производитель'},
+  {name:'ТермоСпецПанель',url:'https://www.tsppanel.ru/',city:'Москва',region:'Москва',types:['ППС','Мин.вата'],panelType:'both',thickMin:50,thickMax:250,widthWall:'1000',widthRoof:'1000',length:'1000–20000мм',price:1750,minOrder:'любой',rating:4,status:'Производитель'},
+  {name:'Термопанель',url:'https://thermopanel-m.ru/',city:'Москва',region:'Москва',types:['ППС','ППУ','Мин.вата'],panelType:'both',thickMin:50,thickMax:200,widthWall:'1190',widthRoof:'1000',length:'2000–13000мм',price:1800,minOrder:'от 1 м²',rating:4,status:'Поставщик'},
+  {name:'Капитал Строй',url:'https://stroysandvich.ru/',city:'Москва (завод МО)',region:'МО',types:['ППС','Мин.вата'],panelType:'both',thickMin:50,thickMax:200,widthWall:'1000/1190',widthRoof:'1000',length:'2000–13000мм',price:1850,minOrder:'от 1500 м²',rating:4,status:'Производитель'},
+  {name:'СТРОЙПАНЕЛЬ',url:'https://www.stroypanel.ru/',city:'Москва',region:'Москва',types:['ППС','Мин.вата'],panelType:'both',thickMin:50,thickMax:250,widthWall:'1190',widthRoof:'1000',length:'2000–14000мм',price:2100,minOrder:'любой',rating:4,status:'Производитель'},
+  {name:'Энергосервис',url:'https://energoservice-panel.ru/',city:'Москва',region:'Москва',types:['ППУ','ПИР'],panelType:'both',thickMin:30,thickMax:200,widthWall:'1190',widthRoof:'1000',length:'2000–13000мм',price:1650,minOrder:'любой',rating:4,status:'Поставщик'},
+  {name:'МетПромЭнерго',url:'https://metpromenergo.ru/',city:'Мытищи',region:'МО',types:['ППС','ПИР','Мин.вата'],panelType:'both',thickMin:50,thickMax:200,widthWall:'1190',widthRoof:'1000',length:'2000–13000мм',price:1720,minOrder:'оптом',rating:4,status:'Поставщик',bu:true,buNote:'Продают новые, б/у, некондицию и неликвид'},
 ];
 
 const panelLabels={'both':'Стены+Кровля','wall':'Стены','roof':'Кровля'};
