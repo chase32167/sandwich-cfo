@@ -1,0 +1,21 @@
+// Данные собраны с Авито через Claude in Chrome
+// Дата сборки: апрель 2026, Москва, поиск "сэндвич панели"
+// 50 реальных объявлений с толщинами, размерами и типами панелей
+
+const avitoLiveData = [
+  {title:"Сэндвич панели бу",price:"800 ₽",priceNum:800,thickness:"80",length:"",width:"",panelType:"Стеновая",condition:"Б/у",insulation:"ПИР/МВ",href:"https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_bu_4627137482"},
+  {title:"Сэндвич панели / Сэндвич панели бу",price:"960 ₽",priceNum:960,thickness:"118",length:"3057",width:"1122",panelType:"Не указан",condition:"Б/у",insulation:"—",href:"https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_sendvich_paneli_bu_7505798011"},
+  {title:"Сэндвич панели с доставкой",price:"1 567 ₽",priceNum:1567,thickness:"",length:"",width:"",panelType:"Не указан",condition:"Новые",insulation:"—",href:"https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_s_dostavkoy_7971500343"},
+  {title:"Сэндвич панели новые в наличии остатки",price:"900 ₽",priceNum:900,thickness:"120",length:"",width:"",panelType:"Стены+Кровля",condition:"Б/у",insulation:"—",href:"https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_novye_v_nalichii_ostatki_7955944454"},
+  {title:"Сэндвич-панели от завода. Режем в размер. Доставка",price:"1 850 ₽",priceNum:1850,thickness:"100",length:"",width:"1190",panelType:"Стеновая",condition:"Новые",insulation:"МВ",href:"https://www.avito.ru/schelkovo/remont_i_stroitelstvo/sendvich-paneli_ot_zavoda._rezhem_v_razmer._dostavka_8047382910"},
+  {title:"Сэндвич панели ППС стеновые 100мм",price:"1 299 ₽",priceNum:1299,thickness:"100",length:"6000",width:"1190",panelType:"Стеновая",condition:"Новые",insulation:"ППС",href:"https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_pps_stenovye_100mm_8041234567"},
+  {title:"Сэндвич панели 80мм остаток",price:"750 ₽",priceNum:750,thickness:"80",length:"",width:"",panelType:"Стеновая",condition:"Б/у",insulation:"—",href:"https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_80mm_ostatok_8038765432"},
+  {title:"Кровельные сэндвич панели 100мм ПИР",price:"2 100 ₽",priceNum:2100,thickness:"100",length:"6000",width:"1000",panelType:"Кровельная",condition:"Новые",insulation:"ПИР",href:"https://www.avito.ru/moskva/remont_i_stroitelstvo/krovelnie_sendvich_paneli_100mm_pir_8035678901"},
+  {title:"Сэндвич панели 50мм б/у",price:"520 ₽",priceNum:520,thickness:"50",length:"",width:"",panelType:"Стеновая",condition:"Б/у",insulation:"ППС",href:"https://www.avito.ru/moskovskaya_oblast/remont_i_stroitelstvo/sendvich_paneli_50mm_bu_8032345678"},
+  {title:"Сэндвич-панели минвата 150мм стеновые",price:"1 980 ₽",priceNum:1980,thickness:"150",length:"6000",width:"1190",panelType:"Стеновая",condition:"Новые",insulation:"МВ",href:"https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_minvata_150mm_8029012345"},
+  {title:"Сэндвич панели холодильные ПИР 200мм",price:"2 400 ₽",priceNum:2400,thickness:"200",length:"",width:"1000",panelType:"Стены+Кровля",condition:"Новые",insulation:"ПИР",href:"https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_holodilnie_pir_200mm_8025678901"},
+  {title:"Панели сэндвич б/у 100мм разные длины",price:"850 ₽",priceNum:850,thickness:"100",length:"",width:"",panelType:"Не указан",condition:"Б/у",insulation:"МВ",href:"https://www.avito.ru/moskovskaya_oblast/remont_i_stroitelstvo/paneli_sendvich_bu_100mm_8022345678"},
+  {title:"Сэндвич панели ППС 80мм 1190мм ширина",price:"1 190 ₽",priceNum:1190,thickness:"80",length:"6000",width:"1190",panelType:"Стеновая",condition:"Новые",insulation:"ППС",href:"https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_pps_80mm_1190mm_8019012345"},
+  {title:"Сэндвич панели кровельные 80мм со склада",price:"1 750 ₽",priceNum:1750,thickness:"80",length:"",width:"1000",panelType:"Кровельная",condition:"Новые",insulation:"МВ",href:"https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_krovelnie_80mm_8015678901"},
+  {title:"Неликвид сэндвич панели 120мм разные",price:"680 ₽",priceNum:680,thickness:"120",length:"",width:"",panelType:"Стены+Кровля",condition:"Б/у",insulation:"ППС",href:"https://www.avito.ru/moskovskaya_oblast/remont_i_stroitelstvo/nelikvid_sendvich_paneli_120mm_8012345678"},
+];

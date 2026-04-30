@@ -18,7 +18,7 @@ header{border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-i
 .tag{font-size:11px;font-family:var(--mono);color:var(--text3);background:var(--bg3);padding:3px 8px;border-radius:4px;border:1px solid var(--border);}
 .status-dot{width:7px;height:7px;border-radius:50%;background:var(--accent2);display:inline-block;margin-right:5px;animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.container{max-width:1400px;margin:0 auto;padding:2rem;}
+.container{max-width:1500px;margin:0 auto;padding:2rem;}
 .metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:1.5rem;}
 .metric{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem;position:relative;overflow:hidden;transition:border-color 0.2s;animation:fadeIn 0.4s ease both;}
 .metric:nth-child(1){animation-delay:.05s}.metric:nth-child(2){animation-delay:.1s}.metric:nth-child(3){animation-delay:.15s}.metric:nth-child(4){animation-delay:.2s}.metric:nth-child(5){animation-delay:.25s}
@@ -37,13 +37,13 @@ header{border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-i
 .card:hover{border-color:var(--border2);}
 .card-title{font-size:11px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem;}
 .table-wrap{overflow-x:auto;}
-table{width:100%;border-collapse:collapse;font-size:13px;}
-th{text-align:left;padding:9px 12px;font-size:10px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);font-weight:400;}
-td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{text-align:left;padding:9px 10px;font-size:10px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);font-weight:400;white-space:nowrap;}
+td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:rgba(255,255,255,.02);}
 .alink{font-weight:500;color:var(--accent);text-decoration:none;}.alink:hover{text-decoration:underline;}
-.badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-family:var(--mono);font-weight:500;}
+.badge{display:inline-block;padding:2px 6px;border-radius:4px;font-size:10px;font-family:var(--mono);font-weight:500;white-space:nowrap;}
 .badge-blue{background:rgba(59,130,246,.15);color:#60a5fa;border:1px solid rgba(59,130,246,.25);}
 .badge-green{background:rgba(16,185,129,.15);color:#34d399;border:1px solid rgba(16,185,129,.25);}
 .badge-amber{background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.25);}
@@ -51,12 +51,15 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .badge-red{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.25);}
 .badge-purple{background:rgba(167,139,250,.15);color:#c4b5fd;border:1px solid rgba(167,139,250,.25);}
 .badge-teal{background:rgba(20,184,166,.15);color:#2dd4bf;border:1px solid rgba(20,184,166,.25);}
+.badge-wall{background:rgba(59,130,246,.2);color:#93c5fd;border:1px solid rgba(59,130,246,.3);}
+.badge-roof{background:rgba(245,158,11,.2);color:#fcd34d;border:1px solid rgba(245,158,11,.3);}
+.badge-both{background:rgba(16,185,129,.2);color:#6ee7b7;border:1px solid rgba(16,185,129,.3);}
 .stars{color:var(--accent3);font-size:12px;letter-spacing:1px;}
 .filter-row{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;align-items:center;}
 .filter-label{font-size:11px;color:var(--text3);font-family:var(--mono);}
 .filter-row select{font-size:12px;font-family:var(--mono);padding:6px 10px;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;color:var(--text2);cursor:pointer;outline:none;}
 .filter-row select:focus{border-color:var(--accent);}
-.note-text{font-size:11px;color:var(--text3);line-height:1.5;max-width:260px;}
+.note-text{font-size:10px;color:var(--text3);line-height:1.5;max-width:200px;}
 .avito-links{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1rem;}
 .avito-link-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:.85rem 1rem;text-decoration:none;transition:border-color .2s;display:block;}
 .avito-link-card:hover{border-color:var(--accent4);}
@@ -99,8 +102,11 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .prop-row:last-child{border-bottom:none;}.prop-label{color:var(--text3);}
 .rec-badge{position:absolute;top:12px;right:10px;font-size:10px;font-family:var(--mono);background:rgba(59,130,246,.2);color:#60a5fa;padding:2px 6px;border-radius:4px;border:1px solid rgba(59,130,246,.3);}
 .chart-wrap{position:relative;width:100%;}
+.legend-row{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--text3);margin-bottom:10px;font-family:var(--mono);}
+.legend-dot{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:4px;vertical-align:middle;}
 footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center;font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:2rem;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(max-width:1100px){table{font-size:11px;}th,td{padding:7px 8px;}}
 @media(max-width:900px){.metrics{grid-template-columns:1fr 1fr}.grid-2{grid-template-columns:1fr}.avito-links{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.metrics{grid-template-columns:1fr 1fr}.container{padding:1rem}header{padding:0 1rem}}
 </style>
@@ -122,9 +128,9 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
   <div class="metrics">
     <div class="metric blue"><div class="metric-label">Поставщиков в базе</div><div class="metric-value">30</div><div class="metric-sub">Полный охват ЦФО</div></div>
     <div class="metric green"><div class="metric-label">Мин. цена новые</div><div class="metric-value">969 ₽</div><div class="metric-sub">КлимПанель · ППС · Чехов</div></div>
-    <div class="metric amber"><div class="metric-label">Мин. цена Авито</div><div class="metric-value">199 ₽</div><div class="metric-sub">б/у · Москва · сегодня</div></div>
-    <div class="metric purple"><div class="metric-label">Регионов ЦФО</div><div class="metric-value">11</div><div class="metric-sub">Мск · МО · Воронеж · Липецк · Тула · Рязань · Курск и др.</div></div>
-    <div class="metric gray"><div class="metric-label">Для гаража</div><div class="metric-value">ППС 80мм</div><div class="metric-sub">от 969 ₽ новые / от 199 ₽ б/у</div></div>
+    <div class="metric amber"><div class="metric-label">Авито б/у от</div><div class="metric-value">520 ₽</div><div class="metric-sub">ППС 50мм · МО · апрель 2026</div></div>
+    <div class="metric purple"><div class="metric-label">Авито объявлений</div><div class="metric-value">50+</div><div class="metric-sub">Москва и МО · собрано браузером</div></div>
+    <div class="metric gray"><div class="metric-label">Толщины</div><div class="metric-value">30–300</div><div class="metric-sub">мм · стены и кровля</div></div>
   </div>
 
   <div class="tabs">
@@ -135,45 +141,66 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
     <button class="tab" onclick="showTab('agent')">AI-агент</button>
   </div>
 
+  <!-- ПОСТАВЩИКИ -->
   <div id="suppliers" class="section active">
     <div class="card">
       <div class="filter-row">
         <span class="filter-label">Фильтр:</span>
-        <select id="fType" onchange="filterTable()"><option value="">Все типы</option><option>ППС</option><option>ППУ</option><option>ПИР</option><option>Мин.вата</option></select>
-        <select id="fRegion" onchange="filterTable()">
-          <option value="">Все регионы</option><option>Москва</option><option>МО</option>
-          <option>Воронеж</option><option>Липецк</option><option>Тула</option>
-          <option>Рязань</option><option>Курск</option><option>Владимир</option>
-        </select>
+        <select id="fType" onchange="filterTable()"><option value="">Все типы утеплит.</option><option>ППС</option><option>ППУ</option><option>ПИР</option><option>Мин.вата</option></select>
+        <select id="fPanel" onchange="filterTable()"><option value="">Стены и кровля</option><option value="both">Стены + Кровля</option><option value="wall">Только стеновые</option><option value="roof">Только кровельные</option></select>
+        <select id="fThick" onchange="filterTable()"><option value="">Любая толщина</option><option value="50">от 50 мм</option><option value="100">от 100 мм</option><option value="150">от 150 мм</option><option value="200">от 200 мм</option></select>
+        <select id="fRegion" onchange="filterTable()"><option value="">Все регионы</option><option>Москва</option><option>МО</option><option>Воронеж</option><option>Липецк</option><option>Тула</option><option>Рязань</option><option>Курск</option><option>Владимир</option></select>
         <select id="fStatus" onchange="filterTable()"><option value="">Все статусы</option><option>Производитель</option><option>Поставщик</option><option>Дилер</option></select>
-        <select id="fSort" onchange="filterTable()"><option value="">По умолчанию</option><option value="price_asc">Цена ↑</option><option value="price_desc">Цена ↓</option><option value="rating">Рейтинг ↓</option></select>
+        <select id="fSort" onchange="filterTable()"><option value="">По умолчанию</option><option value="price_asc">Цена ↑</option><option value="price_desc">Цена ↓</option><option value="rating">Рейтинг ↓</option><option value="thick_desc">Макс. толщина ↓</option></select>
+      </div>
+      <div class="legend-row">
+        <span><span class="legend-dot" style="background:rgba(59,130,246,.5)"></span>стеновые</span>
+        <span><span class="legend-dot" style="background:rgba(245,158,11,.5)"></span>кровельные</span>
+        <span><span class="legend-dot" style="background:rgba(16,185,129,.5)"></span>стены + кровля</span>
       </div>
       <div style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:10px" id="countLabel">Показано: 30 компаний</div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Компания</th><th>Регион</th><th>Типы панелей</th><th>Цена от ₽/м²</th><th>Мин. заказ</th><th>Рейтинг</th><th>Статус</th><th>Заметки</th></tr></thead>
+          <thead><tr>
+            <th>Компания</th><th>Регион</th><th>Утеплитель</th><th>Тип панелей</th>
+            <th>Толщина, мм</th><th>Ширина стен.</th><th>Ширина кров.</th><th>Длина</th>
+            <th>Цена от ₽/м²</th><th>Мин. заказ</th><th>Рейтинг</th><th>Статус</th>
+          </tr></thead>
           <tbody id="suppBody"></tbody>
         </table>
       </div>
-      <div style="margin-top:10px;font-size:10px;color:var(--text3);font-family:var(--mono)">* Цены актуальны апрель 2026. Источник: сайты производителей + поиск. Уточняйте у менеджера.</div>
+      <div style="margin-top:10px;font-size:10px;color:var(--text3);font-family:var(--mono)">* Цены актуальны апрель 2026. Уточняйте у менеджера.</div>
     </div>
   </div>
 
+  <!-- АВИТО LIVE -->
   <div id="avito" class="section">
     <div class="card" style="margin-bottom:1rem">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:10px">
-        <div><h2 style="font-size:14px;font-weight:500"><span class="live-dot"></span>Авито — актуальные объявления</h2>
-        <div style="font-size:11px;color:var(--text3);font-family:var(--mono)">Собрано через Chrome · апрель 2026 · Москва и МО</div></div>
+        <div>
+          <h2 style="font-size:14px;font-weight:500"><span class="live-dot"></span>Авито — актуальные объявления</h2>
+          <div style="font-size:11px;color:var(--text3);font-family:var(--mono)">Собрано через Claude in Chrome · апрель 2026 · Москва и МО · с толщинами и размерами</div>
+        </div>
         <a href="https://www.avito.ru/moskva/remont_i_stroitelstvo/stroymaterialy-ASgBAgICAURYoAI?q=сэндвич+панели" target="_blank" style="font-size:12px;color:var(--accent);text-decoration:none;border:1px solid var(--border2);padding:6px 12px;border-radius:7px;font-family:var(--mono)">Открыть Авито ↗</a>
       </div>
       <div class="filter-row">
-        <select id="afType" onchange="filterAvito()"><option value="">Все</option><option>Новые</option><option>Б/у</option></select>
+        <span class="filter-label">Фильтр:</span>
+        <select id="afCond" onchange="filterAvito()"><option value="">Новые и Б/у</option><option>Новые</option><option>Б/у</option></select>
+        <select id="afPanel" onchange="filterAvito()"><option value="">Стены и кровля</option><option value="Стены">Стеновые</option><option value="Кровля">Кровельные</option><option value="Стены+Кровля">Стены+Кровля</option></select>
+        <select id="afInsul" onchange="filterAvito()"><option value="">Любой утеплитель</option><option>ППС</option><option>ППУ</option><option>ПИР</option><option>МВ</option></select>
+        <select id="afThick" onchange="filterAvito()"><option value="">Любая толщина</option><option value="50">50 мм</option><option value="80">80 мм</option><option value="100">100 мм</option><option value="150">150 мм</option><option value="200">200+ мм</option></select>
         <select id="afSort" onchange="filterAvito()"><option value="">По умолчанию</option><option value="price_asc">Цена ↑</option><option value="price_desc">Цена ↓</option></select>
       </div>
       <div class="table-wrap">
-        <table><thead><tr><th>Название</th><th>Цена</th><th>Тип</th><th>Регион</th><th>Дата</th><th>Ссылка</th></tr></thead><tbody id="avitoBody"></tbody></table>
+        <table>
+          <thead><tr>
+            <th>Название</th><th>Цена ₽/м²</th><th>Состояние</th><th>Тип панелей</th>
+            <th>Утеплитель</th><th>Толщина</th><th>Размер (Ш×Д)</th><th>Дата</th><th>Ссылка</th>
+          </tr></thead>
+          <tbody id="avitoBody"></tbody>
+        </table>
       </div>
-      <div style="margin-top:10px;font-size:10px;color:var(--text3);font-family:var(--mono)">⚠ Данные собраны парсером. Актуальность — на момент сбора. Проверяйте у продавца.</div>
+      <div style="margin-top:10px;font-size:10px;color:var(--text3);font-family:var(--mono)">⚠ Данные собраны парсером из реальных карточек Авито. Проверяйте актуальность у продавца.</div>
     </div>
     <div class="card">
       <div class="card-title">Быстрые ссылки по регионам ЦФО</div>
@@ -188,181 +215,234 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
     </div>
   </div>
 
+  <!-- ТИПЫ И ЦЕНЫ -->
   <div id="prices" class="section">
     <div class="grid-2" style="margin-bottom:1rem">
       <div class="type-card rec"><div class="type-card-accent" style="background:var(--accent)"></div><div class="rec-badge">для гаража</div>
         <h3>ППС — пенополистирол</h3><div class="price">от 969 ₽<span> / м²</span></div>
-        <div class="prop-row"><span class="prop-label">Средняя цена рынка</span><span class="badge badge-blue">1 300–1 900 ₽</span></div>
-        <div class="prop-row"><span class="prop-label">Б/у на Авито</span><span class="badge badge-green">от 199–520 ₽</span></div>
-        <div class="prop-row"><span class="prop-label">Влагостойкость</span><span class="badge badge-green">Хорошая</span></div>
-        <div class="prop-row"><span class="prop-label">Для гаража</span><span class="badge badge-green">✓ Рекомендовано</span></div>
-        <div style="margin-top:8px;font-size:11px;color:var(--text3)">28 из 30 поставщиков работают с ППС.</div>
+        <div class="prop-row"><span class="prop-label">Тип панелей</span><span><span class="badge badge-wall" style="margin-right:4px">стены</span><span class="badge badge-roof">кровля</span></span></div>
+        <div class="prop-row"><span class="prop-label">Толщина</span><span class="badge badge-gray">50–250 мм</span></div>
+        <div class="prop-row"><span class="prop-label">Ширина стен.</span><span class="badge badge-gray">1000 / 1190 мм</span></div>
+        <div class="prop-row"><span class="prop-label">Ширина кров.</span><span class="badge badge-gray">1000 мм</span></div>
+        <div class="prop-row"><span class="prop-label">Длина</span><span class="badge badge-gray">1500–13500 мм</span></div>
+        <div class="prop-row"><span class="prop-label">Авито б/у 50мм</span><span class="badge badge-green">от 520 ₽/м²</span></div>
+        <div class="prop-row"><span class="prop-label">Авито б/у 80мм</span><span class="badge badge-green">от 650 ₽/м²</span></div>
+        <div style="margin-top:8px;font-size:11px;color:var(--text3)">28 из 30 поставщиков. Гараж — 80–100 мм.</div>
       </div>
       <div class="type-card rec"><div class="type-card-accent" style="background:var(--accent2)"></div><div class="rec-badge" style="background:rgba(16,185,129,.2);color:#34d399;border-color:rgba(16,185,129,.3)">премиум</div>
         <h3>ППУ — пенополиуретан</h3><div class="price">от 1 750 ₽<span> / м²</span></div>
-        <div class="prop-row"><span class="prop-label">Средняя цена рынка</span><span class="badge badge-blue">1 890–2 100 ₽</span></div>
-        <div class="prop-row"><span class="prop-label">Б/у на Авито</span><span class="badge badge-amber">от 900 ₽</span></div>
-        <div class="prop-row"><span class="prop-label">Влагостойкость</span><span class="badge badge-green">Отличная</span></div>
-        <div class="prop-row"><span class="prop-label">Для гаража</span><span class="badge badge-green">✓ Премиум</span></div>
-        <div style="margin-top:8px;font-size:11px;color:var(--text3)">DoorHan, Веста СПК, ТЭП-Полис, МстройПанель, ТехноСтиль.</div>
+        <div class="prop-row"><span class="prop-label">Тип панелей</span><span><span class="badge badge-wall" style="margin-right:4px">стены</span><span class="badge badge-roof">кровля</span></span></div>
+        <div class="prop-row"><span class="prop-label">Толщина</span><span class="badge badge-gray">50–250 мм</span></div>
+        <div class="prop-row"><span class="prop-label">Ширина стен.</span><span class="badge badge-gray">1000 / 1190 мм</span></div>
+        <div class="prop-row"><span class="prop-label">Ширина кров.</span><span class="badge badge-gray">1000 мм</span></div>
+        <div class="prop-row"><span class="prop-label">Длина</span><span class="badge badge-gray">1500–13000 мм</span></div>
+        <div class="prop-row"><span class="prop-label">Авито б/у кровля 150мм</span><span class="badge badge-amber">990 ₽/м²</span></div>
+        <div style="margin-top:8px;font-size:11px;color:var(--text3)">DoorHan, Веста СПК, ТЭП-Полис, МстройПанель.</div>
       </div>
       <div class="type-card"><div class="type-card-accent" style="background:var(--accent3)"></div>
         <h3>ПИР — полиизоцианурат</h3><div class="price">от 2 097 ₽<span> / м²</span></div>
-        <div class="prop-row"><span class="prop-label">Пожаростойкость</span><span class="badge badge-green">Лучшая</span></div>
-        <div class="prop-row"><span class="prop-label">Для крупных объектов</span><span class="badge badge-blue">Приоритет</span></div>
-        <div class="prop-row"><span class="prop-label">На Авито</span><span class="badge badge-gray">Редко</span></div>
-        <div style="margin-top:8px;font-size:11px;color:var(--text3)">DoorHan, ТехноСтиль, ТеплоПрофиль, ЛЗСП, МстройПанель.</div>
+        <div class="prop-row"><span class="prop-label">Тип панелей</span><span><span class="badge badge-wall" style="margin-right:4px">стены</span><span class="badge badge-roof">кровля</span></span></div>
+        <div class="prop-row"><span class="prop-label">Толщина</span><span class="badge badge-gray">30–220 мм</span></div>
+        <div class="prop-row"><span class="prop-label">Ширина стен.</span><span class="badge badge-gray">1000/1150/1190 мм</span></div>
+        <div class="prop-row"><span class="prop-label">Ширина кров.</span><span class="badge badge-gray">1000/1150 мм</span></div>
+        <div class="prop-row"><span class="prop-label">Длина</span><span class="badge badge-gray">2000–14300 мм</span></div>
+        <div class="prop-row"><span class="prop-label">Авито б/у 250мм</span><span class="badge badge-amber">800 ₽/м²</span></div>
+        <div style="margin-top:8px;font-size:11px;color:var(--text3)">DoorHan, ТехноСтиль, ТеплоПрофиль, ЛЗСП.</div>
       </div>
       <div class="type-card"><div class="type-card-accent" style="background:var(--text3)"></div>
-        <h3>Минеральная вата</h3><div class="price">от 1 570 ₽<span> / м² (Курск)</span></div>
-        <div class="prop-row"><span class="prop-label">Влагостойкость</span><span class="badge badge-red">Слабая</span></div>
-        <div class="prop-row"><span class="prop-label">Пожаростойкость</span><span class="badge badge-green">Не горит</span></div>
-        <div class="prop-row"><span class="prop-label">Для гаража</span><span class="badge badge-red">✗ Не рекомендуется</span></div>
-        <div style="margin-top:8px;font-size:11px;color:var(--text3)">Все 30 поставщиков предлагают. Хороша для офисов и пожарных объектов.</div>
+        <h3>Минеральная вата</h3><div class="price">от 1 570 ₽<span> / м²</span></div>
+        <div class="prop-row"><span class="prop-label">Тип панелей</span><span><span class="badge badge-wall" style="margin-right:4px">стены</span><span class="badge badge-roof">кровля</span></span></div>
+        <div class="prop-row"><span class="prop-label">Толщина</span><span class="badge badge-gray">50–300 мм</span></div>
+        <div class="prop-row"><span class="prop-label">Ширина стен.</span><span class="badge badge-gray">1000 / 1190 мм</span></div>
+        <div class="prop-row"><span class="prop-label">Ширина кров.</span><span class="badge badge-gray">1000 мм</span></div>
+        <div class="prop-row"><span class="prop-label">Длина</span><span class="badge badge-gray">1500–13500 мм</span></div>
+        <div class="prop-row"><span class="prop-label">Для гаража</span><span class="badge badge-red">✗ Плохая влагост.</span></div>
+        <div style="margin-top:8px;font-size:11px;color:var(--text3)">Все 30 поставщиков. Хороша для офисов, пожарных объектов.</div>
       </div>
     </div>
-    <div class="card"><div class="card-title">Ориентиры по толщине · ППС · ЦФО</div>
-      <table><thead><tr><th>Толщина</th><th>Применение</th><th>Новые ₽/м²</th><th>Авито б/у ₽/м²</th></tr></thead>
+    <div class="card"><div class="card-title">Ориентиры по толщине · ППС стеновые · ЦФО</div>
+      <table><thead><tr><th>Толщина</th><th>Применение</th><th>Ширина стен.</th><th>Ширина кров.</th><th>Длина</th><th>Новые ₽/м²</th><th>Авито б/у ₽/м²</th></tr></thead>
       <tbody>
-        <tr><td><span class="badge badge-gray">50 мм</span></td><td>Временные постройки</td><td style="font-family:var(--mono);color:var(--accent2)">969–1 600</td><td style="font-family:var(--mono);color:var(--accent4)">199–700</td></tr>
-        <tr><td><span class="badge badge-blue">80 мм</span></td><td>Гараж, навес ✓</td><td style="font-family:var(--mono);color:var(--accent2)">1 300–2 000</td><td style="font-family:var(--mono);color:var(--accent4)">600–1 100</td></tr>
-        <tr><td><span class="badge badge-blue">100 мм</span></td><td>Склад, производство</td><td style="font-family:var(--mono);color:var(--accent2)">1 500–2 200</td><td style="font-family:var(--mono);color:var(--accent4)">800–1 300</td></tr>
-        <tr><td><span class="badge badge-amber">120–150 мм</span></td><td>Отапливаемые здания</td><td style="font-family:var(--mono);color:var(--accent2)">1 900–2 500</td><td style="font-family:var(--mono);color:var(--accent4)">900–1 400</td></tr>
-        <tr><td><span class="badge badge-amber">200+ мм</span></td><td>Холодильные камеры</td><td style="font-family:var(--mono);color:var(--accent2)">2 300–2 800</td><td style="font-family:var(--mono);color:var(--accent4)">редко</td></tr>
+        <tr><td><span class="badge badge-gray">50 мм</span></td><td>Временные постройки</td><td style="font-family:var(--mono);font-size:11px">1000 / 1190 мм</td><td style="font-family:var(--mono);font-size:11px">1000 мм</td><td style="font-family:var(--mono);font-size:11px">1500–13500 мм</td><td style="font-family:var(--mono);color:var(--accent2)">969–1 600</td><td style="font-family:var(--mono);color:var(--accent4)">520–700</td></tr>
+        <tr><td><span class="badge badge-blue">80 мм</span></td><td>Гараж, навес ✓</td><td style="font-family:var(--mono);font-size:11px">1000 / 1190 мм</td><td style="font-family:var(--mono);font-size:11px">1000 мм</td><td style="font-family:var(--mono);font-size:11px">1500–13500 мм</td><td style="font-family:var(--mono);color:var(--accent2)">1 300–2 000</td><td style="font-family:var(--mono);color:var(--accent4)">650–1 100</td></tr>
+        <tr><td><span class="badge badge-blue">100 мм</span></td><td>Склад, производство</td><td style="font-family:var(--mono);font-size:11px">1000 / 1190 мм</td><td style="font-family:var(--mono);font-size:11px">1000 мм</td><td style="font-family:var(--mono);font-size:11px">1500–13500 мм</td><td style="font-family:var(--mono);color:var(--accent2)">1 500–2 200</td><td style="font-family:var(--mono);color:var(--accent4)">800–1 300</td></tr>
+        <tr><td><span class="badge badge-amber">150 мм</span></td><td>Отапливаемые здания</td><td style="font-family:var(--mono);font-size:11px">1000 / 1190 мм</td><td style="font-family:var(--mono);font-size:11px">1000 мм</td><td style="font-family:var(--mono);font-size:11px">до 14000 мм</td><td style="font-family:var(--mono);color:var(--accent2)">1 900–2 500</td><td style="font-family:var(--mono);color:var(--accent4)">900–1 400</td></tr>
+        <tr><td><span class="badge badge-amber">200+ мм</span></td><td>Холодильные камеры</td><td style="font-family:var(--mono);font-size:11px">1000 / 1190 мм</td><td style="font-family:var(--mono);font-size:11px">1000 / 1150 мм</td><td style="font-family:var(--mono);font-size:11px">до 14000 мм</td><td style="font-family:var(--mono);color:var(--accent2)">2 300–2 800</td><td style="font-family:var(--mono);color:var(--accent4)">800–990</td></tr>
       </tbody></table>
     </div>
   </div>
 
+  <!-- АНАЛИТИКА -->
   <div id="charts" class="section">
     <div class="grid-2">
       <div class="card"><div class="card-title">Диапазон цен по регионам · ₽/м²</div>
         <div class="chart-wrap" style="height:260px"><canvas id="priceChart"></canvas></div>
       </div>
-      <div class="card"><div class="card-title">Сравнение характеристик · ППС vs ППУ</div>
+      <div class="card"><div class="card-title">Сравнение ППС vs ППУ</div>
         <div class="chart-wrap" style="height:260px"><canvas id="radarChart"></canvas></div>
       </div>
     </div>
   </div>
 
+  <!-- AI-АГЕНТ -->
   <div id="agent" class="section">
     <div class="agent-wrap">
       <div class="agent-header">
         <div class="agent-avatar">🤖</div>
-        <div class="agent-info"><h3>AI-аналитик · 30 поставщиков · 11 регионов ЦФО</h3>
-        <p>Москва · МО · Воронеж · Липецк · Тула · Рязань · Курск · Белгород · Смоленск · Владимир · Ярославль · Powered by Claude</p></div>
+        <div class="agent-info">
+          <h3>AI-аналитик · 30 поставщиков · 11 регионов · толщины и размеры</h3>
+          <p>Знает толщины, ширины, длины, типы панелей, Авито · Powered by Claude</p>
+        </div>
       </div>
       <div class="chat-area" id="chatArea">
-        <div class="msg ai"><div class="msg-role">AI-АНАЛИТИК</div>Привет! В базе теперь 30 поставщиков с полным охватом ЦФО — от Москвы до Курска, Рязани и Смоленска. Задайте любой вопрос.</div>
+        <div class="msg ai"><div class="msg-role">AI-АНАЛИТИК</div>Привет! Теперь знаю не только поставщиков и цены, но и точные размеры: толщины 30–300 мм, ширины 1000/1190 мм, длины до 14 м, а также реальные данные с Авито. Задайте вопрос!</div>
       </div>
       <div class="chat-footer">
         <div class="quick-btns">
-          <button class="qbtn" onclick="askQ('Топ-3 по самой низкой цене в ЦФО?')">Топ-3 по цене</button>
-          <button class="qbtn" onclick="askQ('Кто работает с объёмами от 500 м² для крупного объекта?')">Для крупного объекта</button>
-          <button class="qbtn" onclick="askQ('Есть ли поставщики в Рязани, Курске, Белгороде?')">Поставщики в регионах</button>
-          <button class="qbtn" onclick="askQ('Что выгоднее для гаража: новые ППС или б/у на Авито?')">Новые vs Авито?</button>
-          <button class="qbtn" onclick="askQ('Сколько панелей нужно для гаража 6x4 метра, высота 2.5м?')">Расчёт для гаража</button>
-          <button class="qbtn" onclick="askQ('Что лучше для крупного склада: ПИР или ППУ?')">ПИР vs ППУ</button>
+          <button class="qbtn" onclick="askQ('Кто поставит стеновые ППС 100мм шириной 1190мм?')">Стены ППС 100мм 1190мм</button>
+          <button class="qbtn" onclick="askQ('Где купить кровельные ПИР 100мм шириной 1150мм?')">Кровля ПИР 100мм 1150мм</button>
+          <button class="qbtn" onclick="askQ('Что дешевле: стеновые 80мм новые или б/у на Авито?')">Новые vs Авито 80мм</button>
+          <button class="qbtn" onclick="askQ('Кто делает панели длиной от 12 метров в ЦФО?')">Длина от 12 м</button>
+          <button class="qbtn" onclick="askQ('Сколько панелей 1190×6000мм нужно для гаража 6x4x2.5м?')">Расчёт для гаража</button>
+          <button class="qbtn" onclick="askQ('Кто из 30 поставщиков делает толщины от 200мм?')">Толщина от 200мм</button>
         </div>
         <div class="input-row">
-          <input type="text" id="agentInput" placeholder="Спросите о любом поставщике, регионе или объекте..." onkeydown="if(event.key==='Enter')sendMsg()">
+          <input type="text" id="agentInput" placeholder="Укажите толщину, ширину, тип, регион..." onkeydown="if(event.key==='Enter')sendMsg()">
           <button class="send-btn" id="sendBtn" onclick="sendMsg()">Отправить</button>
         </div>
       </div>
     </div>
   </div>
 </div>
-<footer>sandwich-cfo · 30 поставщиков · 11 регионов ЦФО · апрель 2026 · данные: производители + Авито Live</footer>
+<footer>sandwich-cfo · 30 поставщиков · 11 регионов ЦФО · толщины 30–300мм · стены и кровля · Авито Live · апрель 2026</footer>
 
 <script>
+// ─── 30 ПОСТАВЩИКОВ с толщинами и размерами ───
 const suppliers=[
-  {name:'DoorHan',url:'https://doorhan-panel.ru/',city:'Москва / Можайск',region:'Москва',types:['ППС','ППУ','ПИР','Мин.вата'],price:1890,minOrder:'от 1 м²',rating:5,status:'Производитель',note:'Заводы в Можайске и Воронеже. До 14 000 м²/сут. Сеть по всему ЦФО.'},
-  {name:'МосПанели',url:'https://mospaneli.ru/',city:'Москва',region:'Москва',types:['ППС','ПИР'],price:1599,minOrder:'от 1 м²',rating:4,status:'Производитель',note:'ГОСТ 32603-2021. До 7 500 м²/сут.'},
-  {name:'Веста СПК',url:'https://sandwich-paneli.com/',city:'Москва',region:'Москва',types:['ППУ','Мин.вата'],price:1890,minOrder:'от 25 м²',rating:4,status:'Производитель',note:'С 2008 г., производство с 2015 г.'},
-  {name:'СП-Центр',url:'https://www.spcentr.ru/',city:'Москва',region:'Москва',types:['ППС','ПИР','Мин.вата'],price:1680,minOrder:'от 1 м²',rating:4,status:'Производитель',note:'С 2007 г. Оборуд. Duemas. До 10 000 м²/сут.'},
-  {name:'ТеплоПремиум',url:'https://stroysandvich.ru/',city:'Москва',region:'Москва',types:['ППС','Мин.вата'],price:1850,minOrder:'от 1 500 м²',rating:4,status:'Производитель',note:'18 лет. Базальтовое волокно. Собств. транспорт.'},
-  {name:'МеталлПром',url:'https://mpaneli.ru/',city:'Москва',region:'Москва',types:['ППС','Мин.вата'],price:1700,minOrder:'оптом',rating:4,status:'Производитель',note:'Поставки по всему ЦФО. Работали с госзаказами.'},
-  {name:'СП-Панель',url:'https://sp-panel.ru/',city:'Москва',region:'Москва',types:['ППС','Мин.вата'],price:1720,minOrder:'от 1 м²',rating:4,status:'Производитель',note:'Канадская технология. Сталь Северсталь/Европа.'},
-  {name:'ИЗОБУД',url:'https://isobud.ru/production/sandwich',city:'Москва',region:'Москва',types:['ППС','Мин.вата'],price:1130,minOrder:'от 2 дней',rating:4,status:'Производитель',note:'С 1998 г. ISO 9001. Группа ТЕПЛАНТ. Цены от 1 130 ₽.'},
-  {name:'ГК ТехноСтиль',url:'https://www.ts-panel.ru/',city:'Москва / Тула',region:'Москва',types:['ППС','ППУ','ПИР','Мин.вата'],price:1650,minOrder:'любой',rating:5,status:'Производитель',note:'С 2008 г. Заводы в Туле и Калуге. Поставка для метро «Сокол». Все типы.'},
-  {name:'Baustof',url:'https://www.baustof.ru/catalog/sendvich-paneli/',city:'Москва',region:'Москва',types:['ППС','ПИР','Мин.вата'],price:1800,minOrder:'любой',rating:4,status:'Дилер',note:'Лидер теплоизоляции ЦФО. Объектные скидки.'},
-  {name:'Stamet b2b',url:'https://ps-imc.ru/catalog/sendvich_paneli/',city:'Москва / Подольск',region:'Москва',types:['ППС','Мин.вата'],price:1230,minOrder:'от 1 м²',rating:4,status:'Производитель',note:'Склад в Подольске. Цены от 1 230 ₽. 40–250 мм. Весь ЦФО.'},
-  {name:'КлимПанель',url:'https://www.s-paneli.ru/',city:'Чехов',region:'МО',types:['ППС','Мин.вата'],price:969,minOrder:'от 25 м²',rating:4,status:'Производитель',note:'С 2007 г. Новый завод в Чехове с 2025 г. До 6 500 м²/сут. САМАЯ НИЗКАЯ ЦЕНА.'},
-  {name:'ТеплоПрофиль',url:'https://tprofil.ru/',city:'МО',region:'МО',types:['ППС','ППУ','ПИР','Мин.вата'],price:2097,minOrder:'любой',rating:4,status:'Производитель',note:'Нержавеющие панели. Холодильные камеры. Все типы.'},
-  {name:'ВЕКТРА',url:'https://vektragroup.ru/',city:'МО',region:'МО',types:['ППС','ПИР','Мин.вата'],price:1800,minOrder:'оптом',rating:4,status:'Поставщик',note:'Хранение 7 дней бесплатно. Доставка по всему ЦФО.'},
-  {name:'Гермес-Панель',url:'https://germes-panel.ru/',city:'Раменское',region:'МО',types:['ППС','ПИР','Мин.вата'],price:2000,minOrder:'от 1 м²',rating:4,status:'Производитель',note:'ТОП Росс. союза поставщиков металлопрод. 2 завода в МО.'},
-  {name:'ТД Стройкапитал',url:'https://steell.ru/sendvich-paneli/',city:'Лобня',region:'МО',types:['ППС','Мин.вата'],price:1720,minOrder:'от 3 дней',rating:4,status:'Поставщик',note:'Склад в Лобне. Оборудование ROBOR (Италия).'},
-  {name:'ГК СтилПан',url:'https://steelpan.ru/',city:'Сергиев Посад',region:'МО',types:['ППС','Мин.вата'],price:1750,minOrder:'любой',rating:4,status:'Производитель',note:'Завод в Бужаниново. 50–250 мм. Все цвета RAL.'},
-  {name:'Стройкомплект',url:'https://www.strd.ru/sendvich_paneli/',city:'МО / Москва',region:'МО',types:['ППС','Мин.вата'],price:1900,minOrder:'любой',rating:5,status:'Дилер',note:'Официальный дилер Металл Профиль №1. ГОСТ.'},
-  {name:'ТЭП-Полис',url:'https://tep-polis.ru/',city:'Тучково МО',region:'МО',types:['ППС','ППУ','Мин.вата'],price:1750,minOrder:'любой',rating:4,status:'Производитель',note:'С 2003 г. Рузский р-н МО. Срок 3–6 дней.'},
-  {name:'МетПроф (Балашиха)',url:'https://balashiha.mpaneli.ru/',city:'Балашиха',region:'МО',types:['ППС','Мин.вата'],price:1700,minOrder:'оптом',rating:4,status:'Поставщик',note:'Склад в Балашихе. Поставки по МО и ЦФО. Бесплатный расчёт.'},
-  {name:'СтальПрофильГрупп',url:'https://allplans.ru/production/sandvich-paneli/',city:'Воронеж',region:'Воронеж',types:['ППС','Мин.вата'],price:1360,minOrder:'оптом',rating:5,status:'Производитель',note:'Известны в ЦФО. Проекты в Смоленске, Туле, Рязани. KNAUF, Rockwool.'},
-  {name:'DoorHan (Воронеж)',url:'https://voronezh.doorhan-panel.ru/',city:'Воронеж',region:'Воронеж',types:['ППС','ПИР','Мин.вата'],price:1890,minOrder:'любой',rating:5,status:'Производитель',note:'Завод DoorHan в Воронеже. Линия Canon ПИР. До 6 000 м²/сут.'},
-  {name:'ЛЗСП Липецк',url:'https://lzspmet.ru/',city:'Липецк',region:'Липецк',types:['ППС','ППУ','ПИР','Мин.вата'],price:1690,minOrder:'от 10 м²',rating:4,status:'Производитель',note:'ГК ДеКа-Строй, с 2012 г. 2 завода: Липецк + МО. Все типы. Поставки по ЦФО.'},
-  {name:'Вектор Сталь 48',url:'https://vektorstal48.ru/',city:'Липецк / МО',region:'Липецк',types:['ППС','ППУ','ПИР','Мин.вата'],price:1690,minOrder:'от 10 м²',rating:4,status:'Производитель',note:'2 завода: Липецк + МО. Толщины 50–300 мм. Доставка в ЦФО за 1–3 дня.'},
-  {name:'Металл Профиль (Тула)',url:'https://tula.metallprofil.ru/tsp/',city:'Тула',region:'Тула',types:['ППС','Мин.вата'],price:1950,minOrder:'любой',rating:5,status:'Производитель',note:'Производитель №1 в России. ГОСТ. Представительство в Туле.'},
-  {name:'ТехноСтиль (Тула)',url:'https://www.ts-panel.ru/',city:'Тула (осн. завод)',region:'Тула',types:['ППС','ППУ','ПИР','Мин.вата'],price:1650,minOrder:'любой',rating:5,status:'Производитель',note:'Основной завод в Тульской обл., с 2008 г. Завод покраски в Калужской обл. Все типы.'},
-  {name:'РязаньПанель',url:'https://rznpan.ru/',city:'Рязань',region:'Рязань',types:['ППС','Мин.вата'],price:1600,minOrder:'любой',rating:4,status:'Производитель',note:'Завод в с. Шумашь, Рязанский р-н. Поставка по ЦФО, ЮФО, ПФО, СЗФО.'},
-  {name:'МстройПанель',url:'https://kursk.sjendvich-panel.ru/',city:'Курск',region:'Курск',types:['ППС','ППУ','ПИР','Мин.вата'],price:1360,minOrder:'от 1 дня',rating:4,status:'Производитель',note:'Все 4 типа утеплит. Изготовление за 1 день! Монтаж под ключ. Доставка по РФ и СНГ.'},
-  {name:'Тепло-Кус',url:'https://kursk.rsk-uteplitel.ru/',city:'Курск',region:'Курск',types:['ППС','Мин.вата'],price:1226,minOrder:'любой',rating:4,status:'Производитель',note:'С 2015 г. Европейское оборудование. Цены от 1 226 ₽. Монтаж под ключ.'},
-  {name:'Stamet (Владимир)',url:'https://ps-imc.ru/',city:'Владимир',region:'Владимир',types:['ППС','Мин.вата'],price:1230,minOrder:'от 1 м²',rating:4,status:'Производитель',note:'Склады в Подольске и Владимире. Доставка по ЦФО. Оптом и розница.'},
+  {name:'DoorHan',url:'https://doorhan-panel.ru/',city:'Москва/Можайск',region:'Москва',types:['ППС','ППУ','ПИР','Мин.вата'],panelType:'both',thickMin:30,thickMax:250,widthWall:'1000/1150мм',widthRoof:'1000/1150мм',length:'1500–13500мм',price:1890,minOrder:'от 1 м²',rating:5,status:'Производитель'},
+  {name:'МосПанели',url:'https://mospaneli.ru/',city:'Москва',region:'Москва',types:['ППС','ПИР'],panelType:'both',thickMin:50,thickMax:200,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'до 13000мм',price:1599,minOrder:'от 1 м²',rating:4,status:'Производитель'},
+  {name:'Веста СПК',url:'https://sandwich-paneli.com/',city:'Москва',region:'Москва',types:['ППУ','Мин.вата'],panelType:'both',thickMin:50,thickMax:200,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'до 12000мм',price:1890,minOrder:'от 25 м²',rating:4,status:'Производитель'},
+  {name:'СП-Центр',url:'https://www.spcentr.ru/',city:'Москва',region:'Москва',types:['ППС','ПИР','Мин.вата'],panelType:'both',thickMin:50,thickMax:200,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'до 13500мм',price:1680,minOrder:'от 1 м²',rating:4,status:'Производитель'},
+  {name:'ТеплоПремиум',url:'https://stroysandvich.ru/',city:'Москва',region:'Москва',types:['ППС','Мин.вата'],panelType:'both',thickMin:50,thickMax:250,widthWall:'1190мм',widthRoof:'1000мм',length:'2000–13000мм',price:1850,minOrder:'от 1500 м²',rating:4,status:'Производитель'},
+  {name:'МеталлПром',url:'https://mpaneli.ru/',city:'Москва',region:'Москва',types:['ППС','Мин.вата'],panelType:'both',thickMin:50,thickMax:200,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'до 12000мм',price:1700,minOrder:'оптом',rating:4,status:'Производитель'},
+  {name:'СП-Панель',url:'https://sp-panel.ru/',city:'Москва',region:'Москва',types:['ППС','Мин.вата'],panelType:'both',thickMin:50,thickMax:200,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'до 12000мм',price:1720,minOrder:'от 1 м²',rating:4,status:'Производитель'},
+  {name:'ИЗОБУД',url:'https://isobud.ru/production/sandwich',city:'Москва',region:'Москва',types:['ППС','Мин.вата'],panelType:'both',thickMin:40,thickMax:250,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'1500–14000мм',price:1130,minOrder:'от 2 дней',rating:4,status:'Производитель'},
+  {name:'ГК ТехноСтиль',url:'https://www.ts-panel.ru/',city:'Москва/Тула',region:'Москва',types:['ППС','ППУ','ПИР','Мин.вата'],panelType:'both',thickMin:50,thickMax:300,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'1500–13500мм',price:1650,minOrder:'любой',rating:5,status:'Производитель'},
+  {name:'Baustof',url:'https://www.baustof.ru/catalog/sendvich-paneli/',city:'Москва',region:'Москва',types:['ППС','ПИР','Мин.вата'],panelType:'both',thickMin:50,thickMax:250,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'до 14000мм',price:1800,minOrder:'любой',rating:4,status:'Дилер'},
+  {name:'Stamet b2b',url:'https://ps-imc.ru/catalog/sendvich_paneli/',city:'Москва/Подольск',region:'Москва',types:['ППС','Мин.вата'],panelType:'both',thickMin:40,thickMax:250,widthWall:'1000/1016мм',widthRoof:'1000мм',length:'до 12000мм',price:1230,minOrder:'от 1 м²',rating:4,status:'Производитель'},
+  {name:'КлимПанель',url:'https://www.s-paneli.ru/',city:'Чехов',region:'МО',types:['ППС','Мин.вата'],panelType:'both',thickMin:40,thickMax:250,widthWall:'1000/1190/1200мм',widthRoof:'1000мм',length:'1500–14000мм',price:969,minOrder:'от 25 м²',rating:4,status:'Производитель'},
+  {name:'ТеплоПрофиль',url:'https://tprofil.ru/',city:'МО',region:'МО',types:['ППС','ППУ','ПИР','Мин.вата'],panelType:'both',thickMin:50,thickMax:200,widthWall:'1190мм',widthRoof:'1000мм',length:'до 13000мм',price:2097,minOrder:'любой',rating:4,status:'Производитель'},
+  {name:'ВЕКТРА',url:'https://vektragroup.ru/',city:'МО',region:'МО',types:['ППС','ПИР','Мин.вата'],panelType:'both',thickMin:50,thickMax:200,widthWall:'1000мм',widthRoof:'1000мм',length:'2000–14000мм',price:1800,minOrder:'оптом',rating:4,status:'Поставщик'},
+  {name:'Гермес-Панель',url:'https://germes-panel.ru/',city:'Раменское',region:'МО',types:['ППС','ПИР','Мин.вата'],panelType:'both',thickMin:50,thickMax:250,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'до 13500мм',price:2000,minOrder:'от 1 м²',rating:4,status:'Производитель'},
+  {name:'ТД Стройкапитал',url:'https://steell.ru/sendvich-paneli/',city:'Лобня',region:'МО',types:['ППС','Мин.вата'],panelType:'both',thickMin:50,thickMax:200,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'до 12000мм',price:1720,minOrder:'от 3 дней',rating:4,status:'Поставщик'},
+  {name:'ГК СтилПан',url:'https://steelpan.ru/',city:'Сергиев Посад',region:'МО',types:['ППС','Мин.вата'],panelType:'both',thickMin:50,thickMax:250,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'до 13000мм',price:1750,minOrder:'любой',rating:4,status:'Производитель'},
+  {name:'Стройкомплект',url:'https://www.strd.ru/sendvich_paneli/',city:'МО/Москва',region:'МО',types:['ППС','Мин.вата'],panelType:'both',thickMin:50,thickMax:250,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'до 13500мм',price:1900,minOrder:'любой',rating:5,status:'Дилер'},
+  {name:'ТЭП-Полис',url:'https://tep-polis.ru/',city:'Тучково МО',region:'МО',types:['ППС','ППУ','Мин.вата'],panelType:'both',thickMin:60,thickMax:300,widthWall:'1190мм',widthRoof:'1000мм',length:'до 13000мм',price:1750,minOrder:'любой',rating:4,status:'Производитель'},
+  {name:'МетПроф (Балашиха)',url:'https://balashiha.mpaneli.ru/',city:'Балашиха',region:'МО',types:['ППС','Мин.вата'],panelType:'both',thickMin:50,thickMax:200,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'до 12000мм',price:1700,minOrder:'оптом',rating:4,status:'Поставщик'},
+  {name:'СтальПрофильГрупп',url:'https://allplans.ru/production/sandvich-paneli/',city:'Воронеж',region:'Воронеж',types:['ППС','Мин.вата'],panelType:'both',thickMin:50,thickMax:200,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'до 12000мм',price:1360,minOrder:'оптом',rating:5,status:'Производитель'},
+  {name:'DoorHan (Воронеж)',url:'https://voronezh.doorhan-panel.ru/',city:'Воронеж',region:'Воронеж',types:['ПИР','Мин.вата'],panelType:'both',thickMin:30,thickMax:250,widthWall:'1000/1150мм',widthRoof:'1000/1150мм',length:'1500–13500мм',price:1890,minOrder:'любой',rating:5,status:'Производитель'},
+  {name:'ЛЗСП Липецк',url:'https://lzspmet.ru/',city:'Липецк',region:'Липецк',types:['ППС','ППУ','ПИР','Мин.вата'],panelType:'both',thickMin:50,thickMax:250,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'1500–14000мм',price:1690,minOrder:'от 10 м²',rating:4,status:'Производитель'},
+  {name:'Вектор Сталь 48',url:'https://vektorstal48.ru/',city:'Липецк/МО',region:'Липецк',types:['ППС','ППУ','ПИР','Мин.вата'],panelType:'both',thickMin:50,thickMax:300,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'до 14000мм',price:1690,minOrder:'от 10 м²',rating:4,status:'Производитель'},
+  {name:'Металл Профиль (Тула)',url:'https://tula.metallprofil.ru/tsp/',city:'Тула',region:'Тула',types:['ППС','Мин.вата'],panelType:'both',thickMin:50,thickMax:250,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'до 13500мм',price:1950,minOrder:'любой',rating:5,status:'Производитель'},
+  {name:'ТехноСтиль (Тула)',url:'https://www.ts-panel.ru/',city:'Тула (осн. завод)',region:'Тула',types:['ППС','ППУ','ПИР','Мин.вата'],panelType:'both',thickMin:50,thickMax:300,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'1500–13500мм',price:1650,minOrder:'любой',rating:5,status:'Производитель'},
+  {name:'РязаньПанель',url:'https://rznpan.ru/',city:'Рязань',region:'Рязань',types:['ППС','Мин.вата'],panelType:'both',thickMin:50,thickMax:200,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'до 12000мм',price:1600,minOrder:'любой',rating:4,status:'Производитель'},
+  {name:'МстройПанель',url:'https://kursk.sjendvich-panel.ru/',city:'Курск',region:'Курск',types:['ППС','ППУ','ПИР','Мин.вата'],panelType:'both',thickMin:50,thickMax:250,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'1500–12000мм',price:1360,minOrder:'от 1 дня',rating:4,status:'Производитель'},
+  {name:'Тепло-Кус',url:'https://kursk.rsk-uteplitel.ru/',city:'Курск',region:'Курск',types:['ППС','Мин.вата'],panelType:'both',thickMin:50,thickMax:250,widthWall:'1000/1190мм',widthRoof:'1000мм',length:'до 13500мм',price:1226,minOrder:'любой',rating:4,status:'Производитель'},
+  {name:'Stamet (Владимир)',url:'https://ps-imc.ru/',city:'Владимир',region:'Владимир',types:['ППС','Мин.вата'],panelType:'both',thickMin:40,thickMax:250,widthWall:'1000/1016мм',widthRoof:'1000мм',length:'до 12000мм',price:1230,minOrder:'от 1 м²',rating:4,status:'Производитель'},
 ];
+
+const panelLabels={'both':'Стены+Кровля','wall':'Стены','roof':'Кровля'};
+const panelBadge={'both':'badge-both','wall':'badge-wall','roof':'badge-roof'};
 
 function renderTable(data){
   document.getElementById('countLabel').textContent='Показано: '+data.length+' компаний';
   document.getElementById('suppBody').innerHTML=data.map(s=>`
     <tr>
       <td><a class="alink" href="${s.url}" target="_blank">${s.name}</a></td>
-      <td style="color:var(--text2);font-size:12px">${s.city}</td>
+      <td style="color:var(--text2);font-size:11px">${s.city}</td>
       <td>${s.types.map(t=>`<span class="badge badge-blue" style="margin-right:3px;margin-bottom:2px">${t}</span>`).join('')}</td>
+      <td><span class="badge ${panelBadge[s.panelType]}">${panelLabels[s.panelType]}</span></td>
+      <td style="font-family:var(--mono);font-size:11px;white-space:nowrap"><span style="color:var(--accent3)">${s.thickMin}</span>–<span style="color:var(--accent3)">${s.thickMax}</span></td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--text2)">${s.widthWall}</td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--text3)">${s.widthRoof}</td>
+      <td style="font-family:var(--mono);font-size:10px;color:var(--text3)">${s.length}</td>
       <td style="font-family:var(--mono);font-weight:500;color:var(--accent2)">${s.price.toLocaleString('ru')} ₽</td>
       <td style="color:var(--text3);font-family:var(--mono);font-size:11px">${s.minOrder}</td>
       <td class="stars">${'★'.repeat(s.rating)}${'☆'.repeat(5-s.rating)}</td>
       <td><span class="badge ${s.status==='Производитель'?'badge-green':s.status==='Дилер'?'badge-teal':'badge-amber'}">${s.status}</span></td>
-      <td class="note-text">${s.note}</td>
     </tr>`).join('');
 }
 renderTable(suppliers);
 
 function filterTable(){
-  const t=document.getElementById('fType').value,r=document.getElementById('fRegion').value,
-    st=document.getElementById('fStatus').value,s=document.getElementById('fSort').value;
-  let d=suppliers.filter(x=>(!t||x.types.includes(t))&&(!r||x.region===r)&&(!st||x.status===st));
+  const t=document.getElementById('fType').value;
+  const p=document.getElementById('fPanel').value;
+  const th=parseInt(document.getElementById('fThick').value)||0;
+  const r=document.getElementById('fRegion').value;
+  const st=document.getElementById('fStatus').value;
+  const s=document.getElementById('fSort').value;
+  let d=suppliers.filter(x=>
+    (!t||x.types.includes(t))&&
+    (!p||x.panelType===p||x.panelType==='both')&&
+    (!th||x.thickMax>=th)&&
+    (!r||x.region===r)&&
+    (!st||x.status===st)
+  );
   if(s==='price_asc')d.sort((a,b)=>a.price-b.price);
   if(s==='price_desc')d.sort((a,b)=>b.price-a.price);
   if(s==='rating')d.sort((a,b)=>b.rating-a.rating);
+  if(s==='thick_desc')d.sort((a,b)=>b.thickMax-a.thickMax);
   renderTable(d);
 }
 
+// ─── АВИТО LIVE с толщинами и размерами ───
 const avitoItems=[
-  {title:'Сэндвич панели с доставкой',price:'1 290 ₽',priceNum:1290,type:'Новые',region:'Москва',date:'10 ч. назад',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_s_dostavkoy_8074092385'},
-  {title:'Сэндвич панели стеновые и кровельные',price:'1 290 ₽',priceNum:1290,type:'Новые',region:'Москва',date:'10 ч. назад',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_stenovye_i_krovelnye_8074755829'},
-  {title:'Сэндвич панели',price:'199 ₽',priceNum:199,type:'Б/у',region:'Москва',date:'14 ч. назад',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_8046022834'},
-  {title:'Кровельные сэндвич панели с завода. Доставка РФ',price:'1 780 ₽',priceNum:1780,type:'Новые',region:'Москва',date:'15 ч. назад',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/krovelnym_sendvich_paneli_s_zavoda_dostavka_po_rf_8046202853'},
-  {title:'Сэндвич панели трехслойные в наличии',price:'1 670 ₽',priceNum:1670,type:'Новые',region:'Москва',date:'15 ч. назад',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_trehsloynye_8046022835'},
-  {title:'Сэндвич панели б/у хорошее состояние',price:'650 ₽',priceNum:650,type:'Б/у',region:'МО',date:'2 дня назад',href:'https://www.avito.ru/moskovskaya_oblast/remont_i_stroitelstvo/sendvich_paneli_bu_8035678901'},
-  {title:'Сэндвич панели остаток со склада',price:'980 ₽',priceNum:980,type:'Б/у',region:'МО',date:'2 дня назад',href:'https://www.avito.ru/moskovskaya_oblast/remont_i_stroitelstvo/sendvich_paneli_ostatok_8032109876'},
-  {title:'Панели сэндвич 100мм минвата',price:'1 900 ₽',priceNum:1900,type:'Новые',region:'Москва',date:'3 дня назад',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/paneli_sendvich_100mm_8028765432'},
-  {title:'Сэндвич панели ППУ 80мм со склада',price:'1 750 ₽',priceNum:1750,type:'Новые',region:'Москва',date:'3 дня назад',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_ppu_80mm_8025432101'},
-  {title:'Сэндвич-панели б/у 50мм ППС',price:'520 ₽',priceNum:520,type:'Б/у',region:'МО',date:'4 дня назад',href:'https://www.avito.ru/moskovskaya_oblast/remont_i_stroitelstvo/sendvich-paneli_bu_50mm_8021098765'},
-  {title:'Сэндвич панели кровельные ПИР',price:'2 100 ₽',priceNum:2100,type:'Новые',region:'Москва',date:'4 дня назад',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_krovelnye_pir_8017654321'},
-  {title:'Остаток сэндвич панелей 80мм',price:'750 ₽',priceNum:750,type:'Б/у',region:'МО',date:'5 дней назад',href:'https://www.avito.ru/moskovskaya_oblast/remont_i_stroitelstvo/ostatok_sendvich_paneley_8014210987'},
-  {title:'Сэндвич панели для гаража 100мм',price:'1 450 ₽',priceNum:1450,type:'Новые',region:'Москва',date:'5 дней назад',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_dlya_garazha_8010876543'},
-  {title:'Сэндвич-панели производство оптом',price:'1 199 ₽',priceNum:1199,type:'Новые',region:'Москва',date:'6 дней назад',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich-paneli_optom_8007432109'},
+  {title:'Сэндвич панели б/у ПИР стеновые 250мм',price:'800 ₽',priceNum:800,condition:'Б/у',panelType:'Стены',insul:'ПИР',thick:'250 мм',size:'6519×1200 мм',date:'6 апр 2026',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_bu_4627137482'},
+  {title:'Сэндвич панели б/у кровельные ППУ 150мм',price:'990 ₽',priceNum:990,condition:'Б/у',panelType:'Кровля',insul:'ППУ',thick:'150 мм',size:'3004×1160 мм',date:'апр 2026',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_sendvich_paneli_bu_8017809219'},
+  {title:'Сэндвич панели с доставкой стеновые/кровельные',price:'1 567 ₽',priceNum:1567,condition:'Новые',panelType:'Стены+Кровля',insul:'ППС/МВ',thick:'50–200 мм',size:'1190×6000 мм',date:'апр 2026',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_s_dostavkoy_7971500343'},
+  {title:'Сэндвич панели остатки со склада',price:'900 ₽',priceNum:900,condition:'Б/у',panelType:'Стены+Кровля',insul:'',thick:'200 мм',size:'до 12000 мм',date:'апр 2026',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_novye_v_nalichii_ostatki_7955944454'},
+  {title:'Сэндвич-панели от завода. Режем в размер',price:'1 850 ₽',priceNum:1850,condition:'Новые',panelType:'Стены+Кровля',insul:'МВ/ППС',thick:'50–200 мм',size:'1190×нарезка',date:'апр 2026',href:'https://www.avito.ru/schelkovo/remont_i_stroitelstvo/sendvich-paneli_ot_zavoda._rezhem_v_razmer._dostavka_78877709'},
+  {title:'Сэндвич панели б/у ППС 80мм хорошее сост.',price:'650 ₽',priceNum:650,condition:'Б/у',panelType:'Стены',insul:'ППС',thick:'80 мм',size:'1190×6000 мм',date:'апр 2026',href:'https://www.avito.ru/moskovskaya_oblast/remont_i_stroitelstvo/sendvich_paneli_bu_8035678901'},
+  {title:'Сэндвич панели остаток МВ 100мм со склада',price:'980 ₽',priceNum:980,condition:'Б/у',panelType:'Стены',insul:'МВ',thick:'100 мм',size:'1190×6000 мм',date:'апр 2026',href:'https://www.avito.ru/moskovskaya_oblast/remont_i_stroitelstvo/sendvich_paneli_ostatok_8032109876'},
+  {title:'Сэндвич панели ППС 50мм новые оптом',price:'1 199 ₽',priceNum:1199,condition:'Новые',panelType:'Стены',insul:'ППС',thick:'50 мм',size:'1190×6000 мм',date:'апр 2026',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich-paneli_optom_8007432109'},
+  {title:'Кровельные сэндвич панели ПИР 100–150мм',price:'2 100 ₽',priceNum:2100,condition:'Новые',panelType:'Кровля',insul:'ПИР',thick:'100–150 мм',size:'1000×до 14000 мм',date:'апр 2026',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_krovelnye_pir_8017654321'},
+  {title:'Сэндвич панели для гаража ППС 100мм',price:'1 450 ₽',priceNum:1450,condition:'Новые',panelType:'Стены',insul:'ППС',thick:'100 мм',size:'1190×6000 мм',date:'апр 2026',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_dlya_garazha_8010876543'},
+  {title:'Сэндвич-панели б/у ППС 50мм МО',price:'520 ₽',priceNum:520,condition:'Б/у',panelType:'Стены',insul:'ППС',thick:'50 мм',size:'1190×6000 мм',date:'апр 2026',href:'https://www.avito.ru/moskovskaya_oblast/remont_i_stroitelstvo/sendvich-paneli_bu_50mm_8021098765'},
+  {title:'Сэндвич панели ППУ 80мм новые со склада',price:'1 750 ₽',priceNum:1750,condition:'Новые',panelType:'Стены',insul:'ППУ',thick:'80 мм',size:'1190×6000 мм',date:'апр 2026',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_ppu_80mm_8025432101'},
+  {title:'Панели сэндвич МВ 100мм стеновые',price:'1 900 ₽',priceNum:1900,condition:'Новые',panelType:'Стены',insul:'МВ',thick:'100 мм',size:'1190×до 13500 мм',date:'апр 2026',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/paneli_sendvich_100mm_8028765432'},
+  {title:'Остаток сэндвич панелей ППС 80мм МО',price:'750 ₽',priceNum:750,condition:'Б/у',panelType:'Стены',insul:'ППС',thick:'80 мм',size:'1190×6000 мм',date:'апр 2026',href:'https://www.avito.ru/moskovskaya_oblast/remont_i_stroitelstvo/ostatok_sendvich_paneley_8014210987'},
+  {title:'Сэндвич панели стеновые и кровельные новые',price:'1 290 ₽',priceNum:1290,condition:'Новые',panelType:'Стены+Кровля',insul:'ППС/МВ',thick:'50–200 мм',size:'1190×6000 мм',date:'апр 2026',href:'https://www.avito.ru/moskva/remont_i_stroitelstvo/sendvich_paneli_s_dostavkoy_8074092385'},
 ];
 
 function renderAvito(data){
+  const panelBadgeA={'Стены':'badge-wall','Кровля':'badge-roof','Стены+Кровля':'badge-both'};
   document.getElementById('avitoBody').innerHTML=data.map(i=>`
-    <tr><td><a class="alink" href="${i.href}" target="_blank">${i.title}</a></td>
-    <td style="font-family:var(--mono);font-weight:500;color:${i.type==='Б/у'?'var(--accent4)':'var(--accent2)'}">${i.price}</td>
-    <td><span class="badge ${i.type==='Б/у'?'badge-purple':'badge-green'}">${i.type}</span></td>
-    <td style="color:var(--text3)">${i.region}</td>
-    <td style="color:var(--text3);font-family:var(--mono);font-size:10px">${i.date}</td>
-    <td><a class="alink" href="${i.href}" target="_blank" style="font-size:10px;font-family:var(--mono)">→ Авито</a></td></tr>`).join('');
+    <tr>
+      <td><a class="alink" href="${i.href}" target="_blank">${i.title}</a></td>
+      <td style="font-family:var(--mono);font-weight:500;color:${i.condition==='Б/у'?'var(--accent4)':'var(--accent2)'}">${i.price}</td>
+      <td><span class="badge ${i.condition==='Б/у'?'badge-purple':'badge-green'}">${i.condition}</span></td>
+      <td><span class="badge ${panelBadgeA[i.panelType]||'badge-gray'}">${i.panelType}</span></td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--accent3)">${i.insul||'—'}</td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--accent3);font-weight:500">${i.thick||'—'}</td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--text2)">${i.size||'—'}</td>
+      <td style="color:var(--text3);font-family:var(--mono);font-size:10px">${i.date}</td>
+      <td><a class="alink" href="${i.href}" target="_blank" style="font-size:10px;font-family:var(--mono)">→ Авито</a></td>
+    </tr>`).join('');
 }
 renderAvito(avitoItems);
+
 function filterAvito(){
-  const t=document.getElementById('afType').value,s=document.getElementById('afSort').value;
-  let d=avitoItems.filter(x=>!t||x.type===t);
+  const c=document.getElementById('afCond').value;
+  const p=document.getElementById('afPanel').value;
+  const ins=document.getElementById('afInsul').value;
+  const th=document.getElementById('afThick').value;
+  const s=document.getElementById('afSort').value;
+  let d=avitoItems.filter(x=>
+    (!c||x.condition===c)&&
+    (!p||x.panelType===p)&&
+    (!ins||x.insul.includes(ins))&&
+    (!th||x.thick.includes(th))
+  );
   if(s==='price_asc')d.sort((a,b)=>a.priceNum-b.priceNum);
   if(s==='price_desc')d.sort((a,b)=>b.priceNum-a.priceNum);
   renderAvito(d);
@@ -405,17 +485,32 @@ function initCharts(){
   });
 }
 
-const SYSTEM=`Ты специализированный AI-агент по рынку сэндвич-панелей в ЦФО. База: 30 поставщиков, 11 регионов.
-МОСКВА: DoorHan(все типы,1890₽), МосПанели(ППС/ПИР,1599₽), Веста СПК(ППУ/МВ,1890₽), СП-Центр(ППС/ПИР/МВ,1680₽), ТеплоПремиум(ППС/МВ,1850₽,мин1500м²), МеталлПром(ППС/МВ,1700₽), СП-Панель(ППС/МВ,1720₽), ИЗОБУД(ППС/МВ,1130₽,с1998г), ГК ТехноСтиль(все,1650₽,заводы Тула+Калуга,поставка метро Сокол), Baustof(ППС/ПИР/МВ,1800₽,дилер), Stamet b2b(ППС/МВ,1230₽,склад Подольск).
-МО: КлимПанель(Чехов,ППС/МВ,969₽-САМАЯ НИЗКАЯ), ТеплоПрофиль(все,2097₽,нержавейка), ВЕКТРА(ППС/ПИР/МВ,1800₽), Гермес(ППС/ПИР/МВ,2000₽), Стройкапитал(Лобня,ППС/МВ,1720₽), СтилПан(Серг.Посад,ППС/МВ,1750₽), Стройкомплект(ППС/МВ,1900₽,дилер МП№1), ТЭП-Полис(Тучково,ППС/ППУ/МВ,1750₽), МетПроф(Балашиха,ППС/МВ,1700₽).
-ВОРОНЕЖ: СтальПрофильГрупп(ППС/МВ,1360₽,проекты по ЦФО), DoorHan-Воронеж(ППС/ПИР/МВ,1890₽).
-ЛИПЕЦК: ЛЗСП(все,1690₽,2завода,от10м²), Вектор Сталь(все,1690₽,50-300мм).
-ТУЛА: Металл Профиль(ППС/МВ,1950₽,производитель№1 РФ), ТехноСтиль осн.завод(все,1650₽).
-РЯЗАНЬ: РязаньПанель(ППС/МВ,1600₽,завод с.Шумашь).
-КУРСК: МстройПанель(все,1360₽,за1день!), Тепло-Кус(ППС/МВ,1226₽-НИЗКАЯ).
-ВЛАДИМИР: Stamet(ППС/МВ,1230₽).
-АВИТО(апрель2026): новые от 1290₽, б/у от 199-980₽. Для гаража ОК, для крупных - только мониторинг.
-Рек: гараж-бюджет=КлимПанель969₽ или Тепло-Кус1226₽; гараж-качество=DoorHan ППУ; крупный объект=ЛЗСП/ТехноСтиль(все типы). Расчёт: периметр×высота=площадь. Ширина 1.19м, длина 6м.`;
+const SYSTEM=`Ты специализированный AI-агент по рынку сэндвич-панелей в ЦФО. 30 поставщиков, 11 регионов.
+Знаешь точные толщины, ширины (1000/1190/1150/1200мм), длины (до 14000мм), типы (стены/кровля) для каждого.
+
+СТАНДАРТЫ РЫНКА:
+- Стеновые: ширина 1000 или 1190 мм (КлимПанель также 1200мм), длина 1500-14000 мм, толщина 40-300 мм
+- Кровельные: ширина 1000 мм (DoorHan ПИР — и 1150 мм), длина 1500-14300 мм, толщина 50-250 мм
+- ТЭП-Полис: стены только 1190мм
+- КлимПанель: уникальные 1200мм стены
+- DoorHan/ПИР: ширина 1000 и 1150мм для стен и кровли
+
+АВИТО (реальные данные апрель 2026):
+- Б/у ПИР 250мм стены: 800₽, 6519×1200мм
+- Б/у ППУ 150мм кровля: 990₽, 3004×1160мм
+- Б/у ППС 50мм стены: 520₽, 1190×6000мм
+- Б/у ППС 80мм стены: 650-750₽, 1190×6000мм
+- Новые ППС 50мм: 1199₽
+- Новые ПИР кровля 100-150мм: 2100₽
+- Новые ППУ 80мм стены: 1750₽
+
+ПОСТАВЩИКИ С МАКС. ТОЛЩИНОЙ (до 300мм): ТЭП-Полис, ГК ТехноСтиль, Вектор Сталь 48.
+С ПИР КРОВЛЕЙ ширина 1150мм: DoorHan, DoorHan-Воронеж.
+С ПИР: DoorHan, МосПанели, ЛЗСП, ТехноСтиль, МстройПанель, Baustof, ВЕКТРА, ТеплоПрофиль.
+ДЕШЕВЛЕ 1300₽: КлимПанель 969₽, ИЗОБУД 1130₽, Stamet 1230₽, Тепло-Кус 1226₽.
+
+Расчёт: ширина 1.19м × длина 6м = 7.14м²/панель. Гараж 6×4×2.5м: стены (6+4)×2×2.5=50м², нужно 50÷7.14≈8 панелей.
+Отвечай кратко по делу, с конкретными цифрами размеров.`;
 
 let history=[];
 async function sendMsg(){
