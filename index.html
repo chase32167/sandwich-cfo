@@ -142,8 +142,32 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .drop-text{font-size:13px;color:var(--text2);}
 .drop-sub{font-size:11px;color:var(--text3);margin-top:4px;font-family:var(--mono);}
 .file-chosen{font-size:12px;color:var(--accent2);margin-top:8px;display:none;}
-.analyze-btn{width:100%;padding:11px;background:var(--accent);border:none;border-radius:9px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font);transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
-.analyze-btn:hover{opacity:.88;}.analyze-btn:disabled{opacity:.4;cursor:default;}
+.analyze-btn{width:100%;padding:14px;background:linear-gradient(135deg,#3b82f6,#10b981);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 4px 20px rgba(59,130,246,.4);letter-spacing:.01em;}
+.analyze-btn:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(59,130,246,.55);}
+.analyze-btn:active{transform:translateY(0);}
+.analyze-btn:disabled{opacity:.4;cursor:default;transform:none;box-shadow:none;}
+.consent-row{margin-bottom:1rem;}
+.consent-label{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:12px;color:var(--text2);line-height:1.5;user-select:none;}
+.consent-label input[type=checkbox]{display:none;}
+.consent-check{flex-shrink:0;width:18px;height:18px;border:2px solid var(--border2);border-radius:4px;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s;background:var(--bg3);}
+.consent-label input:checked~.consent-check{background:var(--accent);border-color:var(--accent);}
+.consent-label input:checked~.consent-check::after{content:'✓';font-size:11px;color:#fff;font-weight:700;}
+.consent-link{color:var(--accent);text-decoration:underline;cursor:pointer;}
+.consent-link:hover{color:#60a5fa;}
+/* Модальное окно */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;align-items:center;justify-content:center;padding:1rem;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;max-width:640px;width:100%;max-height:80vh;display:flex;flex-direction:column;overflow:hidden;}
+.modal-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-header h3{font-size:15px;font-weight:600;}
+.modal-close{background:none;border:none;color:var(--text3);font-size:22px;cursor:pointer;line-height:1;padding:0 4px;}
+.modal-close:hover{color:var(--text);}
+.modal-body{padding:1.5rem;overflow-y:auto;font-size:13px;line-height:1.8;color:var(--text2);}
+.modal-body h4{font-size:13px;font-weight:600;color:var(--text);margin:1.2rem 0 .4rem;}
+.modal-body h4:first-child{margin-top:0;}
+.modal-body p{margin-bottom:.75rem;}
+.footer-link{color:var(--text3);text-decoration:underline;cursor:pointer;transition:color .15s;}
+.footer-link:hover{color:var(--text2);}
 .analyze-results{display:none;}
 .analyze-results.show{display:block;}
 .result-section{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1rem;}
@@ -545,8 +569,15 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
             <div class="file-chosen" id="fileLabel">✓ файл выбран</div>
           </div>
         </div>
+        <div class="consent-row">
+          <label class="consent-label" for="af-consent">
+            <input type="checkbox" id="af-consent">
+            <span class="consent-check"></span>
+            <span>Я даю согласие на <span class="consent-link" onclick="openPrivacy()">обработку моих персональных данных</span> в соответствии с политикой конфиденциальности</span>
+          </label>
+        </div>
         <button class="analyze-btn" id="analyzeBtn" onclick="runAnalysis()">
-          <span id="analyzeBtnText">Анализировать</span>
+          <span id="analyzeBtnText">📊 Получить анализ бесплатно</span>
         </button>
         <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:10px;font-family:var(--mono);">Данные используются только для анализа · не сохраняются</div>
       </div>
@@ -562,7 +593,51 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
   </div>
 
 </div>
-<footer>sandwich-cfo · 36 поставщиков · б/у + новые · 11 регионов ЦФО · толщины 30–300мм · май 2026</footer>
+<!-- Модальное окно политики конфиденциальности -->
+<div class="modal-overlay" id="privacyModal" onclick="closePrivacyOutside(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Политика конфиденциальности и обработки персональных данных</h3>
+      <button class="modal-close" onclick="closePrivacy()">×</button>
+    </div>
+    <div class="modal-body">
+      <h4>1. Общие положения</h4>
+      <p>Настоящая политика конфиденциальности определяет порядок обработки персональных данных пользователей сервиса «Аналитика рынка сэндвич-панелей ЦФО» (далее — Сервис), расположенного по адресу sandwich-cfo.vercel.app.</p>
+      <p>Используя Сервис и заполняя форму запроса анализа, вы выражаете согласие с условиями настоящей Политики конфиденциальности.</p>
+
+      <h4>2. Состав персональных данных</h4>
+      <p>Сервис собирает следующие персональные данные, добровольно предоставленные пользователем при заполнении формы: фамилия, имя, отчество; номер телефона; адрес электронной почты.</p>
+      <p>Загружаемые файлы (спецификации, коммерческие предложения) используются исключительно для выполнения запрошенного анализа и не сохраняются на серверах после обработки.</p>
+
+      <h4>3. Цели обработки персональных данных</h4>
+      <p>Персональные данные обрабатываются в следующих целях: предоставление услуги анализа коммерческих предложений; подготовка сравнительных отчётов по ценам поставщиков; обратная связь с пользователем по результатам анализа.</p>
+
+      <h4>4. Правовое основание обработки</h4>
+      <p>Обработка персональных данных осуществляется на основании согласия субъекта персональных данных (ст. 9 Федерального закона № 152-ФЗ «О персональных данных» от 27.07.2006).</p>
+
+      <h4>5. Порядок обработки и хранения</h4>
+      <p>Сбор персональных данных осуществляется через защищённое соединение (HTTPS). Данные передаются на сервер для выполнения анализа и не сохраняются в базах данных Сервиса. Загружаемые файлы обрабатываются в оперативной памяти сервера и удаляются сразу после формирования ответа.</p>
+
+      <h4>6. Передача третьим лицам</h4>
+      <p>Для формирования аналитического отчёта Сервис использует API Anthropic (claude.ai). Текст передаваемых данных обрабатывается в соответствии с политикой конфиденциальности Anthropic (anthropic.com/privacy). Персональные данные пользователей не передаются иным третьим лицам без согласия субъекта, за исключением случаев, предусмотренных законодательством РФ.</p>
+
+      <h4>7. Права субъекта персональных данных</h4>
+      <p>Вы вправе: получить информацию об обработке ваших персональных данных; потребовать уточнения, блокирования или уничтожения персональных данных; отозвать согласие на обработку персональных данных.</p>
+      <p>Для реализации указанных прав направьте запрос по адресу электронной почты, указанному в разделе «Контакты».</p>
+
+      <h4>8. Защита данных</h4>
+      <p>Сервис принимает организационные и технические меры для защиты персональных данных от неправомерного доступа, изменения, раскрытия или уничтожения. Соединение с Сервисом защищено протоколом TLS/SSL.</p>
+
+      <h4>9. Изменение политики</h4>
+      <p>Сервис оставляет за собой право вносить изменения в настоящую Политику конфиденциальности. При существенных изменениях актуальная версия публикуется на данной странице.</p>
+
+      <h4>10. Контакты</h4>
+      <p>По вопросам обработки персональных данных: sandwich-cfo.vercel.app<br>Дата последнего обновления: май 2026 г.</p>
+    </div>
+  </div>
+</div>
+
+<footer>sandwich-cfo · 36 поставщиков · б/у + новые · 11 регионов ЦФО · толщины 30–300мм · май 2026 · <span class="footer-link" onclick="openPrivacy()">Политика конфиденциальности</span></footer>
 
 <script>
 // ─── ПОСТАВЩИКИ НОВЫХ ───
@@ -893,14 +968,21 @@ function dropFile(e) {
 function fmt(n) { return n ? Math.round(n).toLocaleString('ru-RU') + ' ₽' : '—'; }
 function fmtM2(n) { return n ? n.toFixed(1) + ' м²' : '—'; }
 
+function openPrivacy() { document.getElementById('privacyModal').classList.add('open'); document.body.style.overflow='hidden'; }
+function closePrivacy() { document.getElementById('privacyModal').classList.remove('open'); document.body.style.overflow=''; }
+function closePrivacyOutside(e) { if (e.target === document.getElementById('privacyModal')) closePrivacy(); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePrivacy(); });
+
 async function runAnalysis() {
   const name = document.getElementById('af-name').value.trim();
   const phone = document.getElementById('af-phone').value.trim();
   const email = document.getElementById('af-email').value.trim();
+  const consent = document.getElementById('af-consent').checked;
   const okN = validateField('af-name');
   const okP = validateField('af-phone');
   const okE = validateField('af-email');
   if (!okN || !okP || !okE) return;
+  if (!consent) { alert('Необходимо дать согласие на обработку персональных данных'); return; }
   if (!chosenFile) { alert('Загрузите файл спецификации (.xlsx)'); return; }
   if (chosenFile.size > 10 * 1024 * 1024) { alert('Файл слишком большой (макс. 10 МБ)'); return; }
 
