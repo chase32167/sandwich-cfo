@@ -33,6 +33,10 @@ header{border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-i
 .tab:hover{color:var(--text);}.tab.active{background:var(--bg3);color:var(--text);font-weight:500;border:1px solid var(--border2);}
 .tab.bu-tab{color:#fda4af;}
 .tab.bu-tab.active{background:var(--bu-bg);border-color:var(--bu-border);color:var(--bu);}
+.tab.analyze-tab{background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(16,185,129,.2));border:1px solid rgba(59,130,246,.4);color:#60a5fa;font-weight:600;position:relative;padding-right:20px;}
+.tab.analyze-tab::after{content:'';position:absolute;top:7px;right:7px;width:6px;height:6px;border-radius:50%;background:#10b981;animation:pulse 2s infinite;}
+.tab.analyze-tab:hover{background:linear-gradient(135deg,rgba(59,130,246,.35),rgba(16,185,129,.35));border-color:rgba(59,130,246,.6);color:#93c5fd;box-shadow:0 0 12px rgba(59,130,246,.3);}
+.tab.analyze-tab.active{background:linear-gradient(135deg,rgba(59,130,246,.3),rgba(16,185,129,.3));border-color:rgba(59,130,246,.7);color:#fff;box-shadow:0 0 16px rgba(59,130,246,.4);}
 .section{display:none;}.section.active{display:block;}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
 .card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;transition:border-color .2s;}
@@ -238,7 +242,7 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
     <button class="tab" onclick="showTab('prices')">Типы и цены</button>
     <button class="tab" onclick="showTab('charts')">Аналитика</button>
     <button class="tab" onclick="showTab('agent')">AI-агент</button>
-    <button class="tab" onclick="showTab('analyze')" style="color:#34d399;">📊 Анализ КП</button>
+    <button class="tab analyze-tab" onclick="showTab('analyze')">📊 Анализ КП</button>
   </div>
 
   <!-- ПОСТАВЩИКИ НОВЫХ -->
