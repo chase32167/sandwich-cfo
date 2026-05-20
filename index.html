@@ -193,7 +193,7 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
     <span class="logo-sub">/ аналитика рынка</span>
   </div>
   <div style="display:flex;align-items:center;gap:12px">
-    <span class="tag">ЦФО · апрель 2026</span>
+    <span class="tag">ЦФО · май 2026</span>
     <span style="font-size:12px;color:var(--text3)"><span class="status-dot"></span>онлайн</span>
   </div>
 </header>
@@ -250,7 +250,7 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
           <tbody id="suppBody"></tbody>
         </table>
       </div>
-      <div style="margin-top:10px;font-size:10px;color:var(--text3);font-family:var(--mono)">* Цены актуальны апрель 2026. Уточняйте у менеджера. <span style="color:var(--bu)">▶ Б/У панели — отдельная вкладка «Б/У панели»</span></div>
+      <div style="margin-top:10px;font-size:10px;color:var(--text3);font-family:var(--mono)">* Цены актуальны май 2026. Уточняйте у менеджера. <span style="color:var(--bu)">▶ Б/У панели — отдельная вкладка «Б/У панели»</span></div>
     </div>
   </div>
 
@@ -270,7 +270,7 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
         <div class="bu-icon">🛒</div>
         <div>
           <div class="bu-title">Где купить б/у сэндвич-панели</div>
-          <div class="bu-sub">Актуальные источники · апрель 2026</div>
+          <div class="bu-sub">Актуальные источники · май 2026</div>
         </div>
       </div>
       <div class="avito-links">
@@ -313,7 +313,7 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
         <div class="bu-icon">📋</div>
         <div>
           <div class="bu-title">Актуальные б/у объявления</div>
-          <div class="bu-sub">Собрано через Chrome · Авито Москва + МО · апрель 2026</div>
+          <div class="bu-sub">Собрано через Chrome · Авито Москва + МО · май 2026</div>
         </div>
       </div>
       <div class="filter-row">
@@ -378,7 +378,7 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:10px">
         <div>
           <h2 style="font-size:14px;font-weight:500"><span class="live-dot"></span>Авито — все объявления (новые + б/у)</h2>
-          <div style="font-size:11px;color:var(--text3);font-family:var(--mono)">Собрано через Chrome · апрель 2026 · Москва и МО · с толщинами и размерами</div>
+          <div style="font-size:11px;color:var(--text3);font-family:var(--mono)">Собрано через Chrome · май 2026 · Москва и МО · с толщинами и размерами</div>
         </div>
         <a href="https://www.avito.ru/moskva/remont_i_stroitelstvo/stroymaterialy-ASgBAgICAURYoAI?q=сэндвич+панели" target="_blank" style="font-size:12px;color:var(--accent);text-decoration:none;border:1px solid var(--border2);padding:6px 12px;border-radius:7px;font-family:var(--mono)">Открыть Авито ↗</a>
       </div>
@@ -495,6 +495,7 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
       </div>
       <div class="chat-area" id="chatArea">
         <div class="msg ai"><div class="msg-role">AI-АНАЛИТИК</div>Привет! Знаю рынок б/у и новых сэндвич-панелей в ЦФО. Б/у на Авито — экономия 40–70%: ПИР 250мм по 800₽ вместо 2097₽, ППС 50мм по 520₽ вместо 969₽. Задайте вопрос!</div>
+        <div class="msg ai" style="border:1px solid rgba(245,158,11,.3);background:rgba(245,158,11,.07)"><div class="msg-role" style="color:#f59e0b">⚠ УВЕДОМЛЕНИЕ</div>AI-агент временно отключён. Для анализа КП используйте вкладку <b>📊 Анализ КП</b> — там полноценный разбор вашего файла с Claude.</div>
       </div>
       <div class="chat-footer">
         <div class="quick-btns">
@@ -506,8 +507,8 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
           <button class="qbtn" onclick="askQ('Кто производит ПИР кровельные панели 100мм в ЦФО?')">ПИР кровля 100мм</button>
         </div>
         <div class="input-row">
-          <input type="text" id="agentInput" placeholder="Спросите о б/у, ценах, размерах, поставщиках..." onkeydown="if(event.key==='Enter')sendMsg()">
-          <button class="send-btn" id="sendBtn" onclick="sendMsg()">Отправить</button>
+          <input type="text" id="agentInput" placeholder="AI-агент временно отключён" disabled style="opacity:.4;cursor:default;">
+          <button class="send-btn" id="sendBtn" disabled>Отключён</button>
         </div>
       </div>
     </div>
@@ -526,7 +527,7 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
         </div>
         <div class="form-group">
           <label>Телефон</label>
-          <input class="form-input" id="af-phone" type="tel" placeholder="+7 (___) ___-__-__" oninput="phoneMask(this)" onkeydown="return phoneKey(event,this)">
+          <input class="form-input" id="af-phone" type="tel" placeholder="+7 (___) ___-__-__" oninput="phoneMask(this)" onkeydown="phoneKey(event,this)" onfocus="phoneFocus(this)" onblur="phoneBlur(this)">
           <div class="form-error" id="af-phone-err">Введите корректный номер</div>
         </div>
         <div class="form-group">
@@ -537,10 +538,10 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
         <div class="form-group">
           <label>Файл спецификации / КП</label>
           <div class="drop-zone" id="dropZone" ondragover="dropOver(event)" ondragleave="dropLeave(event)" ondrop="dropFile(event)">
-            <input type="file" id="af-file" accept=".xlsx,.xls" onchange="fileChosen(this)">
+            <input type="file" id="af-file" accept=".xlsx,.xls,.csv,.txt,.pdf,.docx,.doc" onchange="fileChosen(this)">
             <div class="drop-icon">📁</div>
-            <div class="drop-text">Перетащите xlsx-файл сюда</div>
-            <div class="drop-sub">или нажмите для выбора · xlsx, xls · до 5 МБ</div>
+            <div class="drop-text">Перетащите файл сюда</div>
+            <div class="drop-sub">xlsx · xls · csv · txt · pdf · docx · doc · до 10 МБ</div>
             <div class="file-chosen" id="fileLabel">✓ файл выбран</div>
           </div>
         </div>
@@ -561,7 +562,7 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
   </div>
 
 </div>
-<footer>sandwich-cfo · 36 поставщиков · б/у + новые · 11 регионов ЦФО · толщины 30–300мм · апрель 2026</footer>
+<footer>sandwich-cfo · 36 поставщиков · б/у + новые · 11 регионов ЦФО · толщины 30–300мм · май 2026</footer>
 
 <script>
 // ─── ПОСТАВЩИКИ НОВЫХ ───
@@ -761,7 +762,7 @@ function initCharts(){
 
 const SYSTEM=`Ты специализированный AI-агент по рынку сэндвич-панелей в ЦФО. 30 поставщиков новых, большая база б/у.
 
-Б/У ПАНЕЛИ (Авито, апрель 2026):
+Б/У ПАНЕЛИ (Авито, май 2026):
 - ПИР стены 250мм б/у: 800₽ (новые 2097₽ — экономия 61%!)
 - ППУ кровля 150мм б/у: 990₽ (новые 1750₽ — экономия 43%)
 - ППС стены 80мм б/у: 650-750₽ (новые от 1300₽ — экономия 50%)
@@ -825,22 +826,42 @@ function removeTyping(id){document.getElementById(id)?.remove();}
 // ─── АНАЛИЗ КП ───
 let chosenFile = null;
 
+function phoneDigits(val) {
+  let d = val.replace(/\D/g, '');
+  if (d.startsWith('7') || d.startsWith('8')) d = d.slice(1);
+  return d.slice(0, 10);
+}
+function phoneFormat(digits) {
+  if (!digits.length) return '';
+  let r = '+7 (';
+  r += digits.slice(0, 3);
+  if (digits.length <= 3) return r;
+  r += ') ' + digits.slice(3, 6);
+  if (digits.length <= 6) return r;
+  r += '-' + digits.slice(6, 8);
+  if (digits.length <= 8) return r;
+  r += '-' + digits.slice(8, 10);
+  return r;
+}
 function phoneMask(input) {
-  let v = input.value.replace(/\D/g, '');
-  if (v.startsWith('7') || v.startsWith('8')) v = v.slice(1);
-  v = v.slice(0, 10);
-  let r = '+7';
-  if (v.length > 0) r += ' (' + v.slice(0, 3);
-  if (v.length >= 4) r += ') ' + v.slice(3, 6);
-  if (v.length >= 7) r += '-' + v.slice(6, 8);
-  if (v.length >= 9) r += '-' + v.slice(8, 10);
-  if (v.length >= 3 && v.length < 4) r += ')';
-  input.value = r;
+  const d = phoneDigits(input.value);
+  input.value = phoneFormat(d);
   validateField('af-phone');
 }
+function phoneFocus(input) {
+  if (!input.value) input.value = '+7 (';
+}
+function phoneBlur(input) {
+  if (phoneDigits(input.value).length === 0) input.value = '';
+}
 function phoneKey(e, input) {
-  if (e.key === 'Backspace' && input.value === '+7 (') { input.value = ''; return false; }
-  return true;
+  if (e.key === 'Backspace') {
+    e.preventDefault();
+    let d = phoneDigits(input.value);
+    d = d.slice(0, -1);
+    input.value = phoneFormat(d);
+    validateField('af-phone');
+  }
 }
 function validateField(id) {
   const el = document.getElementById(id);
@@ -881,7 +902,7 @@ async function runAnalysis() {
   const okE = validateField('af-email');
   if (!okN || !okP || !okE) return;
   if (!chosenFile) { alert('Загрузите файл спецификации (.xlsx)'); return; }
-  if (chosenFile.size > 5 * 1024 * 1024) { alert('Файл слишком большой (макс. 5 МБ)'); return; }
+  if (chosenFile.size > 10 * 1024 * 1024) { alert('Файл слишком большой (макс. 10 МБ)'); return; }
 
   const btn = document.getElementById('analyzeBtn');
   const btnText = document.getElementById('analyzeBtnText');
