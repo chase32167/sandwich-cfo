@@ -124,6 +124,50 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .input-row input::placeholder{color:var(--text3);}
 .send-btn{padding:8px 16px;background:var(--accent);border:none;border-radius:8px;color:#fff;font-size:13px;cursor:pointer;font-weight:500;transition:opacity .15s;font-family:var(--font);}
 .send-btn:hover{opacity:.85;}.send-btn:disabled{opacity:.4;cursor:default;}
+/* Анализ КП */
+.analyze-wrap{display:grid;grid-template-columns:380px 1fr;gap:1.5rem;align-items:start;}
+.analyze-form-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem;}
+.analyze-form-card h3{font-size:13px;font-weight:500;margin-bottom:1.2rem;display:flex;align-items:center;gap:8px;}
+.form-group{margin-bottom:1rem;}
+.form-group label{display:block;font-size:11px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
+.form-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;font-family:var(--font);outline:none;transition:border-color .15s;}
+.form-input:focus{border-color:var(--accent);}
+.form-input.error{border-color:var(--bu);}
+.form-error{font-size:11px;color:var(--bu);margin-top:4px;display:none;}
+.form-error.show{display:block;}
+.drop-zone{border:2px dashed var(--border2);border-radius:10px;padding:2rem 1rem;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:1rem;position:relative;}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--accent);background:rgba(59,130,246,.05);}
+.drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.drop-icon{font-size:28px;margin-bottom:8px;}
+.drop-text{font-size:13px;color:var(--text2);}
+.drop-sub{font-size:11px;color:var(--text3);margin-top:4px;font-family:var(--mono);}
+.file-chosen{font-size:12px;color:var(--accent2);margin-top:8px;display:none;}
+.analyze-btn{width:100%;padding:11px;background:var(--accent);border:none;border-radius:9px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--font);transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.analyze-btn:hover{opacity:.88;}.analyze-btn:disabled{opacity:.4;cursor:default;}
+.analyze-results{display:none;}
+.analyze-results.show{display:block;}
+.result-section{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1rem;}
+.result-section h4{font-size:11px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem;}
+.result-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1rem;}
+.result-metric{background:var(--bg3);border-radius:8px;padding:10px 12px;text-align:center;}
+.result-metric .val{font-size:18px;font-weight:700;font-family:var(--mono);}
+.result-metric .lbl{font-size:10px;color:var(--text3);margin-top:3px;}
+.cmp-table{width:100%;border-collapse:collapse;font-size:12px;}
+.cmp-table th{font-family:var(--mono);font-size:10px;text-transform:uppercase;color:var(--text3);padding:7px 10px;border-bottom:1px solid var(--border);text-align:left;font-weight:400;}
+.cmp-table td{padding:8px 10px;border-bottom:1px solid var(--border);}
+.cmp-table tr:last-child td{border-bottom:none;}
+.cmp-table tr.highlight td{background:rgba(16,185,129,.08);}
+.saving-pos{color:var(--accent2);font-weight:600;}
+.saving-neg{color:var(--bu);font-weight:600;}
+.result-text{font-size:13px;line-height:1.7;color:var(--text2);}
+.result-alert{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;margin-bottom:.75rem;}
+.result-alert.warn{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3);}
+.result-alert.success{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.3);}
+.result-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:.75rem;}
+.result-tag{font-size:11px;font-family:var(--mono);background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:3px 8px;color:var(--text2);}
+.spin{display:inline-block;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:900px){.analyze-wrap{grid-template-columns:1fr;}}
 .type-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;position:relative;overflow:hidden;}
 .type-card.rec{border-color:rgba(59,130,246,.35);}
 .type-card-accent{position:absolute;top:0;left:0;right:0;height:3px;}
@@ -170,6 +214,7 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
     <button class="tab" onclick="showTab('prices')">Типы и цены</button>
     <button class="tab" onclick="showTab('charts')">Аналитика</button>
     <button class="tab" onclick="showTab('agent')">AI-агент</button>
+    <button class="tab" onclick="showTab('analyze')" style="color:#34d399;">📊 Анализ КП</button>
   </div>
 
   <!-- ПОСТАВЩИКИ НОВЫХ -->
@@ -467,8 +512,56 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
       </div>
     </div>
   </div>
+
+  <!-- Анализ КП -->
+  <div id="analyze" class="section">
+    <div class="analyze-wrap">
+      <!-- Форма -->
+      <div class="analyze-form-card">
+        <h3>📊 Анализ коммерческого предложения</h3>
+        <div class="form-group">
+          <label>ФИО</label>
+          <input class="form-input" id="af-name" type="text" placeholder="Иванов Иван Иванович" oninput="validateField('af-name')">
+          <div class="form-error" id="af-name-err">Введите ФИО</div>
+        </div>
+        <div class="form-group">
+          <label>Телефон</label>
+          <input class="form-input" id="af-phone" type="tel" placeholder="+7 (___) ___-__-__" oninput="phoneMask(this)" onkeydown="return phoneKey(event,this)">
+          <div class="form-error" id="af-phone-err">Введите корректный номер</div>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input class="form-input" id="af-email" type="email" placeholder="example@mail.ru" oninput="validateField('af-email')">
+          <div class="form-error" id="af-email-err">Введите корректный email</div>
+        </div>
+        <div class="form-group">
+          <label>Файл спецификации / КП</label>
+          <div class="drop-zone" id="dropZone" ondragover="dropOver(event)" ondragleave="dropLeave(event)" ondrop="dropFile(event)">
+            <input type="file" id="af-file" accept=".xlsx,.xls" onchange="fileChosen(this)">
+            <div class="drop-icon">📁</div>
+            <div class="drop-text">Перетащите xlsx-файл сюда</div>
+            <div class="drop-sub">или нажмите для выбора · xlsx, xls · до 5 МБ</div>
+            <div class="file-chosen" id="fileLabel">✓ файл выбран</div>
+          </div>
+        </div>
+        <button class="analyze-btn" id="analyzeBtn" onclick="runAnalysis()">
+          <span id="analyzeBtnText">Анализировать</span>
+        </button>
+        <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:10px;font-family:var(--mono);">Данные используются только для анализа · не сохраняются</div>
+      </div>
+
+      <!-- Результаты -->
+      <div class="analyze-results" id="analyzeResults">
+        <div class="result-section" id="resHeader"></div>
+        <div class="result-section" id="resPositions"></div>
+        <div class="result-section" id="resMarket"></div>
+        <div class="result-section" id="resConclusion"></div>
+      </div>
+    </div>
+  </div>
+
 </div>
-<footer>sandwich-cfo · 30 поставщиков · б/у + новые · 11 регионов ЦФО · толщины 30–300мм · апрель 2026</footer>
+<footer>sandwich-cfo · 36 поставщиков · б/у + новые · 11 регионов ЦФО · толщины 30–300мм · апрель 2026</footer>
 
 <script>
 // ─── ПОСТАВЩИКИ НОВЫХ ───
@@ -728,6 +821,162 @@ function addTyping(){
   area.appendChild(d);area.scrollTop=area.scrollHeight;return id;
 }
 function removeTyping(id){document.getElementById(id)?.remove();}
+
+// ─── АНАЛИЗ КП ───
+let chosenFile = null;
+
+function phoneMask(input) {
+  let v = input.value.replace(/\D/g, '');
+  if (v.startsWith('7') || v.startsWith('8')) v = v.slice(1);
+  v = v.slice(0, 10);
+  let r = '+7';
+  if (v.length > 0) r += ' (' + v.slice(0, 3);
+  if (v.length >= 4) r += ') ' + v.slice(3, 6);
+  if (v.length >= 7) r += '-' + v.slice(6, 8);
+  if (v.length >= 9) r += '-' + v.slice(8, 10);
+  if (v.length >= 3 && v.length < 4) r += ')';
+  input.value = r;
+  validateField('af-phone');
+}
+function phoneKey(e, input) {
+  if (e.key === 'Backspace' && input.value === '+7 (') { input.value = ''; return false; }
+  return true;
+}
+function validateField(id) {
+  const el = document.getElementById(id);
+  const err = document.getElementById(id + '-err');
+  let ok = true;
+  if (id === 'af-name') ok = el.value.trim().split(' ').length >= 2;
+  if (id === 'af-phone') ok = el.value.replace(/\D/g, '').length === 11;
+  if (id === 'af-email') ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim());
+  el.classList.toggle('error', !ok);
+  if (err) err.classList.toggle('show', !ok && el.value.length > 0);
+  return ok;
+}
+function fileChosen(input) {
+  chosenFile = input.files[0] || null;
+  const lbl = document.getElementById('fileLabel');
+  if (chosenFile) {
+    lbl.textContent = '✓ ' + chosenFile.name + ' (' + (chosenFile.size / 1024).toFixed(0) + ' КБ)';
+    lbl.style.display = 'block';
+  }
+}
+function dropOver(e) { e.preventDefault(); document.getElementById('dropZone').classList.add('drag-over'); }
+function dropLeave(e) { document.getElementById('dropZone').classList.remove('drag-over'); }
+function dropFile(e) {
+  e.preventDefault();
+  dropLeave(e);
+  const f = e.dataTransfer.files[0];
+  if (f) { chosenFile = f; document.getElementById('fileLabel').textContent = '✓ ' + f.name; document.getElementById('fileLabel').style.display = 'block'; }
+}
+function fmt(n) { return n ? Math.round(n).toLocaleString('ru-RU') + ' ₽' : '—'; }
+function fmtM2(n) { return n ? n.toFixed(1) + ' м²' : '—'; }
+
+async function runAnalysis() {
+  const name = document.getElementById('af-name').value.trim();
+  const phone = document.getElementById('af-phone').value.trim();
+  const email = document.getElementById('af-email').value.trim();
+  const okN = validateField('af-name');
+  const okP = validateField('af-phone');
+  const okE = validateField('af-email');
+  if (!okN || !okP || !okE) return;
+  if (!chosenFile) { alert('Загрузите файл спецификации (.xlsx)'); return; }
+  if (chosenFile.size > 5 * 1024 * 1024) { alert('Файл слишком большой (макс. 5 МБ)'); return; }
+
+  const btn = document.getElementById('analyzeBtn');
+  const btnText = document.getElementById('analyzeBtnText');
+  btn.disabled = true;
+  btnText.innerHTML = '<span class="spin">⟳</span> Анализирую...';
+
+  try {
+    const fileBase64 = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(chosenFile);
+    });
+
+    const resp = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, phone, email, fileBase64, fileName: chosenFile.name })
+    });
+    const json = await resp.json();
+    if (!resp.ok || !json.success) throw new Error(json.error || 'Ошибка сервера');
+    renderAnalysis(json.analysis);
+  } catch (err) {
+    alert('Ошибка: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btnText.textContent = 'Анализировать';
+  }
+}
+
+function renderAnalysis(a) {
+  const results = document.getElementById('analyzeResults');
+  results.classList.add('show');
+  results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Метрики
+  document.getElementById('resHeader').innerHTML = `
+    <h4>📋 ${a.docTitle || 'Спецификация'} · ${a.supplier || ''}</h4>
+    <div class="result-metrics">
+      <div class="result-metric"><div class="val" style="color:var(--accent)">${fmtM2(a.totals?.m2Total)}</div><div class="lbl">Всего м²</div></div>
+      <div class="result-metric"><div class="val" style="color:var(--accent3)">${fmt(a.totals?.priceTotal)}</div><div class="lbl">Сумма без НДС</div></div>
+      <div class="result-metric"><div class="val" style="color:var(--bu)">${fmt(a.totals?.vatAmount)}</div><div class="lbl">НДС 20%</div></div>
+    </div>
+    ${a.totals?.vatAmount ? `<div class="result-alert warn">⚠️ <b>Важно для физлица:</b> ${a.vatNote || 'НДС ' + fmt(a.totals.vatAmount) + ' нельзя вернуть — это реальные дополнительные расходы.'}</div>` : ''}`;
+
+  // Позиции
+  if (a.positions?.length) {
+    const rows = a.positions.map(p => `
+      <tr>
+        <td>${p.name}</td>
+        <td><span style="font-family:var(--mono)">${p.type || '—'}</span></td>
+        <td>${p.thickness || '—'}</td>
+        <td style="text-align:center">${p.quantity || '—'}</td>
+        <td style="text-align:right;font-family:var(--mono)">${fmtM2(p.m2)}</td>
+        <td style="text-align:right;font-family:var(--mono)">${p.pricePerM2 ? Math.round(p.pricePerM2).toLocaleString('ru-RU') + ' ₽' : '—'}</td>
+        <td style="text-align:right;font-family:var(--mono)">${fmt(p.total)}</td>
+      </tr>`).join('');
+    document.getElementById('resPositions').innerHTML = `
+      <h4>📦 Позиции заказа</h4>
+      <div class="table-wrap"><table class="cmp-table">
+        <thead><tr><th>Позиция</th><th>Тип</th><th>Толщина</th><th style="text-align:center">Кол-во</th><th style="text-align:right">м²</th><th style="text-align:right">₽/м²</th><th style="text-align:right">Сумма</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>`;
+  }
+
+  // Сравнение с рынком
+  if (a.marketComparison?.length) {
+    const rows = a.marketComparison.map(c => {
+      const pos = c.saving > 0;
+      return `<tr class="${pos ? 'highlight' : ''}">
+        <td><b>${c.supplier}</b></td>
+        <td style="font-family:var(--mono);color:var(--text3)">${c.region || ''}</td>
+        <td style="text-align:right;font-family:var(--mono)">${Math.round(c.pricePerM2).toLocaleString('ru-RU')} ₽</td>
+        <td style="text-align:right;font-family:var(--mono)">${fmt(c.totalForOrder)}</td>
+        <td style="text-align:right" class="${pos ? 'saving-pos' : 'saving-neg'}">${pos ? '−' : '+'}${fmt(Math.abs(c.saving))}</td>
+        <td style="text-align:right" class="${pos ? 'saving-pos' : 'saving-neg'}">${pos ? '−' : '+'}${Math.abs(c.savingPct || 0).toFixed(1)}%</td>
+        <td style="font-size:11px;color:var(--text3)">${c.note || ''}</td>
+      </tr>`;
+    }).join('');
+    document.getElementById('resMarket').innerHTML = `
+      <h4>📊 Сравнение с рынком ЦФО</h4>
+      <div class="table-wrap"><table class="cmp-table">
+        <thead><tr><th>Поставщик</th><th>Регион</th><th style="text-align:right">₽/м²</th><th style="text-align:right">Сумма</th><th style="text-align:right">Экономия</th><th style="text-align:right">%</th><th>Примечание</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>`;
+  }
+
+  // Вывод и рекомендации
+  const tags = (a.alternativeSuppliers || []).map(s => `<span class="result-tag">${s}</span>`).join('');
+  document.getElementById('resConclusion').innerHTML = `
+    <h4>💡 Вывод и рекомендации</h4>
+    <div class="result-alert">${a.conclusion || ''}</div>
+    <div class="result-alert success">${a.recommendation || ''}</div>
+    ${tags ? `<div class="result-tags">${tags}</div>` : ''}`;
+}
 </script>
 </body>
 </html>
