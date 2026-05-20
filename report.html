@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Анализ КП — МЕТАЛЛ-ГАРАНТ</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #f4f6f9;
+    color: #1a1f2e;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: white;
+    padding: 0;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+    color: white;
+    padding: 32px 40px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 200px; height: 200px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+    transform: translate(40%, 40%);
+  }
+  .header-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #60a5fa;
+    margin-bottom: 8px;
+  }
+  .header-title {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 4px;
+    letter-spacing: -0.02em;
+  }
+  .header-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 20px;
+  }
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .header-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .header-meta-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.4);
+  }
+  .header-meta-value {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+  }
+
+  /* ── BODY ── */
+  .body { padding: 28px 40px 36px; }
+
+  /* ── ALERT BOX ── */
+  .alert {
+    background: #fff7ed;
+    border: 1.5px solid #fed7aa;
+    border-left: 4px solid #f97316;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .alert-icon { font-size: 18px; flex-shrink: 0; line-height: 1; }
+  .alert-title { font-weight: 700; color: #9a3412; font-size: 13px; margin-bottom: 4px; }
+  .alert-text { color: #7c2d12; font-size: 12px; line-height: 1.6; }
+  .alert-text b { color: #9a3412; }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #64748b;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  /* ── METRICS GRID ── */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .metric {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 14px 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .metric::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 10px 10px 0 0;
+  }
+  .metric.blue::before { background: #3b82f6; }
+  .metric.green::before { background: #10b981; }
+  .metric.red::before { background: #ef4444; }
+  .metric.amber::before { background: #f59e0b; }
+  .metric-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #94a3b8;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .metric-value {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #0f172a;
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+  .metric-sub {
+    font-size: 10px;
+    color: #94a3b8;
+  }
+
+  /* ── WHAT WAS ORDERED ── */
+  .order-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .order-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .order-card-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .order-card-title .dot {
+    width: 8px; height: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .dot-wall { background: #3b82f6; }
+  .dot-roof { background: #f59e0b; }
+  .order-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 11px;
+  }
+  .order-row:last-child { border-bottom: none; }
+  .order-row-label { color: #64748b; }
+  .order-row-value { font-weight: 600; color: #1e293b; }
+  .price-big {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+  }
+  .price-label {
+    font-size: 10px;
+    color: #94a3b8;
+    margin-top: 2px;
+  }
+
+  /* ── NDS BLOCK ── */
+  .nds-block {
+    background: linear-gradient(135deg, #fef2f2, #fff1f2);
+    border: 1.5px solid #fecaca;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    align-items: center;
+  }
+  .nds-col { text-align: center; }
+  .nds-col-title {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #9ca3af;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .nds-col-value {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .nds-col-value.neutral { color: #374151; }
+  .nds-col-value.negative { color: #dc2626; }
+  .nds-col-value.result { color: #991b1b; }
+  .nds-col-sub { font-size: 10px; color: #9ca3af; margin-top: 3px; }
+  .nds-divider {
+    font-size: 20px;
+    color: #f87171;
+    font-weight: 300;
+    text-align: center;
+  }
+  .nds-arrow { font-size: 22px; color: #fca5a5; text-align: center; }
+  .nds-note {
+    grid-column: 1 / -1;
+    background: #fee2e2;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 11px;
+    color: #7f1d1d;
+    text-align: center;
+  }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-section { margin-bottom: 24px; }
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+  }
+  .compare-table th {
+    background: #1e293b;
+    color: white;
+    padding: 9px 12px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .compare-table th:first-child { border-radius: 8px 0 0 0; }
+  .compare-table th:last-child { border-radius: 0 8px 0 0; text-align: center; }
+  .compare-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #f8fafc; }
+  .compare-table .highlight-row td {
+    background: #fff7ed !important;
+    font-weight: 700;
+    border-top: 2px solid #fed7aa;
+    border-bottom: 2px solid #fed7aa;
+  }
+  .compare-table .fact-row td {
+    background: #fef2f2 !important;
+    font-weight: 700;
+    border-top: 2px solid #fecaca;
+    border-bottom: 2px solid #fecaca;
+  }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .badge-green { background: #dcfce7; color: #166534; }
+  .badge-red { background: #fee2e2; color: #991b1b; }
+  .badge-amber { background: #fef9c3; color: #854d0e; }
+  .badge-gray { background: #f1f5f9; color: #475569; }
+  .diff-neg { color: #16a34a; font-weight: 700; }
+  .diff-pos { color: #dc2626; font-weight: 700; }
+  .diff-neutral { color: #64748b; }
+  .text-right { text-align: right; }
+  .text-center { text-align: center; }
+
+  /* ── SAVINGS BLOCK ── */
+  .savings-block {
+    background: linear-gradient(135deg, #0f172a, #1e3a5f);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    color: white;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    align-items: center;
+  }
+  .savings-rows { }
+  .savings-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-size: 12px;
+  }
+  .savings-row:last-child { border-bottom: none; }
+  .savings-row-label { color: rgba(255,255,255,0.65); }
+  .savings-row-value { font-weight: 600; color: #86efac; }
+  .savings-total {
+    text-align: center;
+    padding: 12px 20px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .savings-total-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 4px;
+  }
+  .savings-total-value {
+    font-size: 26px;
+    font-weight: 800;
+    color: #4ade80;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .savings-total-sub {
+    font-size: 10px;
+    color: rgba(255,255,255,0.45);
+    margin-top: 3px;
+  }
+
+  /* ── RECOMMENDATIONS ── */
+  .rec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .rec-card {
+    border-radius: 8px;
+    padding: 14px 16px;
+    border: 1.5px solid;
+  }
+  .rec-card.action {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+  }
+  .rec-card.warning {
+    background: #fff7ed;
+    border-color: #fed7aa;
+  }
+  .rec-card-title {
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .rec-card.action .rec-card-title { color: #15803d; }
+  .rec-card.warning .rec-card-title { color: #b45309; }
+  .rec-list {
+    list-style: none;
+    padding: 0;
+  }
+  .rec-list li {
+    font-size: 11px;
+    padding: 3px 0 3px 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .rec-card.action .rec-list li { color: #14532d; }
+  .rec-card.warning .rec-list li { color: #7c2d12; }
+  .rec-card.action .rec-list li::before { content: '✓'; position: absolute; left: 0; font-weight: 700; color: #16a34a; }
+  .rec-card.warning .rec-list li::before { content: '!'; position: absolute; left: 0; font-weight: 700; color: #d97706; }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    padding: 12px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-note { font-size: 10px; color: #94a3b8; }
+  .footer-date { font-size: 10px; color: #94a3b8; }
+
+  /* ── DIVIDER ── */
+  .divider { height: 1px; background: #e2e8f0; margin: 20px 0; }
+
+  @media print {
+    body { background: white; }
+    .page { margin: 0; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-tag">Финансовый анализ предложения</div>
+    <div class="header-title">Анализ счёта — ООО ПК «МЕТАЛЛ-ГАРАНТ»</div>
+    <div class="header-sub">Сэндвич-панели МВ 120 мм · Счёт № 3133 от 08.05.2026 · Липецк</div>
+    <div class="header-meta">
+      <div class="header-meta-item">
+        <span class="header-meta-label">Материал</span>
+        <span class="header-meta-value">Минеральная вата 120 мм, 1 кл.</span>
+      </div>
+      <div class="header-meta-item">
+        <span class="header-meta-label">Объём</span>
+        <span class="header-meta-value">246,9 м² · 85 панелей</span>
+      </div>
+      <div class="header-meta-item">
+        <span class="header-meta-label">Покупатель</span>
+        <span class="header-meta-value">Физическое лицо</span>
+      </div>
+      <div class="header-meta-item">
+        <span class="header-meta-label">Дата анализа</span>
+        <span class="header-meta-value">Май 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- ALERT -->
+    <div class="alert">
+      <div class="alert-icon">⚠</div>
+      <div>
+        <div class="alert-title">Важно: вы покупаете как физическое лицо</div>
+        <div class="alert-text">
+          В счёте выставлен НДС 20% = <b>136 952 ₽</b>. Юридические лица возвращают этот налог через вычет.
+          Физическое лицо — <b>не может</b>. Вся сумма счёта, включая НДС, это ваши окончательные затраты.
+          Это критически важно при сравнении с рынком.
+        </div>
+      </div>
+    </div>
+
+    <!-- METRICS -->
+    <div class="section-title">Ключевые цифры счёта</div>
+    <div class="metrics">
+      <div class="metric blue">
+        <div class="metric-label">Итого к оплате</div>
+        <div class="metric-value">759 463</div>
+        <div class="metric-sub">рублей, с НДС</div>
+      </div>
+      <div class="metric red">
+        <div class="metric-label">в т.ч. НДС (невозврат)</div>
+        <div class="metric-value">136 952</div>
+        <div class="metric-sub">потери физлица</div>
+      </div>
+      <div class="metric amber">
+        <div class="metric-label">Стеновые панели</div>
+        <div class="metric-value">2 390 ₽</div>
+        <div class="metric-sub">за м² с НДС · 161 м²</div>
+      </div>
+      <div class="metric amber">
+        <div class="metric-label">Кровельные панели</div>
+        <div class="metric-value">2 920 ₽</div>
+        <div class="metric-sub">за м² с НДС · 85,8 м²</div>
+      </div>
+    </div>
+
+    <!-- WHAT WAS ORDERED -->
+    <div class="section-title">Состав заказа</div>
+    <div class="order-grid">
+      <div class="order-card">
+        <div class="order-card-title">
+          <div class="dot dot-wall"></div>
+          Стеновые панели СПС-З 120 мм · 1190 мм
+        </div>
+        <div class="order-row">
+          <span class="order-row-label">Количество панелей</span>
+          <span class="order-row-value">63 штуки</span>
+        </div>
+        <div class="order-row">
+          <span class="order-row-label">Площадь</span>
+          <span class="order-row-value">161,1 м²</span>
+        </div>
+        <div class="order-row">
+          <span class="order-row-label">Типоразмеров длины</span>
+          <span class="order-row-value">12 разных</span>
+        </div>
+        <div class="order-row">
+          <span class="order-row-label">Длины панелей</span>
+          <span class="order-row-value">1 430 – 6 860 мм</span>
+        </div>
+        <div class="order-row">
+          <span class="order-row-label">Цена за м² (с НДС)</span>
+          <span class="order-row-value">2 390 ₽</span>
+        </div>
+        <div style="margin-top:10px; padding-top:10px; border-top:2px solid #e2e8f0;">
+          <div class="price-big">384 979 ₽</div>
+          <div class="price-label">стоимость стеновых панелей</div>
+        </div>
+      </div>
+      <div class="order-card">
+        <div class="order-card-title">
+          <div class="dot dot-roof"></div>
+          Кровельные панели СПС-К 120 мм · 1000 мм
+        </div>
+        <div class="order-row">
+          <span class="order-row-label">Количество панелей</span>
+          <span class="order-row-value">22 штуки</span>
+        </div>
+        <div class="order-row">
+          <span class="order-row-label">Площадь</span>
+          <span class="order-row-value">85,8 м²</span>
+        </div>
+        <div class="order-row">
+          <span class="order-row-label">Длина панелей</span>
+          <span class="order-row-value">3 900 мм (типовой)</span>
+        </div>
+        <div class="order-row">
+          <span class="order-row-label">Покрытие внешнее</span>
+          <span class="order-row-value">RAL 8017 (коричневый)</span>
+        </div>
+        <div class="order-row">
+          <span class="order-row-label">Цена за м² (с НДС)</span>
+          <span class="order-row-value">2 920 ₽</span>
+        </div>
+        <div style="margin-top:10px; padding-top:10px; border-top:2px solid #e2e8f0;">
+          <div class="price-big">250 536 ₽</div>
+          <div class="price-label">стоимость кровельных панелей</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- НДС BLOCK -->
+    <div class="section-title">НДС — главный вопрос для физического лица</div>
+    <div class="nds-block">
+      <div class="nds-col">
+        <div class="nds-col-title">Сумма панелей и услуг</div>
+        <div class="nds-col-value neutral">759 463 ₽</div>
+        <div class="nds-col-sub">итого по счёту</div>
+      </div>
+      <div class="nds-col" style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <div style="font-size:10px;color:#9ca3af;text-transform:uppercase;letter-spacing:.1em;font-weight:600;">Из них НДС</div>
+        <div style="font-size:28px;color:#f87171;font-weight:800;letter-spacing:-.02em;">136 952 ₽</div>
+        <div style="font-size:10px;color:#f87171;">физлицо не возвращает ✗</div>
+      </div>
+      <div class="nds-col">
+        <div class="nds-col-title">Юрлицо платит реально</div>
+        <div class="nds-col-value neutral">622 511 ₽</div>
+        <div class="nds-col-sub">после вычета НДС</div>
+      </div>
+      <div class="nds-note">
+        Физлицо переплачивает <b>136 952 ₽</b> только из-за разницы в налоговом статусе. Поиск поставщика на УСН (без НДС) автоматически устраняет эту переплату.
+      </div>
+    </div>
+
+    <!-- COMPARISON — WALLS -->
+    <div class="compare-section">
+      <div class="section-title">Сравнение цен — Стеновые МВ 120 мм (161 м²)</div>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Поставщик</th>
+            <th>Регион</th>
+            <th>Цена без НДС</th>
+            <th>Цена с НДС (физлицо)</th>
+            <th>Статус</th>
+            <th style="text-align:center;">Разница/м²</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>МстройПанель</b></td>
+            <td>Курск</td>
+            <td>~1 700 ₽</td>
+            <td>~2 040 ₽</td>
+            <td><span class="badge badge-green">Производитель</span></td>
+            <td class="text-center"><span class="diff-neg">−350 ₽</span></td>
+          </tr>
+          <tr>
+            <td><b>ЛЗСП</b></td>
+            <td>Липецк</td>
+            <td>~1 900 ₽</td>
+            <td>~2 280 ₽</td>
+            <td><span class="badge badge-green">Производитель</span></td>
+            <td class="text-center"><span class="diff-neg">−110 ₽</span></td>
+          </tr>
+          <tr>
+            <td><b>Вектор Сталь 48</b></td>
+            <td>Липецк</td>
+            <td>~1 900 ₽</td>
+            <td>~2 280 ₽</td>
+            <td><span class="badge badge-green">Производитель</span></td>
+            <td class="text-center"><span class="diff-neg">−110 ₽</span></td>
+          </tr>
+          <tr>
+            <td><b>ГК ТехноСтиль</b></td>
+            <td>Тула</td>
+            <td>~2 000 ₽</td>
+            <td>~2 400 ₽</td>
+            <td><span class="badge badge-green">Производитель</span></td>
+            <td class="text-center"><span class="diff-pos">+10 ₽</span></td>
+          </tr>
+          <tr class="fact-row">
+            <td>⬛ МЕТАЛЛ-ГАРАНТ (факт)</td>
+            <td>Липецк</td>
+            <td>1 992 ₽</td>
+            <td><b>2 390 ₽</b></td>
+            <td><span class="badge badge-amber">Выставлен счёт</span></td>
+            <td class="text-center"><span class="diff-neutral">— факт</span></td>
+          </tr>
+          <tr>
+            <td><b>Металл Профиль</b></td>
+            <td>Тула</td>
+            <td>~2 400 ₽</td>
+            <td>~2 880 ₽</td>
+            <td><span class="badge badge-gray">Производитель</span></td>
+            <td class="text-center"><span class="diff-pos">+490 ₽</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- COMPARISON — ROOF -->
+    <div class="compare-section">
+      <div class="section-title">Сравнение цен — Кровельные МВ 120 мм (85,8 м²)</div>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Поставщик</th>
+            <th>Регион</th>
+            <th>Цена без НДС</th>
+            <th>Цена с НДС (физлицо)</th>
+            <th>Статус</th>
+            <th style="text-align:center;">Разница/м²</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>МстройПанель</b></td>
+            <td>Курск</td>
+            <td>~1 900 ₽</td>
+            <td>~2 280 ₽</td>
+            <td><span class="badge badge-green">Производитель</span></td>
+            <td class="text-center"><span class="diff-neg">−640 ₽</span></td>
+          </tr>
+          <tr>
+            <td><b>ЛЗСП</b></td>
+            <td>Липецк</td>
+            <td>~2 100 ₽</td>
+            <td>~2 520 ₽</td>
+            <td><span class="badge badge-green">Производитель</span></td>
+            <td class="text-center"><span class="diff-neg">−400 ₽</span></td>
+          </tr>
+          <tr>
+            <td><b>DoorHan (Воронеж)</b></td>
+            <td>Воронеж</td>
+            <td>~2 300 ₽</td>
+            <td>~2 760 ₽</td>
+            <td><span class="badge badge-green">Производитель</span></td>
+            <td class="text-center"><span class="diff-neg">−160 ₽</span></td>
+          </tr>
+          <tr>
+            <td><b>Металл Профиль</b></td>
+            <td>Тула</td>
+            <td>~2 400 ₽</td>
+            <td>~2 880 ₽</td>
+            <td><span class="badge badge-gray">Производитель №1</span></td>
+            <td class="text-center"><span class="diff-neg">−40 ₽</span></td>
+          </tr>
+          <tr class="fact-row">
+            <td>⬛ МЕТАЛЛ-ГАРАНТ (факт)</td>
+            <td>Липецк</td>
+            <td>2 433 ₽</td>
+            <td><b>2 920 ₽</b></td>
+            <td><span class="badge badge-red">Выше рынка</span></td>
+            <td class="text-center"><span class="diff-neutral">— факт</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SAVINGS -->
+    <div class="section-title">Итоговая оценка переплаты</div>
+    <div class="savings-block">
+      <div class="savings-rows">
+        <div class="savings-row">
+          <span class="savings-row-label">Стеновые: 161 м² × ~200 ₽/м² выше рынка</span>
+          <span class="savings-row-value">~ 32 000 – 65 000 ₽</span>
+        </div>
+        <div class="savings-row">
+          <span class="savings-row-label">Кровельные: 85,8 м² × ~400 ₽/м² выше рынка</span>
+          <span class="savings-row-value">~ 34 000 – 55 000 ₽</span>
+        </div>
+        <div class="savings-row">
+          <span class="savings-row-label">Фасонные элементы (умеренная наценка)</span>
+          <span class="savings-row-value">~ 5 000 – 10 000 ₽</span>
+        </div>
+        <div class="savings-row">
+          <span class="savings-row-label">НДС — если найти поставщика на УСН</span>
+          <span class="savings-row-value">~ 30 000 – 80 000 ₽</span>
+        </div>
+      </div>
+      <div class="savings-total">
+        <div class="savings-total-label">Потенциальная экономия</div>
+        <div class="savings-total-value">100 000 –<br>210 000 ₽</div>
+        <div class="savings-total-sub">13–28% от суммы счёта</div>
+      </div>
+    </div>
+
+    <!-- RECOMMENDATIONS -->
+    <div class="section-title">Рекомендации</div>
+    <div class="rec-grid">
+      <div class="rec-card action">
+        <div class="rec-card-title">
+          <span>✅</span> Если счёт ещё не оплачен
+        </div>
+        <ul class="rec-list">
+          <li>Запросить КП у ЛЗСП и Вектор Сталь 48 — они в Липецке, доставка та же</li>
+          <li>Передать им раскладку с точными размерами панелей</li>
+          <li>Уточнить систему налогообложения: УСН = без НДС = выгоднее для физлица</li>
+          <li>Сравнить полные суммы «под ключ» (панели + доборные + доставка)</li>
+        </ul>
+      </div>
+      <div class="rec-card warning">
+        <div class="rec-card-title">
+          <span>⚡</span> Что усложняет смену поставщика
+        </div>
+        <ul class="rec-list">
+          <li>34 нестандартных типоразмера — любой поставщик возьмёт наценку за раскрой</li>
+          <li>Фасонные элементы (ФЭС/ФЭК) рассчитаны под этот проект — нужно пересчитывать</li>
+          <li>Счёт действителен 3 дня — решение нужно принять быстро</li>
+          <li>Если счёт уже оплачен — для следующего проекта брать 2-3 КП заранее</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- BOTTOM LINE -->
+    <div class="alert" style="background:#f0fdf4;border-color:#bbf7d0;border-left-color:#22c55e;">
+      <div class="alert-icon">💡</div>
+      <div>
+        <div class="alert-title" style="color:#14532d;">Вывод</div>
+        <div class="alert-text" style="color:#15803d;">
+          Цена стеновых панелей (<b>2 390 ₽/м²</b>) — умеренно выше рынка на 5–15%.
+          Кровельные (<b>2 920 ₽/м²</b>) — <b>значительно выше рынка на 15–25%</b>.
+          Совокупная переплата с учётом НДС — от <b>100 000 до 210 000 ₽</b>.
+          Ключевой инструмент экономии для физлица — поиск поставщика на УСН (без НДС).
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-note">Анализ подготовлен на основе счёта № 3133 от 08.05.2026 и базы поставщиков ЦФО (36 компаний)</div>
+    <div class="footer-date">Май 2026 · sandwich-cfo.github.io</div>
+  </div>
+
+</div>
+</body>
+</html>
