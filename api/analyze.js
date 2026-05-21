@@ -222,20 +222,28 @@ module.exports = async (req, res) => {
     ${a.supplier?`<div style="font-size:12px;color:#f59e0b;margin-top:6px">Поставщик из КП: ${a.supplier}</div>`:''}
   </div>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
-    <div style="background:#13161b;border:1px solid #1f2330;border-radius:8px;padding:12px;text-align:center">
-      <div style="font-size:18px;font-weight:700;color:#3b82f6">${fmtM2(a.totals?.m2Total)}</div>
-      <div style="font-size:10px;color:#555d6e;margin-top:3px">Всего м²</div>
-    </div>
-    <div style="background:#13161b;border:1px solid #1f2330;border-radius:8px;padding:12px;text-align:center">
-      <div style="font-size:18px;font-weight:700;color:#f59e0b">${fmt(a.totals?.priceTotal)}</div>
-      <div style="font-size:10px;color:#555d6e;margin-top:3px">Сумма без НДС</div>
-    </div>
-    <div style="background:#13161b;border:1px solid #1f2330;border-radius:8px;padding:12px;text-align:center">
-      <div style="font-size:18px;font-weight:700;color:#f43f5e">${fmt(a.totals?.vatAmount)}</div>
-      <div style="font-size:10px;color:#555d6e;margin-top:3px">НДС 20%</div>
-    </div>
-  </div>
+  <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px">
+    <tr>
+      <td width="33%" style="padding-right:5px">
+        <div style="background:#13161b;border:1px solid #1f2330;border-radius:8px;padding:12px;text-align:center">
+          <div style="font-size:18px;font-weight:700;color:#3b82f6">${fmtM2(a.totals?.m2Total)}</div>
+          <div style="font-size:11px;color:#8b92a5;margin-top:4px">Всего м²</div>
+        </div>
+      </td>
+      <td width="33%" style="padding:0 3px">
+        <div style="background:#13161b;border:1px solid #1f2330;border-radius:8px;padding:12px;text-align:center">
+          <div style="font-size:18px;font-weight:700;color:#f59e0b">${fmt(a.totals?.priceTotal)}</div>
+          <div style="font-size:11px;color:#8b92a5;margin-top:4px">Сумма без НДС</div>
+        </div>
+      </td>
+      <td width="34%" style="padding-left:5px">
+        <div style="background:#13161b;border:1px solid #1f2330;border-radius:8px;padding:12px;text-align:center">
+          <div style="font-size:18px;font-weight:700;color:#f43f5e">${fmt(a.totals?.vatAmount)}</div>
+          <div style="font-size:11px;color:#8b92a5;margin-top:4px">НДС 20%</div>
+        </div>
+      </td>
+    </tr>
+  </table>
 
   ${posRows ? `<div style="background:#13161b;border:1px solid #1f2330;border-radius:10px;padding:16px 20px;margin-bottom:16px">
     <div style="font-size:10px;color:#555d6e;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Позиции</div>
