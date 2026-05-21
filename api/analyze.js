@@ -181,12 +181,12 @@ module.exports = async (req, res) => {
 
         await resend.emails.send({
           from: `Анализ КП <hi@ad-unicorn.ru>`,
-          to: ['hi@ad-unicorn.ru'],
-          subject: `📊 Новый анализ КП: ${a.client?.name} · ${a.docTitle || fileName}`,
+          to: [email],
+          subject: `📊 Анализ вашего КП: ${a.docTitle || fileName}`,
           html: `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d0f12;font-family:Arial,sans-serif;color:#e8eaf0">
 <div style="max-width:640px;margin:0 auto;padding:24px">
   <div style="background:linear-gradient(135deg,#3b82f6,#10b981);border-radius:10px;padding:20px 24px;margin-bottom:20px">
-    <h1 style="margin:0;font-size:18px;color:#fff">📊 Новый анализ КП</h1>
+    <h1 style="margin:0;font-size:18px;color:#fff">📊 Ваш анализ КП готов</h1>
     <p style="margin:6px 0 0;font-size:13px;color:rgba(255,255,255,0.8)">${a.docTitle||fileName} · ${new Date().toLocaleDateString('ru-RU')}</p>
   </div>
 
