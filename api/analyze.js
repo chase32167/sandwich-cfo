@@ -110,6 +110,7 @@ async function extractText(fileBase64, fileName) {
 }
 
 const ALLOWED_EXTS = ['xlsx','xls','csv','txt','pdf','docx','doc'];
+const extOf = name => (name || '').split('.').pop().toLowerCase();
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -124,7 +125,7 @@ module.exports = async (req, res) => {
 
   // Валидация расширений на сервере
   for (const f of files) {
-    const ext = (f.fileName || '').split('.').pop().toLowerCase();
+    const ext = extOf(f.fileName);
     if (!ALLOWED_EXTS.includes(ext)) {
       return res.status(400).json({ error: `Недопустимый формат файла: ${f.fileName}` });
     }
@@ -135,21 +136,32 @@ module.exports = async (req, res) => {
     const fileNames = files.map(f => f.fileName).join(', ');
     const clientInfo = `Клиент: ${name}, тел: ${phone}, email: ${email}\nФайлы: ${fileNames}`;
 
-    // Собираем контент: PDF → document-блоки, остальные → текст
-    const messageParts = [];
-    const textParts = [clientInfo];
+    // Собираем контент: PDF → document-блоки, остальные → текст (параллельно)
+    const MAX_TEXT_PER_FILE = 12000; // символов — не даём огромным xlsx/docx замедлять Claude
 
-    for (const { fileBase64, fileName } of files) {
-      const ext = (fileName || '').split('.').pop().toLowerCase();
-      if (ext === 'pdf') {
-        messageParts.push({
-          type: 'document',
-          source: { type: 'base64', media_type: 'application/pdf', data: fileBase64 },
-        });
-      } else {
+    const pdfFiles = files.filter(f => extOf(f.fileName) === 'pdf');
+    const textFiles = files.filter(f => extOf(f.fileName) !== 'pdf');
+
+    // Параллельно извлекаем текст из всех не-PDF файлов
+    const extractedTexts = await Promise.all(
+      textFiles.map(async ({ fileBase64, fileName }) => {
         const text = await extractText(fileBase64, fileName);
-        textParts.push(`\n--- ${fileName} ---\n${text}`);
-      }
+        const trimmed = text.length > MAX_TEXT_PER_FILE
+          ? text.slice(0, MAX_TEXT_PER_FILE) + `\n...[обрезано, показаны первые ${MAX_TEXT_PER_FILE} символов]`
+          : text;
+        return `\n--- ${fileName} ---\n${trimmed}`;
+      })
+    );
+
+    const messageParts = [];
+    const textParts = [clientInfo, ...extractedTexts];
+
+    // PDF идут как document-блоки (нативная поддержка Claude)
+    for (const { fileBase64 } of pdfFiles) {
+      messageParts.push({
+        type: 'document',
+        source: { type: 'base64', media_type: 'application/pdf', data: fileBase64 },
+      });
     }
 
     textParts.push(USER_PROMPT_SUFFIX);
