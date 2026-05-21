@@ -12,4 +12,4 @@
 - **Симптом**: «Expected ',' or ']' after array element in JSON at position 5878» — ответ обрывался посередине массива
 - **Корневая причина**: `max_tokens: 3000` в вызове Claude API — модель генерировала JSON, который не влезал в 3000 токенов (~5878 символов), и ответ обрезался посередине JSON-структуры
 - **Фикс**: `max_tokens: 3000 → 4096`; добавлен assistant prefill `{ role: 'assistant', content: '{' }` чтобы Claude генерировал только JSON без markdown-обёртки; парсинг: `raw = '{' + message.content[0].text`
-- **Урок**: для JSON-ответов с массивами (positions + marketComparison могут быть большими) нужен запас max_tokens. Assistant prefill с `{` надёжно убирает markdown и исключает текст вне JSON.
+- **Урок**: для JSON-ответов с массивами (positions + marketComparison могут быть большими) нужен запас max_tokens. Assistant prefill с `{` **не поддерживается claude-sonnet-4-6** — использовать нельзя. Для надёжного JSON достаточно жёсткого требования в SYSTEM_PROMPT.
