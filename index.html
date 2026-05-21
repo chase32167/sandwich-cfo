@@ -145,7 +145,16 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .drop-icon{font-size:28px;margin-bottom:8px;}
 .drop-text{font-size:13px;color:var(--text2);}
 .drop-sub{font-size:11px;color:var(--text3);margin-top:4px;font-family:var(--mono);}
-.file-chosen{font-size:12px;color:var(--accent2);margin-top:8px;display:none;}
+.files-list{margin-top:.6rem;display:flex;flex-direction:column;gap:5px;}
+.file-item{display:flex;align-items:center;gap:8px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:6px;padding:5px 10px;font-size:12px;}
+.file-item-icon{flex-shrink:0;font-size:14px;}
+.file-item-name{flex:1;color:var(--accent2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.file-item-size{flex-shrink:0;color:var(--text3);font-size:11px;}
+.file-item-rm{background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;padding:0 2px;line-height:1;flex-shrink:0;}
+.file-item-rm:hover{color:#f43f5e;}
+.drop-zone.has-files{padding:1rem;}
+.file-error{font-size:11px;color:#f43f5e;margin-top:4px;display:none;}
+.file-error.show{display:block;}
 .analyze-btn{width:100%;padding:14px;background:linear-gradient(135deg,#3b82f6,#10b981);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 4px 20px rgba(59,130,246,.4);letter-spacing:.01em;}
 .analyze-btn:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(59,130,246,.55);}
 .analyze-btn:active{transform:translateY(0);}
@@ -582,12 +591,13 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
         <div class="form-group">
           <label>Файл спецификации / КП</label>
           <div class="drop-zone" id="dropZone" ondragover="dropOver(event)" ondragleave="dropLeave(event)" ondrop="dropFile(event)">
-            <input type="file" id="af-file" accept=".xlsx,.xls,.csv,.txt,.pdf,.docx,.doc" onchange="fileChosen(this)">
-            <div class="drop-icon">📁</div>
-            <div class="drop-text">Перетащите файл сюда</div>
-            <div class="drop-sub">xlsx · xls · csv · txt · pdf · docx · doc · до 10 МБ</div>
-            <div class="file-chosen" id="fileLabel">✓ файл выбран</div>
+            <input type="file" id="af-file" multiple accept=".xlsx,.xls,.csv,.txt,.pdf,.docx,.doc" onchange="fileChosen(this)">
+            <div class="drop-icon" id="dropIcon">📁</div>
+            <div class="drop-text" id="dropText">Перетащите файлы сюда</div>
+            <div class="drop-sub">xlsx · xls · csv · txt · pdf · docx · doc · до 4 файлов · 10 МБ каждый</div>
           </div>
+          <div class="files-list" id="filesList"></div>
+          <div class="file-error" id="fileError"></div>
         </div>
         <div class="consent-row">
           <label class="consent-label" for="af-consent">
@@ -938,7 +948,62 @@ function addTyping(){
 function removeTyping(id){document.getElementById(id)?.remove();}
 
 // ─── АНАЛИЗ КП ───
-let chosenFile = null;
+let chosenFiles = [];
+const ALLOWED_EXTS = ['xlsx','xls','csv','txt','pdf','docx','doc'];
+const MAX_FILES = 4;
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+function extOf(name) { return name.split('.').pop().toLowerCase(); }
+
+function addFiles(fileList) {
+  const errEl = document.getElementById('fileError');
+  errEl.classList.remove('show');
+  const errors = [];
+  Array.from(fileList).forEach(f => {
+    if (chosenFiles.length >= MAX_FILES) { errors.push(`Максимум ${MAX_FILES} файла`); return; }
+    if (!ALLOWED_EXTS.includes(extOf(f.name))) { errors.push(`Недопустимый формат: ${f.name}`); return; }
+    if (f.size > MAX_FILE_SIZE) { errors.push(`Файл слишком большой: ${f.name}`); return; }
+    if (chosenFiles.some(c => c.name === f.name && c.size === f.size)) return; // дубликат
+    chosenFiles.push(f);
+  });
+  if (errors.length) { errEl.textContent = errors[0]; errEl.classList.add('show'); }
+  renderFileList();
+}
+
+function renderFileList() {
+  const list = document.getElementById('filesList');
+  const zone = document.getElementById('dropZone');
+  const dropText = document.getElementById('dropText');
+  const dropIcon = document.getElementById('dropIcon');
+  if (!chosenFiles.length) {
+    list.innerHTML = '';
+    zone.classList.remove('has-files');
+    dropText.textContent = 'Перетащите файлы сюда';
+    dropIcon.style.display = '';
+    return;
+  }
+  zone.classList.add('has-files');
+  dropText.textContent = chosenFiles.length < MAX_FILES ? 'Добавить ещё файл' : 'Максимум 4 файла';
+  dropIcon.style.display = 'none';
+  const ICONS = {pdf:'📄',xlsx:'📊',xls:'📊',csv:'📊',docx:'📝',doc:'📝',txt:'📃'};
+  list.innerHTML = chosenFiles.map((f,i) =>
+    `<div class="file-item">
+      <span class="file-item-icon">${ICONS[extOf(f.name)]||'📎'}</span>
+      <span class="file-item-name" title="${f.name}">${f.name}</span>
+      <span class="file-item-size">${(f.size/1024).toFixed(0)} КБ</span>
+      <button class="file-item-rm" onclick="removeFile(${i})" title="Удалить">×</button>
+    </div>`
+  ).join('');
+}
+
+function removeFile(idx) {
+  chosenFiles.splice(idx, 1);
+  document.getElementById('fileError').classList.remove('show');
+  renderFileList();
+  // сбросить input чтобы можно было добавить тот же файл снова
+  const inp = document.getElementById('af-file');
+  inp.value = '';
+}
 
 function phoneDigits(val) {
   let d = val.replace(/\D/g, '');
@@ -989,20 +1054,14 @@ function validateField(id) {
   return ok;
 }
 function fileChosen(input) {
-  chosenFile = input.files[0] || null;
-  const lbl = document.getElementById('fileLabel');
-  if (chosenFile) {
-    lbl.textContent = '✓ ' + chosenFile.name + ' (' + (chosenFile.size / 1024).toFixed(0) + ' КБ)';
-    lbl.style.display = 'block';
-  }
+  if (input.files.length) addFiles(input.files);
 }
 function dropOver(e) { e.preventDefault(); document.getElementById('dropZone').classList.add('drag-over'); }
 function dropLeave(e) { document.getElementById('dropZone').classList.remove('drag-over'); }
 function dropFile(e) {
   e.preventDefault();
   dropLeave(e);
-  const f = e.dataTransfer.files[0];
-  if (f) { chosenFile = f; document.getElementById('fileLabel').textContent = '✓ ' + f.name; document.getElementById('fileLabel').style.display = 'block'; }
+  if (e.dataTransfer.files.length) addFiles(e.dataTransfer.files);
 }
 function fmt(n) { return n ? Math.round(n).toLocaleString('ru-RU') + ' ₽' : '—'; }
 function fmtM2(n) { return n ? n.toFixed(1) + ' м²' : '—'; }
@@ -1089,8 +1148,7 @@ async function runAnalysis() {
   const okE = validateField('af-email');
   if (!okN || !okP || !okE) return;
   if (!consent) { alert('Необходимо дать согласие на обработку персональных данных'); return; }
-  if (!chosenFile) { alert('Загрузите файл спецификации'); return; }
-  if (chosenFile.size > 10 * 1024 * 1024) { alert('Файл слишком большой (макс. 10 МБ)'); return; }
+  if (!chosenFiles.length) { alert('Загрузите хотя бы один файл'); return; }
 
   const btn = document.getElementById('analyzeBtn');
   const btnText = document.getElementById('analyzeBtnText');
@@ -1099,17 +1157,18 @@ async function runAnalysis() {
   startProgress();
 
   try {
-    const fileBase64 = await new Promise((resolve, reject) => {
+    const readFile = f => new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = e => resolve(e.target.result.split(',')[1]);
+      reader.onload = e => resolve({ fileBase64: e.target.result.split(',')[1], fileName: f.name });
       reader.onerror = reject;
-      reader.readAsDataURL(chosenFile);
+      reader.readAsDataURL(f);
     });
+    const files = await Promise.all(chosenFiles.map(readFile));
 
     const resp = await fetch('/api/analyze', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, phone, email, fileBase64, fileName: chosenFile.name })
+      body: JSON.stringify({ name, phone, email, files })
     });
     const json = await resp.json();
     if (!resp.ok || !json.success) throw new Error(json.error || 'Ошибка сервера');

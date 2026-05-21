@@ -4,7 +4,7 @@ const mammoth = require('mammoth');
 const { Resend } = require('resend');
 
 module.exports.config = {
-  api: { bodyParser: { sizeLimit: '12mb' } },
+  api: { bodyParser: { sizeLimit: '50mb' } },
 };
 
 const SUPPLIERS_CONTEXT = `
@@ -112,6 +112,8 @@ async function extractText(fileBase64, fileName) {
   throw new Error(`Формат .${ext} не поддерживается`);
 }
 
+const ALLOWED_EXTS = ['xlsx','xls','csv','txt','pdf','docx','doc'];
+
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -119,30 +121,44 @@ module.exports = async (req, res) => {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { name, phone, email, fileBase64, fileName } = req.body || {};
+  const { name, phone, email, files } = req.body || {};
   if (!name || !phone || !email) return res.status(400).json({ error: 'Заполните все поля формы' });
-  if (!fileBase64) return res.status(400).json({ error: 'Загрузите файл' });
+  if (!files || !files.length) return res.status(400).json({ error: 'Загрузите хотя бы один файл' });
 
-  const ext = (fileName || '').split('.').pop().toLowerCase();
+  // Валидация расширений на сервере
+  for (const f of files) {
+    const ext = (f.fileName || '').split('.').pop().toLowerCase();
+    if (!ALLOWED_EXTS.includes(ext)) {
+      return res.status(400).json({ error: `Недопустимый формат файла: ${f.fileName}` });
+    }
+  }
 
   try {
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-    const clientInfo = `Клиент: ${name}, тел: ${phone}, email: ${email}\nФайл: ${fileName || 'документ'}`;
+    const fileNames = files.map(f => f.fileName).join(', ');
+    const clientInfo = `Клиент: ${name}, тел: ${phone}, email: ${email}\nФайлы: ${fileNames}`;
 
-    let messageContent;
+    // Собираем контент: PDF → document-блоки, остальные → текст
+    const messageParts = [];
+    const textParts = [clientInfo];
 
-    if (ext === 'pdf') {
-      messageContent = [
-        {
+    for (const { fileBase64, fileName } of files) {
+      const ext = (fileName || '').split('.').pop().toLowerCase();
+      if (ext === 'pdf') {
+        messageParts.push({
           type: 'document',
           source: { type: 'base64', media_type: 'application/pdf', data: fileBase64 },
-        },
-        { type: 'text', text: clientInfo + '\n' + USER_PROMPT_SUFFIX },
-      ];
-    } else {
-      const text = await extractText(fileBase64, fileName);
-      messageContent = clientInfo + '\n\nДанные из файла:\n' + text + '\n' + USER_PROMPT_SUFFIX;
+        });
+      } else {
+        const text = await extractText(fileBase64, fileName);
+        textParts.push(`\n--- ${fileName} ---\n${text}`);
+      }
     }
+
+    textParts.push(USER_PROMPT_SUFFIX);
+    messageParts.push({ type: 'text', text: textParts.join('\n') });
+
+    const messageContent = messageParts.length > 1 ? messageParts : messageParts[0].text;
 
     const message = await client.messages.create({
       model: 'claude-sonnet-4-20250514',
@@ -182,12 +198,12 @@ module.exports = async (req, res) => {
         await resend.emails.send({
           from: `Анализ КП <hi@ad-unicorn.ru>`,
           to: [email],
-          subject: `📊 Анализ вашего КП: ${a.docTitle || fileName}`,
+          subject: `📊 Анализ вашего КП: ${a.docTitle || fileNames}`,
           html: `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d0f12;font-family:Arial,sans-serif;color:#e8eaf0">
 <div style="max-width:640px;margin:0 auto;padding:24px">
   <div style="background:linear-gradient(135deg,#3b82f6,#10b981);border-radius:10px;padding:20px 24px;margin-bottom:20px">
     <h1 style="margin:0;font-size:18px;color:#fff">📊 Ваш анализ КП готов</h1>
-    <p style="margin:6px 0 0;font-size:13px;color:rgba(255,255,255,0.8)">${a.docTitle||fileName} · ${new Date().toLocaleDateString('ru-RU')}</p>
+    <p style="margin:6px 0 0;font-size:13px;color:rgba(255,255,255,0.8)">${a.docTitle||fileNames} · ${new Date().toLocaleDateString('ru-RU')}</p>
   </div>
 
   <div style="background:#13161b;border:1px solid #1f2330;border-radius:10px;padding:16px 20px;margin-bottom:16px">
