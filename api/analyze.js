@@ -171,14 +171,17 @@ module.exports = async (req, res) => {
 
     const message = await client.messages.create({
       model: 'claude-sonnet-4-6',
-      max_tokens: 3000,
+      max_tokens: 4096,
       system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: messageContent }],
+      messages: [
+        { role: 'user', content: messageContent },
+        { role: 'assistant', content: '{' },
+      ],
     });
 
-    const raw = message.content[0].text.trim();
+    const raw = '{' + message.content[0].text.trim();
     const jsonMatch = raw.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error('AI не вернул корректный JSON');
+    if (!jsonMatch) throw new Error('Сервис не вернул корректный JSON');
 
     const analysis = JSON.parse(jsonMatch[0]);
 

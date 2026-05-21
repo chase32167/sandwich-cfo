@@ -175,6 +175,8 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .drop-zone.has-files{padding:1rem;}
 .file-error{font-size:11px;color:#f43f5e;margin-top:4px;display:none;}
 .file-error.show{display:block;}
+.analyze-error-box{display:none;background:rgba(244,63,94,.09);border:1px solid rgba(244,63,94,.28);border-radius:8px;padding:12px 14px;font-size:13px;color:#fda4af;margin-top:14px;line-height:1.5;}
+.analyze-error-box.show{display:block;}
 .analyze-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),#f59e0b);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 4px 20px rgba(232,105,42,.4);letter-spacing:.01em;}
 .analyze-btn:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(232,105,42,.55);}
 .analyze-btn:active{transform:translateY(0);}
@@ -281,7 +283,7 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
   <div class="hero-inner">
     <div class="hero-text">
       <h1 class="hero-title">Аналитика рынка<br><span>стройматериалов ЦФО</span></h1>
-      <p class="hero-sub">Реальные цены 36 поставщиков · б/у и новые панели · мониторинг Авито<br>Загрузите КП — AI сравнит за 30 секунд и покажет где переплата</p>
+      <p class="hero-sub">Реальные цены 36 поставщиков · б/у и новые панели · мониторинг Авито<br>Загрузите КП — мы проверим цены за 30 секунд и покажем где переплата</p>
       <button class="hero-cta" onclick="openAnalyzeModal()">📊 Проверить КП бесплатно →</button>
     </div>
     <div class="hero-stats">
@@ -620,7 +622,7 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
     <div class="modal-header">
       <div>
         <h3>📊 Анализ коммерческого предложения</h3>
-        <p class="modal-header-sub">AI сравнит ваш КП с базой 36 поставщиков ЦФО · результат придёт на email</p>
+        <p class="modal-header-sub">Сравниваем ваш КП с базой 36 поставщиков ЦФО · результат придёт на email</p>
       </div>
       <button class="modal-close" onclick="closeAnalyzeModal()">×</button>
     </div>
@@ -672,6 +674,7 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
         <div class="progress-steps" id="progressSteps"></div>
         <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
       </div>
+      <div class="analyze-error-box" id="analyzeError"></div>
       <!-- Результаты -->
       <div class="analyze-results" id="analyzeResults" style="margin-top:1.5rem">
         <div class="result-section" id="resHeader"></div>
@@ -1201,9 +1204,15 @@ async function runAnalysis() {
   const okN = validateField('af-name');
   const okP = validateField('af-phone');
   const okE = validateField('af-email');
+  document.getElementById('analyzeError').classList.remove('show');
   if (!okN || !okP || !okE) return;
   if (!consent) { document.querySelector('.consent-check').classList.add('error'); return; }
-  if (!chosenFiles.length) { alert('Загрузите хотя бы один файл'); return; }
+  if (!chosenFiles.length) {
+    const fe = document.getElementById('fileError');
+    fe.textContent = 'Загрузите хотя бы один файл';
+    fe.classList.add('show');
+    return;
+  }
 
   const btn = document.getElementById('analyzeBtn');
   const btnText = document.getElementById('analyzeBtnText');
@@ -1235,7 +1244,9 @@ async function runAnalysis() {
     renderAnalysis(json.analysis);
   } catch (err) {
     stopProgress(false);
-    alert('Ошибка: ' + err.message);
+    const errBox = document.getElementById('analyzeError');
+    errBox.textContent = err.message;
+    errBox.classList.add('show');
   } finally {
     btn.disabled = false;
     btnText.innerHTML = '📊 Получить анализ бесплатно';
