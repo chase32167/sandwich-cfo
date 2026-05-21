@@ -687,11 +687,21 @@ const suppliers=[
 const panelLabels={'both':'Стены+Кровля','wall':'Стены','roof':'Кровля'};
 const panelBadge={'both':'badge-both','wall':'badge-wall','roof':'badge-roof'};
 
+function addUtm(url){
+  try{
+    const u=new URL(url);
+    u.searchParams.set('utm_source',window.location.hostname);
+    u.searchParams.set('utm_medium','referral');
+    u.searchParams.set('utm_campaign','sandwich-cfo');
+    return u.toString();
+  }catch(e){return url;}
+}
+
 function renderTable(data){
   document.getElementById('countLabel').textContent='Показано: '+data.length+' компаний';
   document.getElementById('suppBody').innerHTML=data.map(s=>`
     <tr${s.bu?' class="bu-row" title="'+s.buNote+'"':''}>
-      <td><a class="alink" href="${s.url}" target="_blank">${s.name}</a>${s.bu?'&nbsp;<span class="badge badge-bu" title="'+s.buNote+'">б/у есть</span>':''}</td>
+      <td><a class="alink" href="${addUtm(s.url)}" target="_blank">${s.name}</a>${s.bu?'&nbsp;<span class="badge badge-bu" title="'+s.buNote+'">б/у есть</span>':''}</td>
       <td style="color:var(--text2);font-size:11px">${s.city}</td>
       <td>${s.types.map(t=>`<span class="badge badge-blue" style="margin-right:3px;margin-bottom:2px">${t}</span>`).join('')}</td>
       <td><span class="badge ${panelBadge[s.panelType]}">${panelLabels[s.panelType]}</span></td>
