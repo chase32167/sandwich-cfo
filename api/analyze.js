@@ -3,9 +3,6 @@ const XLSX = require('xlsx');
 const mammoth = require('mammoth');
 const { Resend } = require('resend');
 
-module.exports.config = {
-  api: { bodyParser: { sizeLimit: '50mb' } },
-};
 
 const SUPPLIERS_CONTEXT = `
 База поставщиков сэндвич-панелей ЦФО (цена за м², обычно БЕЗ НДС):
@@ -271,3 +268,5 @@ module.exports = async (req, res) => {
     return res.status(500).json({ error: err.message || 'Ошибка анализа' });
   }
 };
+
+module.exports.config = { maxDuration: 60 };
