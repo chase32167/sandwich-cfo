@@ -161,7 +161,7 @@ module.exports = async (req, res) => {
     const messageContent = messageParts.length > 1 ? messageParts : messageParts[0].text;
 
     const message = await client.messages.create({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-sonnet-4-6',
       max_tokens: 3000,
       system: SYSTEM_PROMPT,
       messages: [{ role: 'user', content: messageContent }],
