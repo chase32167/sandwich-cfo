@@ -1,6 +1,7 @@
 const Anthropic = require('@anthropic-ai/sdk');
 const XLSX = require('xlsx');
 const mammoth = require('mammoth');
+const { Resend } = require('resend');
 
 module.exports.config = {
   api: { bodyParser: { sizeLimit: '12mb' } },
@@ -155,6 +156,98 @@ module.exports = async (req, res) => {
     if (!jsonMatch) throw new Error('AI не вернул корректный JSON');
 
     const analysis = JSON.parse(jsonMatch[0]);
+
+    // Отправка email (только если RESEND_API_KEY задан)
+    if (process.env.RESEND_API_KEY) {
+      try {
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        const fmt = n => n ? Math.round(n).toLocaleString('ru-RU') + ' ₽' : '—';
+        const fmtM2 = n => n ? n.toFixed(1) + ' м²' : '—';
+        const a = analysis;
+        const posRows = (a.positions || []).map(p =>
+          `<tr><td style="padding:6px 10px;border-bottom:1px solid #2a2f3a">${p.name}</td>
+           <td style="padding:6px 10px;border-bottom:1px solid #2a2f3a;text-align:center">${p.type||'—'}</td>
+           <td style="padding:6px 10px;border-bottom:1px solid #2a2f3a;text-align:center">${p.thickness||'—'}</td>
+           <td style="padding:6px 10px;border-bottom:1px solid #2a2f3a;text-align:right">${fmtM2(p.m2)}</td>
+           <td style="padding:6px 10px;border-bottom:1px solid #2a2f3a;text-align:right">${p.pricePerM2?Math.round(p.pricePerM2).toLocaleString('ru-RU')+' ₽':'—'}</td>
+           <td style="padding:6px 10px;border-bottom:1px solid #2a2f3a;text-align:right">${fmt(p.total)}</td></tr>`
+        ).join('');
+        const cmpRows = (a.marketComparison || []).map(c =>
+          `<tr><td style="padding:6px 10px;border-bottom:1px solid #2a2f3a"><b>${c.supplier}</b></td>
+           <td style="padding:6px 10px;border-bottom:1px solid #2a2f3a;color:#8b92a5">${c.region||''}</td>
+           <td style="padding:6px 10px;border-bottom:1px solid #2a2f3a;text-align:right">${Math.round(c.pricePerM2).toLocaleString('ru-RU')} ₽</td>
+           <td style="padding:6px 10px;border-bottom:1px solid #2a2f3a;text-align:right;color:${c.saving>0?'#10b981':'#f43f5e'}">${c.saving>0?'−':'+'}${fmt(Math.abs(c.saving))}</td></tr>`
+        ).join('');
+
+        await resend.emails.send({
+          from: `Анализ КП <hi@ad-unicorn.ru>`,
+          to: ['hi@ad-unicorn.ru'],
+          subject: `📊 Новый анализ КП: ${a.client?.name} · ${a.docTitle || fileName}`,
+          html: `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d0f12;font-family:Arial,sans-serif;color:#e8eaf0">
+<div style="max-width:640px;margin:0 auto;padding:24px">
+  <div style="background:linear-gradient(135deg,#3b82f6,#10b981);border-radius:10px;padding:20px 24px;margin-bottom:20px">
+    <h1 style="margin:0;font-size:18px;color:#fff">📊 Новый анализ КП</h1>
+    <p style="margin:6px 0 0;font-size:13px;color:rgba(255,255,255,0.8)">${a.docTitle||fileName} · ${new Date().toLocaleDateString('ru-RU')}</p>
+  </div>
+
+  <div style="background:#13161b;border:1px solid #1f2330;border-radius:10px;padding:16px 20px;margin-bottom:16px">
+    <div style="font-size:10px;color:#555d6e;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Клиент</div>
+    <div style="font-size:15px;font-weight:600">${a.client?.name||name}</div>
+    <div style="font-size:13px;color:#8b92a5;margin-top:4px">${a.client?.phone||phone} · ${a.client?.email||email}</div>
+    ${a.supplier?`<div style="font-size:12px;color:#f59e0b;margin-top:6px">Поставщик из КП: ${a.supplier}</div>`:''}
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px">
+    <div style="background:#13161b;border:1px solid #1f2330;border-radius:8px;padding:12px;text-align:center">
+      <div style="font-size:18px;font-weight:700;color:#3b82f6">${fmtM2(a.totals?.m2Total)}</div>
+      <div style="font-size:10px;color:#555d6e;margin-top:3px">Всего м²</div>
+    </div>
+    <div style="background:#13161b;border:1px solid #1f2330;border-radius:8px;padding:12px;text-align:center">
+      <div style="font-size:18px;font-weight:700;color:#f59e0b">${fmt(a.totals?.priceTotal)}</div>
+      <div style="font-size:10px;color:#555d6e;margin-top:3px">Сумма без НДС</div>
+    </div>
+    <div style="background:#13161b;border:1px solid #1f2330;border-radius:8px;padding:12px;text-align:center">
+      <div style="font-size:18px;font-weight:700;color:#f43f5e">${fmt(a.totals?.vatAmount)}</div>
+      <div style="font-size:10px;color:#555d6e;margin-top:3px">НДС 20%</div>
+    </div>
+  </div>
+
+  ${posRows ? `<div style="background:#13161b;border:1px solid #1f2330;border-radius:10px;padding:16px 20px;margin-bottom:16px">
+    <div style="font-size:10px;color:#555d6e;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Позиции</div>
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <thead><tr style="color:#555d6e;font-size:10px">
+        <th style="padding:4px 10px;text-align:left">Позиция</th><th style="padding:4px 10px">Тип</th>
+        <th style="padding:4px 10px">Толщина</th><th style="padding:4px 10px;text-align:right">м²</th>
+        <th style="padding:4px 10px;text-align:right">₽/м²</th><th style="padding:4px 10px;text-align:right">Сумма</th>
+      </tr></thead><tbody>${posRows}</tbody>
+    </table></div>` : ''}
+
+  ${cmpRows ? `<div style="background:#13161b;border:1px solid #1f2330;border-radius:10px;padding:16px 20px;margin-bottom:16px">
+    <div style="font-size:10px;color:#555d6e;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Сравнение с рынком</div>
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+      <thead><tr style="color:#555d6e;font-size:10px">
+        <th style="padding:4px 10px;text-align:left">Поставщик</th><th style="padding:4px 10px;text-align:left">Регион</th>
+        <th style="padding:4px 10px;text-align:right">₽/м²</th><th style="padding:4px 10px;text-align:right">Экономия</th>
+      </tr></thead><tbody>${cmpRows}</tbody>
+    </table></div>` : ''}
+
+  <div style="background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);border-radius:8px;padding:14px 16px;margin-bottom:10px;font-size:13px;line-height:1.6">
+    ${a.conclusion||''}
+  </div>
+  <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.3);border-radius:8px;padding:14px 16px;font-size:13px;line-height:1.6">
+    ${a.recommendation||''}
+  </div>
+
+  <div style="text-align:center;margin-top:20px;font-size:11px;color:#555d6e">
+    sandwich-cfo.vercel.app · Аналитика рынка сэндвич-панелей ЦФО
+  </div>
+</div></body></html>`,
+        });
+      } catch (emailErr) {
+        console.warn('Email send failed (non-fatal):', emailErr.message);
+      }
+    }
+
     return res.status(200).json({ success: true, analysis });
 
   } catch (err) {
