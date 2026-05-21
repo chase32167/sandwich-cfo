@@ -3,40 +3,63 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Сэндвич-панели ЦФО — Аналитика рынка</title>
-<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>СтройДата ЦФО — Аналитика рынка стройматериалов</title>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-:root{--bg:#0d0f12;--bg2:#13161b;--bg3:#1a1e25;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--accent:#3b82f6;--accent2:#10b981;--accent3:#f59e0b;--accent4:#a78bfa;--bu:#f43f5e;--bu-bg:rgba(244,63,94,0.12);--bu-border:rgba(244,63,94,0.3);--text:#e8eaf0;--text2:#8b92a5;--text3:#555d6e;--font:'Geologica',sans-serif;--mono:'JetBrains Mono',monospace;}
+:root{--bg:#08090C;--bg2:#0F1117;--bg3:#161B24;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--primary:#E8692A;--accent:#E8692A;--accent2:#10b981;--accent3:#f59e0b;--accent4:#a78bfa;--bu:#f43f5e;--bu-bg:rgba(244,63,94,0.10);--bu-border:rgba(244,63,94,0.28);--text:#E8EAF0;--text2:#8B92A5;--text3:#4A5568;--font:'Onest',sans-serif;--mono:'JetBrains Mono',monospace;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;}
-header{border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;background:rgba(13,15,18,0.92);backdrop-filter:blur(12px);}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;background-image:radial-gradient(circle,rgba(255,255,255,0.032) 1px,transparent 1px);background-size:24px 24px;background-attachment:fixed;}
+header{border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:100;background:rgba(8,9,12,0.94);backdrop-filter:blur(16px);}
 .logo{display:flex;align-items:center;gap:10px;}
-.logo-icon{width:28px;height:28px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;}
-.logo-text{font-size:14px;font-weight:500;}
-.logo-sub{font-size:11px;color:var(--text3);font-family:var(--mono);margin-left:4px;}
+.logo-mark{width:32px;height:32px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;letter-spacing:-.5px;flex-shrink:0;}
+.logo-name{font-size:15px;font-weight:700;}
+.logo-region{font-size:11px;font-family:var(--mono);color:var(--text3);background:var(--bg3);padding:2px 7px;border-radius:4px;border:1px solid var(--border2);margin-left:2px;}
+.header-cats{display:flex;align-items:center;gap:6px;}
+.cat-pill{font-size:12px;font-family:var(--font);padding:5px 13px;border-radius:20px;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;transition:all .15s;font-weight:500;}
+.cat-pill.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.cat-pill.cat-add{border-style:dashed;color:var(--text3);}
+.cat-pill.cat-add:hover{color:var(--text2);}
+.header-right{display:flex;align-items:center;gap:10px;}
+.status-online{font-size:12px;color:var(--text3);display:flex;align-items:center;gap:5px;}
+.header-cta{padding:8px 16px;background:var(--accent);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);transition:opacity .15s;white-space:nowrap;}
+.header-cta:hover{opacity:.85;}
 .tag{font-size:11px;font-family:var(--mono);color:var(--text3);background:var(--bg3);padding:3px 8px;border-radius:4px;border:1px solid var(--border);}
-.status-dot{width:7px;height:7px;border-radius:50%;background:var(--accent2);display:inline-block;margin-right:5px;animation:pulse 2s infinite;}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--accent2);display:inline-block;animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+/* HERO */
+.hero{border-bottom:1px solid var(--border);padding:2.5rem 2rem;position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;right:-60px;top:-80px;width:440px;height:440px;background:radial-gradient(circle,rgba(232,105,42,0.09) 0%,transparent 70%);pointer-events:none;}
+.hero-inner{max-width:1500px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;}
+.hero-text{flex:1;min-width:260px;}
+.hero-title{font-size:30px;font-weight:800;line-height:1.15;margin-bottom:10px;letter-spacing:-.03em;}.hero-title span{color:var(--accent);}
+.hero-sub{font-size:14px;color:var(--text2);margin-bottom:22px;line-height:1.6;}
+.hero-cta{padding:13px 28px;background:var(--accent);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);box-shadow:0 4px 24px rgba(232,105,42,.38);transition:all .2s;}
+.hero-cta:hover{transform:translateY(-2px);box-shadow:0 6px 32px rgba(232,105,42,.55);}
+.hero-stats{display:flex;gap:2.5rem;flex-shrink:0;flex-wrap:wrap;align-items:center;}
+.hero-stat{text-align:center;}
+.hero-stat-val{font-size:26px;font-weight:800;font-family:var(--mono);letter-spacing:-.03em;}
+.hero-stat-val.orange{color:var(--accent);}
+.hero-stat-lbl{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:2px;}
+/* NAV BAR */
+.nav-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:1.5rem;flex-wrap:wrap;}
+.nav-analyze-btn{padding:9px 20px;background:var(--accent);border:none;border-radius:9px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);box-shadow:0 2px 14px rgba(232,105,42,.35);transition:all .2s;white-space:nowrap;flex-shrink:0;}
+.nav-analyze-btn:hover{transform:translateY(-1px);box-shadow:0 4px 22px rgba(232,105,42,.52);}
 .container{max-width:1500px;margin:0 auto;padding:2rem;}
 .metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:1.5rem;}
 .metric{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem;position:relative;overflow:hidden;transition:border-color 0.2s;animation:fadeIn 0.4s ease both;}
 .metric:nth-child(1){animation-delay:.05s}.metric:nth-child(2){animation-delay:.1s}.metric:nth-child(3){animation-delay:.15s}.metric:nth-child(4){animation-delay:.2s}.metric:nth-child(5){animation-delay:.25s}
 .metric:hover{border-color:var(--border2);}
-.metric::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
-.metric.blue::before{background:var(--accent)}.metric.green::before{background:var(--accent2)}.metric.amber::before{background:var(--accent3)}.metric.gray::before{background:var(--text3)}.metric.purple::before{background:var(--accent4)}.metric.rose::before{background:var(--bu)}
+.metric::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;border-radius:2px;}
+.metric.blue::before{background:#3b82f6}.metric.green::before{background:var(--accent2)}.metric.amber::before{background:var(--accent3)}.metric.gray::before{background:var(--text3)}.metric.purple::before{background:var(--accent4)}.metric.rose::before{background:var(--bu)}
 .metric-label{font-size:10px;color:var(--text3);font-family:var(--mono);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em;}
 .metric-value{font-size:22px;font-weight:700;letter-spacing:-.03em;}
 .metric-sub{font-size:10px;color:var(--text3);margin-top:3px;}
-.tabs{display:flex;gap:2px;margin-bottom:1.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:4px;width:fit-content;flex-wrap:wrap;}
+.tabs{display:flex;gap:2px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:4px;flex-wrap:wrap;}
 .tab{padding:7px 16px;font-size:13px;cursor:pointer;border:none;background:transparent;color:var(--text2);border-radius:7px;transition:all .15s;font-family:var(--font);}
 .tab:hover{color:var(--text);}.tab.active{background:var(--bg3);color:var(--text);font-weight:500;border:1px solid var(--border2);}
 .tab.bu-tab{color:#fda4af;}
 .tab.bu-tab.active{background:var(--bu-bg);border-color:var(--bu-border);color:var(--bu);}
-.tab.analyze-tab{background:linear-gradient(135deg,rgba(59,130,246,.2),rgba(16,185,129,.2));border:1px solid rgba(59,130,246,.4);color:#60a5fa;font-weight:600;position:relative;padding-right:20px;}
-.tab.analyze-tab::after{content:'';position:absolute;top:7px;right:7px;width:6px;height:6px;border-radius:50%;background:#10b981;animation:pulse 2s infinite;}
-.tab.analyze-tab:hover{background:linear-gradient(135deg,rgba(59,130,246,.35),rgba(16,185,129,.35));border-color:rgba(59,130,246,.6);color:#93c5fd;box-shadow:0 0 12px rgba(59,130,246,.3);}
-.tab.analyze-tab.active{background:linear-gradient(135deg,rgba(59,130,246,.3),rgba(16,185,129,.3));border-color:rgba(59,130,246,.7);color:#fff;box-shadow:0 0 16px rgba(59,130,246,.4);}
 .section{display:none;}.section.active{display:block;}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
 .card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;transition:border-color .2s;}
@@ -129,9 +152,6 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .send-btn{padding:8px 16px;background:var(--accent);border:none;border-radius:8px;color:#fff;font-size:13px;cursor:pointer;font-weight:500;transition:opacity .15s;font-family:var(--font);}
 .send-btn:hover{opacity:.85;}.send-btn:disabled{opacity:.4;cursor:default;}
 /* Анализ КП */
-.analyze-wrap{display:grid;grid-template-columns:380px 1fr;gap:1.5rem;align-items:start;}
-.analyze-form-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem;}
-.analyze-form-card h3{font-size:13px;font-weight:500;margin-bottom:1.2rem;display:flex;align-items:center;gap:8px;}
 .form-group{margin-bottom:1rem;}
 .form-group label{display:block;font-size:11px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;}
 .form-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;font-family:var(--font);outline:none;transition:border-color .15s;}
@@ -140,13 +160,13 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .form-error{font-size:11px;color:var(--bu);margin-top:4px;display:none;}
 .form-error.show{display:block;}
 .drop-zone{border:2px dashed var(--border2);border-radius:10px;padding:2rem 1rem;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:1rem;position:relative;}
-.drop-zone:hover,.drop-zone.drag-over{border-color:var(--accent);background:rgba(59,130,246,.05);}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--accent);background:rgba(232,105,42,.05);}
 .drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
 .drop-icon{font-size:28px;margin-bottom:8px;}
 .drop-text{font-size:13px;color:var(--text2);}
 .drop-sub{font-size:11px;color:var(--text3);margin-top:4px;font-family:var(--mono);}
 .files-list{margin-top:.6rem;display:flex;flex-direction:column;gap:5px;}
-.file-item{display:flex;align-items:center;gap:8px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:6px;padding:5px 10px;font-size:12px;}
+.file-item{display:flex;align-items:center;gap:8px;background:rgba(232,105,42,.08);border:1px solid rgba(232,105,42,.2);border-radius:6px;padding:5px 10px;font-size:12px;}
 .file-item-icon{flex-shrink:0;font-size:14px;}
 .file-item-name{flex:1;color:var(--accent2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .file-item-size{flex-shrink:0;color:var(--text3);font-size:11px;}
@@ -155,8 +175,8 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .drop-zone.has-files{padding:1rem;}
 .file-error{font-size:11px;color:#f43f5e;margin-top:4px;display:none;}
 .file-error.show{display:block;}
-.analyze-btn{width:100%;padding:14px;background:linear-gradient(135deg,#3b82f6,#10b981);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 4px 20px rgba(59,130,246,.4);letter-spacing:.01em;}
-.analyze-btn:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(59,130,246,.55);}
+.analyze-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--accent),#f59e0b);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 4px 20px rgba(232,105,42,.4);letter-spacing:.01em;}
+.analyze-btn:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(232,105,42,.55);}
 .analyze-btn:active{transform:translateY(0);}
 .analyze-btn:disabled{opacity:.4;cursor:default;transform:none;box-shadow:none;}
 .consent-row{margin-bottom:1rem;}
@@ -167,14 +187,15 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .consent-label input:checked~.consent-check{background:var(--accent);border-color:var(--accent);}
 .consent-label input:checked~.consent-check::after{content:'✓';font-size:11px;color:#fff;font-weight:700;}
 .consent-link{color:var(--accent);text-decoration:underline;cursor:pointer;}
-.consent-link:hover{color:#60a5fa;}
+.consent-link:hover{opacity:.8;}
 /* Модальное окно */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;align-items:center;justify-content:center;padding:1rem;}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:1000;align-items:center;justify-content:center;padding:1rem;}
 .modal-overlay.open{display:flex;}
-.modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;max-width:640px;width:100%;max-height:80vh;display:flex;flex-direction:column;overflow:hidden;}
-.modal-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-box{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;max-width:640px;width:100%;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;}
+.modal-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
 .modal-header h3{font-size:15px;font-weight:600;}
-.modal-close{background:none;border:none;color:var(--text3);font-size:22px;cursor:pointer;line-height:1;padding:0 4px;}
+.modal-header-sub{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:3px;}
+.modal-close{background:none;border:none;color:var(--text3);font-size:22px;cursor:pointer;line-height:1;padding:0 4px;flex-shrink:0;}
 .modal-close:hover{color:var(--text);}
 .modal-body{padding:1.5rem;overflow-y:auto;font-size:13px;line-height:1.8;color:var(--text2);}
 .modal-body h4{font-size:13px;font-weight:600;color:var(--text);margin:1.2rem 0 .4rem;}
@@ -184,7 +205,7 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .footer-link:hover{color:var(--text2);}
 .analyze-results{display:none;}
 .analyze-results.show{display:block;}
-.result-section{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1rem;}
+.result-section{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1rem;}
 .result-section h4{font-size:11px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1rem;}
 .result-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1rem;}
 .result-metric{background:var(--bg3);border-radius:8px;padding:10px 12px;text-align:center;}
@@ -198,20 +219,19 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .saving-pos{color:var(--accent2);font-weight:600;}
 .saving-neg{color:var(--bu);font-weight:600;}
 .result-text{font-size:13px;line-height:1.7;color:var(--text2);}
-.result-alert{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;margin-bottom:.75rem;}
+.result-alert{background:rgba(232,105,42,.08);border:1px solid rgba(232,105,42,.28);border-radius:8px;padding:12px 14px;font-size:13px;line-height:1.6;margin-bottom:.75rem;}
 .result-alert.warn{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3);}
 .result-alert.success{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.3);}
 .result-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:.75rem;}
 .result-tag{font-size:11px;font-family:var(--mono);background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:3px 8px;color:var(--text2);}
 .spin{display:inline-block;animation:spin 1s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
-@media(max-width:900px){.analyze-wrap{grid-template-columns:1fr;}}
 /* Прогресс-индикатор */
 .progress-box{display:none;margin-top:1rem;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:1.1rem 1.2rem;}
 .progress-box.show{display:block;}
 .progress-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;}
 .progress-title{font-size:12px;font-weight:600;color:var(--text2);}
-.progress-timer{font-size:12px;font-family:var(--mono);color:var(--accent);background:rgba(59,130,246,.12);padding:2px 8px;border-radius:4px;}
+.progress-timer{font-size:12px;font-family:var(--mono);color:var(--accent);background:rgba(232,105,42,.12);padding:2px 8px;border-radius:4px;}
 .progress-steps{display:flex;flex-direction:column;gap:6px;margin-bottom:.9rem;}
 .progress-step{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text3);transition:color .3s;}
 .progress-step.active{color:var(--text);}
@@ -223,34 +243,55 @@ tr:hover td{background:rgba(255,255,255,.02);}
 .progress-bar-wrap{height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
 .progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transition:width .5s ease;}
 .type-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;position:relative;overflow:hidden;}
-.type-card.rec{border-color:rgba(59,130,246,.35);}
+.type-card.rec{border-color:rgba(232,105,42,.35);}
 .type-card-accent{position:absolute;top:0;left:0;right:0;height:3px;}
 .type-card h3{font-size:14px;font-weight:500;margin-bottom:4px;}
 .type-card .price{font-size:20px;font-weight:700;font-family:var(--mono);margin:8px 0;}
 .type-card .price span{font-size:12px;font-weight:400;color:var(--text3);}
 .prop-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;}
 .prop-row:last-child{border-bottom:none;}.prop-label{color:var(--text3);}
-.rec-badge{position:absolute;top:12px;right:10px;font-size:10px;font-family:var(--mono);background:rgba(59,130,246,.2);color:#60a5fa;padding:2px 6px;border-radius:4px;border:1px solid rgba(59,130,246,.3);}
+.rec-badge{position:absolute;top:12px;right:10px;font-size:10px;font-family:var(--mono);background:rgba(232,105,42,.18);color:#fb923c;padding:2px 6px;border-radius:4px;border:1px solid rgba(232,105,42,.3);}
 .chart-wrap{position:relative;width:100%;}
 footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center;font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:2rem;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-@media(max-width:1100px){table{font-size:11px;}th,td{padding:7px 8px;}}
-@media(max-width:900px){.metrics{grid-template-columns:1fr 1fr}.grid-2{grid-template-columns:1fr}.avito-links{grid-template-columns:1fr 1fr}.bu-tips{grid-template-columns:1fr}}
-@media(max-width:600px){.metrics{grid-template-columns:1fr 1fr}.container{padding:1rem}header{padding:0 1rem}}
+@media(max-width:1100px){table{font-size:11px;}th,td{padding:7px 8px;}.hero-title{font-size:24px;}.hero-stats{gap:1.5rem;}.hero-stat-val{font-size:22px;}}
+@media(max-width:900px){.metrics{grid-template-columns:1fr 1fr}.grid-2{grid-template-columns:1fr}.avito-links{grid-template-columns:1fr 1fr}.bu-tips{grid-template-columns:1fr}.hero-inner{flex-direction:column}.hero-stats{justify-content:center}.header-cats{display:none}}
+@media(max-width:600px){.metrics{grid-template-columns:1fr 1fr}.container{padding:1rem}header{padding:0 1rem}.hero{padding:1.5rem 1rem}.hero-title{font-size:20px}.nav-bar{flex-direction:column;align-items:stretch}.nav-analyze-btn{text-align:center}}
 </style>
 </head>
 <body>
 <header>
   <div class="logo">
-    <div class="logo-icon">СП</div>
-    <span class="logo-text">Сэндвич-панели ЦФО</span>
-    <span class="logo-sub">/ аналитика рынка</span>
+    <div class="logo-mark">СД</div>
+    <span class="logo-name">СтройДата</span>
+    <span class="logo-region">ЦФО</span>
   </div>
-  <div style="display:flex;align-items:center;gap:12px">
-    <span class="tag">ЦФО · май 2026</span>
-    <span style="font-size:12px;color:var(--text3)"><span class="status-dot"></span>онлайн</span>
+  <div class="header-cats">
+    <button class="cat-pill active">Сэндвич-панели</button>
+    <button class="cat-pill cat-add" title="Скоро: кирпич, арматура, утеплители">+ категория</button>
+  </div>
+  <div class="header-right">
+    <span class="tag">май 2026</span>
+    <span class="status-online"><span class="status-dot"></span>онлайн</span>
+    <button class="header-cta" onclick="openAnalyzeModal()">📊 Анализ КП</button>
   </div>
 </header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <h1 class="hero-title">Аналитика рынка<br><span>стройматериалов ЦФО</span></h1>
+      <p class="hero-sub">Реальные цены 36 поставщиков · б/у и новые панели · мониторинг Авито<br>Загрузите КП — AI сравнит за 30 секунд и покажет где переплата</p>
+      <button class="hero-cta" onclick="openAnalyzeModal()">📊 Проверить КП бесплатно →</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val orange">36</div><div class="hero-stat-lbl">поставщиков</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">969₽</div><div class="hero-stat-lbl">мин. цена/м²</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">−70%</div><div class="hero-stat-lbl">экономия б/у</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">11</div><div class="hero-stat-lbl">регионов ЦФО</div></div>
+    </div>
+  </div>
+</div>
 
 <div class="container">
   <div class="metrics">
@@ -261,13 +302,15 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
     <div class="metric gray"><div class="metric-label">Толщины</div><div class="metric-value">30–300</div><div class="metric-sub">мм · стены и кровля</div></div>
   </div>
 
-  <div class="tabs">
-    <button class="tab active" onclick="showTab('suppliers')">Поставщики (36)</button>
-    <button class="tab bu-tab" onclick="showTab('bu')">🔴 Б/У панели</button>
-    <button class="tab" onclick="showTab('avito')">Авито Live</button>
-    <button class="tab" onclick="showTab('prices')">Типы и цены</button>
-    <button class="tab" onclick="showTab('charts')">Аналитика</button>
-    <button class="tab analyze-tab" onclick="showTab('analyze')">📊 Анализ КП</button>
+  <div class="nav-bar">
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('suppliers')">Поставщики (36)</button>
+      <button class="tab bu-tab" onclick="showTab('bu')">🔴 Б/У панели</button>
+      <button class="tab" onclick="showTab('avito')">Авито Live</button>
+      <button class="tab" onclick="showTab('prices')">Типы и цены</button>
+      <button class="tab" onclick="showTab('charts')">Аналитика</button>
+    </div>
+    <button class="nav-analyze-btn" onclick="openAnalyzeModal()">📊 Анализ КП — бесплатно</button>
   </div>
 
   <!-- ПОСТАВЩИКИ НОВЫХ -->
@@ -567,62 +610,70 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
     </div>
   </div>
 
-  <!-- Анализ КП -->
-  <div id="analyze" class="section">
-    <div class="analyze-wrap">
-      <!-- Форма -->
-      <div class="analyze-form-card">
+  <!-- Анализ КП — контент перенесён в модальное окно #analyzeModal -->
+  <div id="analyze" class="section" style="display:none!important"></div>
+
+</div>
+<!-- Модальное окно анализа КП -->
+<div class="modal-overlay" id="analyzeModal" onclick="closeAnalyzeOutside(event)">
+  <div class="modal-box" style="max-width:680px">
+    <div class="modal-header">
+      <div>
         <h3>📊 Анализ коммерческого предложения</h3>
-        <div class="form-group">
-          <label>ФИО</label>
-          <input class="form-input" id="af-name" type="text" placeholder="Иванов Иван Иванович" onblur="validateField('af-name')">
-          <div class="form-error" id="af-name-err">Введите ФИО</div>
-        </div>
-        <div class="form-group">
+        <p class="modal-header-sub">AI сравнит ваш КП с базой 36 поставщиков ЦФО · результат придёт на email</p>
+      </div>
+      <button class="modal-close" onclick="closeAnalyzeModal()">×</button>
+    </div>
+    <div class="modal-body" id="analyzeModalBody" style="padding:1.5rem">
+      <div class="form-group">
+        <label>ФИО</label>
+        <input class="form-input" id="af-name" type="text" placeholder="Иванов Иван Иванович" onblur="validateField('af-name')">
+        <div class="form-error" id="af-name-err">Введите ФИО</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div class="form-group" style="margin-bottom:0">
           <label>Телефон</label>
           <input class="form-input" id="af-phone" type="tel" placeholder="+7 (___) ___-__-__" oninput="phoneMask(this)" onkeydown="phoneKey(event,this)" onfocus="phoneFocus(this)" onblur="phoneBlur(this)">
           <div class="form-error" id="af-phone-err">Введите корректный номер</div>
         </div>
-        <div class="form-group">
+        <div class="form-group" style="margin-bottom:0">
           <label>Email</label>
           <input class="form-input" id="af-email" type="email" placeholder="example@mail.ru" onblur="validateField('af-email')">
           <div class="form-error" id="af-email-err">Введите корректный email</div>
         </div>
-        <div class="form-group">
-          <label>Файл спецификации / КП</label>
-          <div class="drop-zone" id="dropZone" ondragover="dropOver(event)" ondragleave="dropLeave(event)" ondrop="dropFile(event)">
-            <input type="file" id="af-file" multiple accept=".xlsx,.xls,.csv,.txt,.pdf,.docx,.doc" onchange="fileChosen(this)">
-            <div class="drop-icon" id="dropIcon">📁</div>
-            <div class="drop-text" id="dropText">Перетащите файлы сюда</div>
-            <div class="drop-sub">xlsx · xls · csv · txt · pdf · docx · doc · до 4 файлов · 10 МБ каждый</div>
-          </div>
-          <div class="files-list" id="filesList"></div>
-          <div class="file-error" id="fileError"></div>
-        </div>
-        <div class="consent-row">
-          <label class="consent-label" for="af-consent">
-            <input type="checkbox" id="af-consent" onchange="clearConsentError()">
-            <span class="consent-check"></span>
-            <span>Я даю согласие на <span class="consent-link" onclick="openPrivacy()">обработку моих персональных данных</span> в соответствии с политикой конфиденциальности</span>
-          </label>
-        </div>
-        <button class="analyze-btn" id="analyzeBtn" onclick="runAnalysis()">
-          <span id="analyzeBtnText">📊 Получить анализ бесплатно</span>
-        </button>
-        <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:10px;font-family:var(--mono);">Данные используются только для анализа · не сохраняются</div>
-
-        <div class="progress-box" id="progressBox">
-          <div class="progress-header">
-            <span class="progress-title">Формируем анализ...</span>
-            <span class="progress-timer" id="progressTimer">0 сек</span>
-          </div>
-          <div class="progress-steps" id="progressSteps"></div>
-          <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
-        </div>
       </div>
-
+      <div class="form-group" style="margin-top:1rem">
+        <label>Файл спецификации / КП</label>
+        <div class="drop-zone" id="dropZone" ondragover="dropOver(event)" ondragleave="dropLeave(event)" ondrop="dropFile(event)">
+          <input type="file" id="af-file" multiple accept=".xlsx,.xls,.csv,.txt,.pdf,.docx,.doc" onchange="fileChosen(this)">
+          <div class="drop-icon" id="dropIcon">📁</div>
+          <div class="drop-text" id="dropText">Перетащите файлы сюда</div>
+          <div class="drop-sub">xlsx · xls · csv · txt · pdf · docx · doc · до 4 файлов · 10 МБ каждый</div>
+        </div>
+        <div class="files-list" id="filesList"></div>
+        <div class="file-error" id="fileError"></div>
+      </div>
+      <div class="consent-row">
+        <label class="consent-label" for="af-consent">
+          <input type="checkbox" id="af-consent" onchange="clearConsentError()">
+          <span class="consent-check"></span>
+          <span>Я даю согласие на <span class="consent-link" onclick="openPrivacy()">обработку персональных данных</span> в соответствии с политикой конфиденциальности</span>
+        </label>
+      </div>
+      <button class="analyze-btn" id="analyzeBtn" onclick="runAnalysis()">
+        <span id="analyzeBtnText">📊 Получить анализ бесплатно</span>
+      </button>
+      <div style="font-size:11px;color:var(--text3);text-align:center;margin-top:10px;font-family:var(--mono);">Данные используются только для анализа · не сохраняются</div>
+      <div class="progress-box" id="progressBox">
+        <div class="progress-header">
+          <span class="progress-title">Формируем анализ...</span>
+          <span class="progress-timer" id="progressTimer">0 сек</span>
+        </div>
+        <div class="progress-steps" id="progressSteps"></div>
+        <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+      </div>
       <!-- Результаты -->
-      <div class="analyze-results" id="analyzeResults">
+      <div class="analyze-results" id="analyzeResults" style="margin-top:1.5rem">
         <div class="result-section" id="resHeader"></div>
         <div class="result-section" id="resPositions"></div>
         <div class="result-section" id="resMarket"></div>
@@ -630,8 +681,8 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
       </div>
     </div>
   </div>
-
 </div>
+
 <!-- Модальное окно политики конфиденциальности -->
 <div class="modal-overlay" id="privacyModal" onclick="closePrivacyOutside(event)">
   <div class="modal-box">
@@ -676,7 +727,7 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;text-align:center
   </div>
 </div>
 
-<footer>sandwich-cfo · 36 поставщиков · б/у + новые · 11 регионов ЦФО · толщины 30–300мм · май 2026 · <span class="footer-link" onclick="openPrivacy()">Политика конфиденциальности</span></footer>
+<footer>СтройДата ЦФО · 36 поставщиков · б/у + новые · 11 регионов · толщины 30–300мм · май 2026 · <span class="footer-link" onclick="openPrivacy()">Политика конфиденциальности</span></footer>
 
 <script>
 // ─── ПОСТАВЩИКИ НОВЫХ ───
@@ -850,6 +901,7 @@ function filterAvito(){
 
 let chartsReady=false;
 function showTab(id){
+  if(id==='analyze'){openAnalyzeModal();return;}
   document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('active',el.getAttribute('onclick').includes("'"+id+"'")));
   document.querySelectorAll('.section').forEach(el=>el.classList.toggle('active',el.id===id));
   if(id==='charts'&&!chartsReady){chartsReady=true;initCharts();}
@@ -1067,9 +1119,12 @@ function fmtM2(n) { return n ? n.toFixed(1) + ' м²' : '—'; }
 
 function openPrivacy() { document.getElementById('privacyModal').classList.add('open'); document.body.style.overflow='hidden'; }
 function closePrivacy() { document.getElementById('privacyModal').classList.remove('open'); document.body.style.overflow=''; }
-function clearConsentError() { document.querySelector('.consent-check').classList.remove('error'); }
 function closePrivacyOutside(e) { if (e.target === document.getElementById('privacyModal')) closePrivacy(); }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closePrivacy(); });
+function openAnalyzeModal() { document.getElementById('analyzeModal').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeAnalyzeModal() { document.getElementById('analyzeModal').classList.remove('open'); document.body.style.overflow=''; }
+function closeAnalyzeOutside(e) { if (e.target === document.getElementById('analyzeModal')) closeAnalyzeModal(); }
+function clearConsentError() { document.querySelector('.consent-check').classList.remove('error'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closePrivacy(); closeAnalyzeModal(); } });
 
 const PROGRESS_STEPS = [
   {icon:'📎', text:'Загружаем файл'},
@@ -1186,7 +1241,8 @@ async function runAnalysis() {
 function renderAnalysis(a) {
   const results = document.getElementById('analyzeResults');
   results.classList.add('show');
-  results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const modalBody = document.getElementById('analyzeModalBody');
+  if (modalBody) setTimeout(() => modalBody.scrollTo({ top: results.offsetTop - 20, behavior: 'smooth' }), 200);
 
   // Метрики
   document.getElementById('resHeader').innerHTML = `
