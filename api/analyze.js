@@ -173,13 +173,10 @@ module.exports = async (req, res) => {
       model: 'claude-sonnet-4-6',
       max_tokens: 4096,
       system: SYSTEM_PROMPT,
-      messages: [
-        { role: 'user', content: messageContent },
-        { role: 'assistant', content: '{' },
-      ],
+      messages: [{ role: 'user', content: messageContent }],
     });
 
-    const raw = '{' + message.content[0].text.trim();
+    const raw = message.content[0].text.trim();
     const jsonMatch = raw.match(/\{[\s\S]*\}/);
     if (!jsonMatch) throw new Error('Сервис не вернул корректный JSON');
 
