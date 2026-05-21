@@ -207,74 +207,96 @@ module.exports = async (req, res) => {
         await resend.emails.send({
           from: `Анализ КП <hi@ad-unicorn.ru>`,
           to: [email],
-          subject: `📊 Анализ вашего КП: ${a.docTitle || fileNames}`,
-          html: `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d0f12;font-family:Arial,sans-serif;color:#e8eaf0">
-<div style="max-width:640px;margin:0 auto;padding:24px">
-  <div style="background:linear-gradient(135deg,#3b82f6,#10b981);border-radius:10px;padding:20px 24px;margin-bottom:20px">
-    <h1 style="margin:0;font-size:18px;color:#fff">📊 Ваш анализ КП готов</h1>
-    <p style="margin:6px 0 0;font-size:13px;color:rgba(255,255,255,0.8)">${a.docTitle||fileNames} · ${new Date().toLocaleDateString('ru-RU')}</p>
-  </div>
+          subject: `Анализ КП готов: ${a.docTitle || fileNames}`,
+          html: `<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#f3f4f6;font-family:Arial,Helvetica,sans-serif;color:#111827">
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:24px 16px">
+<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%">
 
-  <div style="background:#13161b;border:1px solid #1f2330;border-radius:10px;padding:16px 20px;margin-bottom:16px">
-    <div style="font-size:10px;color:#555d6e;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Клиент</div>
-    <div style="font-size:15px;font-weight:600">${a.client?.name||name}</div>
-    <div style="font-size:13px;color:#8b92a5;margin-top:4px">${a.client?.phone||phone} · ${a.client?.email||email}</div>
-    ${a.supplier?`<div style="font-size:12px;color:#f59e0b;margin-top:6px">Поставщик из КП: ${a.supplier}</div>`:''}
-  </div>
+  <!-- HEADER -->
+  <tr><td style="background:#1e3a5f;border-radius:10px 10px 0 0;padding:24px 28px">
+    <div style="font-size:10px;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Аналитика рынка сэндвич-панелей ЦФО</div>
+    <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:4px">Ваш анализ КП готов</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.75)">${a.docTitle||fileNames} · ${new Date().toLocaleDateString('ru-RU')}</div>
+  </td></tr>
 
-  <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px">
-    <tr>
-      <td width="33%" style="padding-right:5px">
-        <div style="background:#13161b;border:1px solid #1f2330;border-radius:8px;padding:12px;text-align:center">
-          <div style="font-size:18px;font-weight:700;color:#3b82f6">${fmtM2(a.totals?.m2Total)}</div>
-          <div style="font-size:11px;color:#8b92a5;margin-top:4px">Всего м²</div>
+  <!-- CLIENT -->
+  <tr><td style="background:#fff;padding:20px 28px;border-left:1px solid #e5e7eb;border-right:1px solid #e5e7eb">
+    <div style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Клиент</div>
+    <div style="font-size:15px;font-weight:700;color:#111827">${a.client?.name||name}</div>
+    <div style="font-size:12px;color:#6b7280;margin-top:3px">${a.client?.phone||phone} · ${a.client?.email||email}</div>
+    ${a.supplier?`<div style="font-size:12px;color:#d97706;margin-top:6px;font-weight:600">Поставщик из КП: ${a.supplier}</div>`:''}
+  </td></tr>
+
+  <!-- METRICS -->
+  <tr><td style="background:#fff;padding:0 28px 20px;border-left:1px solid #e5e7eb;border-right:1px solid #e5e7eb">
+    <table width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td width="33%" style="padding-right:6px">
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px;text-align:center">
+          <div style="font-size:18px;font-weight:700;color:#2563eb">${fmtM2(a.totals?.m2Total)}</div>
+          <div style="font-size:10px;color:#6b7280;margin-top:4px">Всего м²</div>
         </div>
       </td>
       <td width="33%" style="padding:0 3px">
-        <div style="background:#13161b;border:1px solid #1f2330;border-radius:8px;padding:12px;text-align:center">
-          <div style="font-size:18px;font-weight:700;color:#f59e0b">${fmt(a.totals?.priceTotal)}</div>
-          <div style="font-size:11px;color:#8b92a5;margin-top:4px">Сумма без НДС</div>
+        <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:12px;text-align:center">
+          <div style="font-size:18px;font-weight:700;color:#ea580c">${fmt(a.totals?.priceTotal)}</div>
+          <div style="font-size:10px;color:#6b7280;margin-top:4px">Сумма без НДС</div>
         </div>
       </td>
-      <td width="34%" style="padding-left:5px">
-        <div style="background:#13161b;border:1px solid #1f2330;border-radius:8px;padding:12px;text-align:center">
-          <div style="font-size:18px;font-weight:700;color:#f43f5e">${fmt(a.totals?.vatAmount)}</div>
-          <div style="font-size:11px;color:#8b92a5;margin-top:4px">НДС 20%</div>
+      <td width="34%" style="padding-left:6px">
+        <div style="background:#fff5f5;border:1px solid #fca5a5;border-radius:8px;padding:12px;text-align:center">
+          <div style="font-size:18px;font-weight:700;color:#dc2626">${fmt(a.totals?.vatAmount)}</div>
+          <div style="font-size:10px;color:#6b7280;margin-top:4px">НДС 20%</div>
         </div>
       </td>
-    </tr>
-  </table>
+    </tr></table>
+  </td></tr>
 
-  ${posRows ? `<div style="background:#13161b;border:1px solid #1f2330;border-radius:10px;padding:16px 20px;margin-bottom:16px">
-    <div style="font-size:10px;color:#555d6e;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Позиции</div>
-    <table style="width:100%;border-collapse:collapse;font-size:12px">
-      <thead><tr style="color:#555d6e;font-size:10px">
-        <th style="padding:4px 10px;text-align:left">Позиция</th><th style="padding:4px 10px">Тип</th>
-        <th style="padding:4px 10px">Толщина</th><th style="padding:4px 10px;text-align:right">м²</th>
-        <th style="padding:4px 10px;text-align:right">₽/м²</th><th style="padding:4px 10px;text-align:right">Сумма</th>
-      </tr></thead><tbody>${posRows}</tbody>
-    </table></div>` : ''}
+  ${posRows ? `<!-- POSITIONS -->
+  <tr><td style="background:#fff;padding:0 28px 20px;border-left:1px solid #e5e7eb;border-right:1px solid #e5e7eb">
+    <div style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #e5e7eb">Позиции заказа</div>
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:11px">
+      <tr style="background:#f9fafb">
+        <th style="padding:6px 8px;font-size:9px;font-weight:600;color:#6b7280;text-align:left;border-bottom:1px solid #e5e7eb">Позиция</th>
+        <th style="padding:6px 8px;font-size:9px;font-weight:600;color:#6b7280;text-align:center;border-bottom:1px solid #e5e7eb">Тип</th>
+        <th style="padding:6px 8px;font-size:9px;font-weight:600;color:#6b7280;text-align:center;border-bottom:1px solid #e5e7eb">Толщ.</th>
+        <th style="padding:6px 8px;font-size:9px;font-weight:600;color:#6b7280;text-align:right;border-bottom:1px solid #e5e7eb">м²</th>
+        <th style="padding:6px 8px;font-size:9px;font-weight:600;color:#6b7280;text-align:right;border-bottom:1px solid #e5e7eb">₽/м²</th>
+        <th style="padding:6px 8px;font-size:9px;font-weight:600;color:#6b7280;text-align:right;border-bottom:1px solid #e5e7eb">Сумма</th>
+      </tr>
+      ${posRows}
+    </table>
+  </td></tr>` : ''}
 
-  ${cmpRows ? `<div style="background:#13161b;border:1px solid #1f2330;border-radius:10px;padding:16px 20px;margin-bottom:16px">
-    <div style="font-size:10px;color:#555d6e;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Сравнение с рынком</div>
-    <table style="width:100%;border-collapse:collapse;font-size:12px">
-      <thead><tr style="color:#555d6e;font-size:10px">
-        <th style="padding:4px 10px;text-align:left">Поставщик</th><th style="padding:4px 10px;text-align:left">Регион</th>
-        <th style="padding:4px 10px;text-align:right">₽/м²</th><th style="padding:4px 10px;text-align:right">Экономия</th>
-      </tr></thead><tbody>${cmpRows}</tbody>
-    </table></div>` : ''}
+  ${cmpRows ? `<!-- MARKET -->
+  <tr><td style="background:#fff;padding:0 28px 20px;border-left:1px solid #e5e7eb;border-right:1px solid #e5e7eb">
+    <div style="font-size:9px;color:#6b7280;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #e5e7eb">Сравнение с рынком ЦФО</div>
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:11px">
+      <tr style="background:#f9fafb">
+        <th style="padding:6px 8px;font-size:9px;font-weight:600;color:#6b7280;text-align:left;border-bottom:1px solid #e5e7eb">Поставщик</th>
+        <th style="padding:6px 8px;font-size:9px;font-weight:600;color:#6b7280;text-align:left;border-bottom:1px solid #e5e7eb">Регион</th>
+        <th style="padding:6px 8px;font-size:9px;font-weight:600;color:#6b7280;text-align:right;border-bottom:1px solid #e5e7eb">₽/м²</th>
+        <th style="padding:6px 8px;font-size:9px;font-weight:600;color:#6b7280;text-align:right;border-bottom:1px solid #e5e7eb">Экономия</th>
+      </tr>
+      ${cmpRows}
+    </table>
+  </td></tr>` : ''}
 
-  <div style="background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);border-radius:8px;padding:14px 16px;margin-bottom:10px;font-size:13px;line-height:1.6">
-    ${a.conclusion||''}
-  </div>
-  <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.3);border-radius:8px;padding:14px 16px;font-size:13px;line-height:1.6">
-    ${a.recommendation||''}
-  </div>
+  <!-- CONCLUSION -->
+  <tr><td style="background:#fff;padding:0 28px 20px;border-left:1px solid #e5e7eb;border-right:1px solid #e5e7eb">
+    ${a.conclusion?`<div style="background:#eff6ff;border-left:3px solid #2563eb;padding:12px 14px;margin-bottom:12px;border-radius:0 6px 6px 0;font-size:12px;line-height:1.65;color:#1e3a5f">${a.conclusion}</div>`:''}
+    ${a.recommendation?`<div style="background:#f0fdf4;border-left:3px solid #16a34a;padding:12px 14px;border-radius:0 6px 6px 0;font-size:12px;line-height:1.65;color:#14532d">${a.recommendation}</div>`:''}
+  </td></tr>
 
-  <div style="text-align:center;margin-top:20px;font-size:11px;color:#555d6e">
-    sandwich-cfo.vercel.app · Аналитика рынка сэндвич-панелей ЦФО
-  </div>
-</div></body></html>`,
+  <!-- FOOTER -->
+  <tr><td style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:0 0 10px 10px;padding:14px 28px;text-align:center">
+    <div style="font-size:11px;color:#9ca3af">sandwich-cfo.vercel.app · Аналитика рынка сэндвич-панелей ЦФО</div>
+  </td></tr>
+
+</table>
+</td></tr></table>
+</body></html>`,
         });
       } catch (emailErr) {
         console.warn('Email send failed (non-fatal):', emailErr.message);

@@ -1280,7 +1280,10 @@ async function runAnalysis() {
   }
 }
 
+let lastAnalysis = null;
+
 function renderAnalysis(a) {
+  lastAnalysis = a;
   // Метрики
   document.getElementById('resHeader').innerHTML = `
     <h4>📋 ${a.docTitle || 'Спецификация'}${a.supplier ? ' · ' + a.supplier : ''}</h4>
@@ -1358,21 +1361,124 @@ function closeResults() {
 }
 
 function downloadPDF() {
-  const el = document.getElementById('resultsContent');
-  const title = (document.getElementById('resTitleMain').textContent || 'Анализ_КП').replace(/[^\wа-яА-ЯёЁ\s]/gu, '').trim().replace(/\s+/g, '_');
+  if (!lastAnalysis) return;
+  const a = lastAnalysis;
+  const safeStr = s => (s||'').replace(/[^\wа-яА-ЯёЁ\d]/gu,'_').replace(/_+/g,'_').replace(/^_|_$/g,'');
+  const filename = 'Анализ_КП_' + safeStr(a.supplier || a.docTitle || 'отчёт') + '.pdf';
+  const html = buildPDFHtml(a);
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'position:fixed;left:-9999px;top:0;width:750px;background:#fff;';
+  wrap.innerHTML = html;
+  document.body.appendChild(wrap);
   const btn = document.querySelector('.pdf-btn');
   btn.textContent = '⏳ Генерируем...';
   btn.disabled = true;
   html2pdf().set({
-    margin: 8,
-    filename: title + '.pdf',
-    image: { type: 'jpeg', quality: 0.97 },
-    html2canvas: { scale: 2, useCORS: true, logging: false, backgroundColor: '#0F1117' },
+    margin: [8, 8, 8, 8],
+    filename,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  }).from(el).save().finally(() => {
+  }).from(wrap.firstChild).save().finally(() => {
+    document.body.removeChild(wrap);
     btn.textContent = '⬇ Скачать PDF';
     btn.disabled = false;
   });
+}
+
+function buildPDFHtml(a) {
+  const fmt = n => n ? Math.round(n).toLocaleString('ru-RU') + ' ₽' : '—';
+  const fmtM2 = n => n ? n.toFixed(1) + ' м²' : '—';
+  const date = new Date().toLocaleDateString('ru-RU', {day:'numeric', month:'long', year:'numeric'});
+  const totalWithVat = a.totals?.priceTotalWithVat || ((a.totals?.priceTotal||0) + (a.totals?.vatAmount||0)) || null;
+
+  const posRows = (a.positions||[]).map(p=>`
+    <tr>
+      <td style="padding:6px 8px;border-bottom:1px solid #e5e7eb;font-size:10px;line-height:1.4">${p.name}</td>
+      <td style="padding:6px 8px;border-bottom:1px solid #e5e7eb;text-align:center;font-size:10px">${p.type||'—'}</td>
+      <td style="padding:6px 8px;border-bottom:1px solid #e5e7eb;text-align:center;font-size:10px">${p.thickness||'—'}</td>
+      <td style="padding:6px 8px;border-bottom:1px solid #e5e7eb;text-align:center;font-size:10px">${p.quantity||'—'}</td>
+      <td style="padding:6px 8px;border-bottom:1px solid #e5e7eb;text-align:right;font-size:10px">${fmtM2(p.m2)}</td>
+      <td style="padding:6px 8px;border-bottom:1px solid #e5e7eb;text-align:right;font-size:10px;font-weight:600">${p.pricePerM2?Math.round(p.pricePerM2).toLocaleString('ru-RU')+' ₽':'—'}</td>
+      <td style="padding:6px 8px;border-bottom:1px solid #e5e7eb;text-align:right;font-size:10px;font-weight:600">${fmt(p.total)}</td>
+    </tr>`).join('');
+
+  const cmpRows = (a.marketComparison||[]).map(c=>{
+    const pos=c.saving>0;
+    return `<tr style="${pos?'background:#f0fdf4;':''}">
+      <td style="padding:6px 8px;border-bottom:1px solid #e5e7eb;font-size:10px;font-weight:600">${c.supplier}</td>
+      <td style="padding:6px 8px;border-bottom:1px solid #e5e7eb;font-size:10px;color:#6b7280">${c.region||''}</td>
+      <td style="padding:6px 8px;border-bottom:1px solid #e5e7eb;text-align:right;font-size:10px">${Math.round(c.pricePerM2).toLocaleString('ru-RU')} ₽</td>
+      <td style="padding:6px 8px;border-bottom:1px solid #e5e7eb;text-align:right;font-size:10px">${fmt(c.totalForOrder)}</td>
+      <td style="padding:6px 8px;border-bottom:1px solid #e5e7eb;text-align:right;font-size:10px;font-weight:700;color:${pos?'#16a34a':'#dc2626'}">${pos?'−':'+'}${fmt(Math.abs(c.saving))}</td>
+      <td style="padding:6px 8px;border-bottom:1px solid #e5e7eb;text-align:right;font-size:10px;font-weight:700;color:${pos?'#16a34a':'#dc2626'}">${pos?'−':'+'}${Math.abs(c.savingPct||0).toFixed(1)}%</td>
+      <td style="padding:6px 8px;border-bottom:1px solid #e5e7eb;font-size:9px;color:#6b7280">${c.note||''}</td>
+    </tr>`;
+  }).join('');
+
+  const altList = (a.alternativeSuppliers||[]).map(s=>
+    `<tr><td style="padding:5px 0;font-size:11px;border-bottom:1px solid #f3f4f6;color:#374151">▸ ${s}</td></tr>`
+  ).join('');
+
+  return `<div style="font-family:Arial,Helvetica,sans-serif;background:#fff;color:#111827;width:710px;margin:0 auto;font-size:12px">
+    <div style="background:#1e3a5f;padding:26px 36px 22px">
+      <div style="font-size:8px;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.6);margin-bottom:5px">Финансовый анализ предложения</div>
+      <div style="font-size:19px;font-weight:700;line-height:1.25;color:#fff;margin-bottom:5px">${a.docTitle||'Анализ коммерческого предложения'}</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.72)">${[a.supplier,date].filter(Boolean).join(' · ')}</div>
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:16px"><tr>
+        ${a.client?.name?`<td width="25%" style="padding-right:12px"><div style="font-size:8px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:2px">Клиент</div><div style="font-size:11px;font-weight:600;color:#fff">${a.client.name}</div></td>`:''}
+        <td width="25%" style="padding-right:12px"><div style="font-size:8px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:2px">Объём</div><div style="font-size:11px;font-weight:600;color:#fff">${fmtM2(a.totals?.m2Total)}</div></td>
+        <td width="25%" style="padding-right:12px"><div style="font-size:8px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:2px">Сумма без НДС</div><div style="font-size:11px;font-weight:600;color:#fff">${fmt(a.totals?.priceTotal)}</div></td>
+        <td width="25%"><div style="font-size:8px;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:2px">Дата анализа</div><div style="font-size:11px;font-weight:600;color:#fff">${date}</div></td>
+      </tr></table>
+    </div>
+    <div style="padding:24px 36px">
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:22px"><tr>
+        ${totalWithVat?`<td width="25%" style="padding-right:5px"><div style="border:1px solid #bfdbfe;border-radius:8px;padding:10px 12px"><div style="font-size:8px;color:#2563eb;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Итого с НДС</div><div style="font-size:17px;font-weight:700;color:#1d4ed8">${fmt(totalWithVat)}</div></div></td>`:''}
+        <td width="${totalWithVat?'25%':'33%'}" style="padding:0 3px"><div style="border:1px solid #fca5a5;border-radius:8px;padding:10px 12px"><div style="font-size:8px;color:#dc2626;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">НДС 20%</div><div style="font-size:17px;font-weight:700;color:#dc2626">${fmt(a.totals?.vatAmount)}</div></div></td>
+        <td width="${totalWithVat?'25%':'33%'}" style="padding:0 3px"><div style="border:1px solid #e5e7eb;border-radius:8px;padding:10px 12px"><div style="font-size:8px;color:#6b7280;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Без НДС</div><div style="font-size:17px;font-weight:700;color:#111827">${fmt(a.totals?.priceTotal)}</div></div></td>
+        <td width="${totalWithVat?'25%':'33%'}" style="padding-left:5px"><div style="border:1px solid #e5e7eb;border-radius:8px;padding:10px 12px"><div style="font-size:8px;color:#6b7280;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Площадь</div><div style="font-size:17px;font-weight:700;color:#111827">${fmtM2(a.totals?.m2Total)}</div></div></td>
+      </tr></table>
+
+      ${a.vatNote?`<div style="background:#fffbeb;border-left:3px solid #f59e0b;padding:10px 14px;margin-bottom:20px;border-radius:0 6px 6px 0"><div style="font-size:9px;font-weight:700;color:#92400e;text-transform:uppercase;margin-bottom:4px">⚠ Важно про НДС</div><div style="font-size:11px;color:#78350f;line-height:1.65">${a.vatNote}</div></div>`:''}
+
+      ${posRows?`<div style="font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:#6b7280;margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid #e5e7eb">Позиции заказа</div>
+      <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-bottom:22px">
+        <thead><tr style="background:#f9fafb">
+          <th style="padding:6px 8px;font-size:8px;font-weight:600;color:#6b7280;text-transform:uppercase;text-align:left;border-bottom:1px solid #e5e7eb">Позиция</th>
+          <th style="padding:6px 8px;font-size:8px;font-weight:600;color:#6b7280;text-transform:uppercase;text-align:center;border-bottom:1px solid #e5e7eb">Тип</th>
+          <th style="padding:6px 8px;font-size:8px;font-weight:600;color:#6b7280;text-transform:uppercase;text-align:center;border-bottom:1px solid #e5e7eb">Толщ.</th>
+          <th style="padding:6px 8px;font-size:8px;font-weight:600;color:#6b7280;text-transform:uppercase;text-align:center;border-bottom:1px solid #e5e7eb">Кол-во</th>
+          <th style="padding:6px 8px;font-size:8px;font-weight:600;color:#6b7280;text-transform:uppercase;text-align:right;border-bottom:1px solid #e5e7eb">м²</th>
+          <th style="padding:6px 8px;font-size:8px;font-weight:600;color:#6b7280;text-transform:uppercase;text-align:right;border-bottom:1px solid #e5e7eb">₽/м²</th>
+          <th style="padding:6px 8px;font-size:8px;font-weight:600;color:#6b7280;text-transform:uppercase;text-align:right;border-bottom:1px solid #e5e7eb">Сумма</th>
+        </tr></thead><tbody>${posRows}</tbody>
+      </table>`:''}
+
+      ${cmpRows?`<div style="font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:#6b7280;margin-bottom:8px;padding-bottom:5px;border-bottom:2px solid #e5e7eb">Сравнение с рынком ЦФО</div>
+      <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin-bottom:22px">
+        <thead><tr style="background:#f9fafb">
+          <th style="padding:6px 8px;font-size:8px;font-weight:600;color:#6b7280;text-transform:uppercase;text-align:left;border-bottom:1px solid #e5e7eb">Поставщик</th>
+          <th style="padding:6px 8px;font-size:8px;font-weight:600;color:#6b7280;text-transform:uppercase;text-align:left;border-bottom:1px solid #e5e7eb">Регион</th>
+          <th style="padding:6px 8px;font-size:8px;font-weight:600;color:#6b7280;text-transform:uppercase;text-align:right;border-bottom:1px solid #e5e7eb">₽/м²</th>
+          <th style="padding:6px 8px;font-size:8px;font-weight:600;color:#6b7280;text-transform:uppercase;text-align:right;border-bottom:1px solid #e5e7eb">Сумма</th>
+          <th style="padding:6px 8px;font-size:8px;font-weight:600;color:#6b7280;text-transform:uppercase;text-align:right;border-bottom:1px solid #e5e7eb">Экономия</th>
+          <th style="padding:6px 8px;font-size:8px;font-weight:600;color:#6b7280;text-transform:uppercase;text-align:right;border-bottom:1px solid #e5e7eb">%</th>
+          <th style="padding:6px 8px;font-size:8px;font-weight:600;color:#6b7280;text-transform:uppercase;text-align:left;border-bottom:1px solid #e5e7eb">Примечание</th>
+        </tr></thead><tbody>${cmpRows}</tbody>
+      </table>`:''}
+
+      ${a.conclusion?`<div style="background:#eff6ff;border-left:3px solid #2563eb;padding:10px 14px;margin-bottom:14px;border-radius:0 6px 6px 0"><div style="font-size:9px;font-weight:700;color:#1d4ed8;text-transform:uppercase;margin-bottom:4px">Вывод</div><div style="font-size:11px;color:#1e3a5f;line-height:1.65">${a.conclusion}</div></div>`:''}
+      ${a.recommendation?`<div style="background:#f0fdf4;border-left:3px solid #16a34a;padding:10px 14px;margin-bottom:14px;border-radius:0 6px 6px 0"><div style="font-size:9px;font-weight:700;color:#15803d;text-transform:uppercase;margin-bottom:4px">Рекомендации</div><div style="font-size:11px;color:#14532d;line-height:1.65">${a.recommendation}</div></div>`:''}
+      ${altList?`<div style="font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:#6b7280;margin-bottom:8px">Альтернативные поставщики</div><table width="100%" cellpadding="0" cellspacing="0">${altList}</table>`:''}
+    </div>
+    <div style="background:#f9fafb;border-top:1px solid #e5e7eb;padding:10px 36px">
+      <table width="100%" cellpadding="0" cellspacing="0"><tr>
+        <td style="font-size:9px;color:#9ca3af">Анализ подготовлен на основе ${a.docTitle||'документа'} · ${date}</td>
+        <td style="font-size:9px;color:#9ca3af;text-align:right">sandwich-cfo.vercel.app</td>
+      </tr></table>
+    </div>
+  </div>`;
 }
 </script>
 </body>
