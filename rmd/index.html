@@ -1,0 +1,2506 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Регламент работы с Digital — Русский Монетный Двор</title>
+<style>
+/* ─── Tokens ─────────────────────────────────────────────────────── */
+:root {
+  --crimson:    #9b092d;
+  --crimson-hi: #b5112f;
+  --gold:       #c39a65;
+  --bronze:     #a58978;
+  --cream:      #f3eddf;
+  --surface:    #e8e0cf;
+  --border:     #d6cbb8;
+  --ink:        #1c1c1b;
+  --ink-2:      #3d3028;
+  --ink-3:      #7a6a5a;
+
+  --bg:          var(--cream);
+  --bg-surface:  var(--surface);
+  --text:        var(--ink);
+  --text-2:      var(--ink-2);
+  --text-3:      var(--ink-3);
+  --bdr:         var(--border);
+  --sidebar-w:   244px;
+  --content-max: 740px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:         #160f0f;
+    --bg-surface: #221616;
+    --text:       #f0e8d8;
+    --text-2:     #d8c8b0;
+    --text-3:     #9a8070;
+    --bdr:        #3a2820;
+    --crimson:    #d0244a;
+    --crimson-hi: #e04060;
+    --gold:       #c9a470;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg:         #160f0f;
+  --bg-surface: #221616;
+  --text:       #f0e8d8;
+  --text-2:     #d8c8b0;
+  --text-3:     #9a8070;
+  --bdr:        #3a2820;
+  --crimson:    #d0244a;
+  --crimson-hi: #e04060;
+  --gold:       #c9a470;
+}
+
+:root[data-theme="light"] {
+  --bg:         #f3eddf;
+  --bg-surface: #e8e0cf;
+  --text:       #1c1c1b;
+  --text-2:     #3d3028;
+  --text-3:     #7a6a5a;
+  --bdr:        #d6cbb8;
+  --crimson:    #9b092d;
+  --crimson-hi: #b5112f;
+  --gold:       #c39a65;
+}
+
+/* ─── Reset ─────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
+html { scroll-behavior: smooth }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--text);
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+/* ─── Layout ─────────────────────────────────────────────────────── */
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ─── Sidebar ─────────────────────────────────────────────────────── */
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--bdr);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 22px 20px 18px;
+  border-bottom: 1px solid var(--bdr);
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.logo-mark {
+  width: 30px;
+  height: 27px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.logo-mark img {
+  width: 30px;
+  height: 27px;
+  object-fit: contain;
+}
+
+.logo-text {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 12.5px;
+  font-weight: bold;
+  color: var(--text);
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+}
+
+.sidebar-meta {
+  font-size: 10.5px;
+  color: var(--text-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nav {
+  padding: 14px 0 8px;
+  flex: 1;
+}
+
+.nav-group {
+  padding: 10px 20px 2px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+
+.nav-link {
+  display: block;
+  padding: 6px 20px;
+  font-size: 13px;
+  color: var(--text-2);
+  text-decoration: none;
+  line-height: 1.4;
+  transition: color .15s, background .15s;
+  border-left: 2px solid transparent;
+}
+
+.nav-link:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--crimson) 6%, transparent);
+}
+
+.nav-link.active {
+  color: var(--crimson);
+  border-left-color: var(--crimson);
+  background: color-mix(in srgb, var(--crimson) 8%, transparent);
+  font-weight: 500;
+}
+
+.sidebar-foot {
+  padding: 14px 20px;
+  border-top: 1px solid var(--bdr);
+}
+
+.theme-btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: var(--text-3);
+  background: none;
+  border: 1px solid var(--bdr);
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  width: 100%;
+  transition: color .15s, border-color .15s;
+  font-family: inherit;
+}
+
+.theme-btn:hover { color: var(--text); border-color: var(--gold) }
+
+/* ─── Main ───────────────────────────────────────────────────────── */
+.main {
+  flex: 1;
+  min-width: 0;
+  padding: 48px clamp(24px, 5vw, 60px) 80px;
+}
+
+.page-intro {
+  max-width: var(--content-max);
+  margin-bottom: 56px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--bdr);
+}
+
+.page-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.page-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(26px, 3.5vw, 38px);
+  font-weight: normal;
+  color: var(--text);
+  line-height: 1.15;
+  text-wrap: balance;
+  margin-bottom: 14px;
+}
+
+.page-desc {
+  font-size: 15.5px;
+  color: var(--text-2);
+  line-height: 1.7;
+  max-width: 560px;
+  margin-bottom: 16px;
+}
+
+.version-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  background: var(--bg-surface);
+  border: 1px solid var(--bdr);
+  border-radius: 3px;
+  padding: 3px 10px;
+  color: var(--text-3);
+  letter-spacing: 0.03em;
+}
+
+/* ─── Section ────────────────────────────────────────────────────── */
+.section {
+  max-width: var(--content-max);
+  margin-bottom: 60px;
+  scroll-margin-top: 28px;
+}
+
+.section-heading {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 22px;
+  font-weight: normal;
+  color: var(--text);
+  line-height: 1.2;
+  padding-left: 16px;
+  border-left: 3px solid var(--crimson);
+  margin-bottom: 6px;
+  text-wrap: balance;
+}
+
+.section-sub {
+  font-size: 13.5px;
+  color: var(--text-3);
+  margin-bottom: 22px;
+  padding-left: 19px;
+}
+
+.sub-heading {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 26px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--bdr);
+}
+
+.divider {
+  height: 1px;
+  background: var(--bdr);
+  margin: 52px 0;
+  max-width: var(--content-max);
+}
+
+/* ─── Rules list ─────────────────────────────────────────────────── */
+.rules {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rule {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 0 12px;
+  background: var(--bg-surface);
+  border: 1px solid var(--bdr);
+  border-radius: 6px;
+  padding: 14px 16px;
+  transition: border-color .15s;
+}
+
+.rule:hover { border-color: var(--gold) }
+
+.rule-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--crimson);
+  font-variant-numeric: tabular-nums;
+  padding-top: 2px;
+  letter-spacing: 0.04em;
+}
+
+.rule-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.rule-desc {
+  font-size: 13.5px;
+  color: var(--text-2);
+  line-height: 1.55;
+}
+
+.rule-note {
+  display: inline-block;
+  margin-top: 5px;
+  font-size: 12px;
+  color: var(--text-3);
+  background: color-mix(in srgb, var(--gold) 12%, transparent);
+  border-radius: 3px;
+  padding: 2px 8px;
+}
+
+/* ─── Workflow ───────────────────────────────────────────────────── */
+.workflow {
+  display: flex;
+  align-items: flex-start;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  gap: 0;
+  margin: 20px 0;
+}
+
+.wf-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 96px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.wf-badge {
+  background: var(--bg-surface);
+  border: 1px solid var(--bdr);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--text-2);
+}
+
+.wf-badge.b-work   { background: var(--crimson); color: #f3eddf; border-color: var(--crimson) }
+.wf-badge.b-review { background: color-mix(in srgb, var(--gold) 18%, var(--bg-surface)); border-color: color-mix(in srgb, var(--gold) 50%, transparent) }
+.wf-badge.b-done   { background: color-mix(in srgb, #2a7a4a 14%, var(--bg-surface)); border-color: #2a7a4a }
+
+.wf-label {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: 6px;
+  line-height: 1.3;
+  max-width: 86px;
+}
+
+.wf-arrow {
+  padding: 0 3px;
+  padding-top: 12px;
+  color: var(--bdr);
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.roles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.role-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--bdr);
+  border-radius: 5px;
+  padding: 11px 14px;
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+
+.role-card strong {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--crimson);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+/* ─── Smart rules ────────────────────────────────────────────────── */
+.smart-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.smart-item {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 0 12px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--bdr);
+}
+
+.smart-item:first-child { padding-top: 0 }
+.smart-item:last-child  { border-bottom: none; padding-bottom: 0 }
+
+.smart-n {
+  font-family: Georgia, serif;
+  font-size: 22px;
+  color: var(--gold);
+  line-height: 1.15;
+  flex-shrink: 0;
+}
+
+.smart-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.smart-body {
+  font-size: 13.5px;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+
+/* ─── Table ──────────────────────────────────────────────────────── */
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--bdr);
+  border-radius: 6px;
+  margin: 12px 0 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  font-variant-numeric: tabular-nums;
+  min-width: 400px;
+}
+
+thead { background: var(--bg-surface) }
+
+th {
+  padding: 9px 14px;
+  text-align: left;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--bdr);
+  white-space: nowrap;
+}
+
+td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--bdr);
+  color: var(--text-2);
+  line-height: 1.4;
+}
+
+tr:last-child td { border-bottom: none }
+tr:hover td { background: color-mix(in srgb, var(--gold) 5%, transparent) }
+
+.days     { font-weight: 600; color: var(--text) }
+.days-ind { color: var(--text-3); font-style: italic }
+
+.tag {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 3px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tag-c { background: color-mix(in srgb, var(--crimson) 12%, transparent); color: var(--crimson) }
+.tag-e { background: color-mix(in srgb, var(--gold) 18%, transparent); color: color-mix(in srgb, var(--gold) 80%, #333) }
+.tag-f { background: color-mix(in srgb, #3a60b8 12%, transparent); color: #3a60b8 }
+
+/* ─── Callout ────────────────────────────────────────────────────── */
+.callout {
+  display: flex;
+  gap: 12px;
+  border-radius: 6px;
+  padding: 13px 16px;
+  margin: 14px 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  border: 1px solid;
+}
+
+.callout-icon { flex-shrink: 0; margin-top: 1px; font-style: normal }
+
+.c-info {
+  background: color-mix(in srgb, var(--gold) 9%, var(--bg));
+  border-color: color-mix(in srgb, var(--gold) 38%, transparent);
+  color: var(--text-2);
+}
+
+.c-warn {
+  background: color-mix(in srgb, #d48000 7%, var(--bg));
+  border-color: color-mix(in srgb, #d48000 32%, transparent);
+  color: var(--text-2);
+}
+
+.c-temp {
+  background: color-mix(in srgb, var(--crimson) 7%, var(--bg));
+  border-color: color-mix(in srgb, var(--crimson) 28%, transparent);
+  color: var(--text-2);
+}
+
+.callout strong { color: var(--text) }
+
+/* ─── Brief fields ───────────────────────────────────────────────── */
+.brief-grid {
+  display: grid;
+  gap: 7px;
+  margin-bottom: 4px;
+}
+
+.brief-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.bf {
+  background: var(--bg-surface);
+  border: 1px solid var(--bdr);
+  border-radius: 5px;
+  padding: 10px 14px;
+  position: relative;
+}
+
+.bf.req {
+  padding-left: 20px;
+}
+
+.bf.req::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: var(--crimson);
+}
+
+.bf-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--crimson);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.bf-hint {
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+/* ─── Materials ──────────────────────────────────────────────────── */
+.mat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.mat-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--bdr);
+  border-radius: 6px;
+  padding: 15px;
+}
+
+.mat-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--crimson);
+  flex-shrink: 0;
+}
+
+.mat-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.mat-list li {
+  font-size: 13px;
+  color: var(--text-2);
+  display: flex;
+  gap: 7px;
+}
+
+.mat-list li::before {
+  content: '—';
+  color: var(--gold);
+  flex-shrink: 0;
+  font-size: 11px;
+  margin-top: 1px;
+}
+
+/* ─── Email cards ────────────────────────────────────────────────── */
+.email-group {
+  display: grid;
+  gap: 7px;
+  margin: 10px 0 20px;
+}
+
+.email-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--bdr);
+  border-radius: 5px;
+  padding: 11px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color .15s;
+}
+
+.email-card:hover { border-color: var(--gold) }
+
+.email-meta {
+  font-size: 10.5px;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 2px;
+}
+
+.email-name {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.email-arrow { color: var(--gold); font-size: 15px; flex-shrink: 0 }
+
+/* ─── Brief: step structure ─────────────────────────────────────── */
+.brief-attach {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 20px;
+}
+
+.b-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-surface);
+  border: 1px solid var(--bdr);
+  border-radius: 20px;
+  padding: 4px 11px;
+  font-size: 12.5px;
+  color: var(--text-2);
+}
+
+.b-chip-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--crimson);
+  flex-shrink: 0;
+}
+
+.b-step {
+  margin-bottom: 16px;
+}
+
+.b-step-hd {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.b-num {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--crimson);
+  color: #f3eddf;
+  font-size: 10.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.b-step-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Form rows */
+.form-block {
+  border: 1px solid var(--bdr);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.fr {
+  display: grid;
+  grid-template-columns: 158px 1fr;
+  border-bottom: 1px solid var(--bdr);
+}
+
+.fr:last-child { border-bottom: none }
+
+.fr-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  padding: 10px 12px 10px 14px;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--bdr);
+  line-height: 1.4;
+  display: flex;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+.fr-req { color: var(--crimson); font-size: 15px; line-height: 1; margin-top: -1px }
+
+.fr-hint {
+  font-size: 13px;
+  color: var(--text-2);
+  padding: 10px 14px;
+  line-height: 1.5;
+  background: var(--bg);
+}
+
+.fr-ex {
+  font-size: 12px;
+  color: var(--text-3);
+  display: block;
+  margin-top: 3px;
+  font-style: italic;
+}
+
+/* Spec mosaic */
+.spec-mosaic {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--bdr);
+  border: 1px solid var(--bdr);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.sm {
+  background: var(--bg-surface);
+  padding: 9px 12px;
+}
+
+.sm-k {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-3);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.sm-v {
+  font-size: 12.5px;
+  color: var(--text-2);
+  line-height: 1.35;
+}
+
+/* Legend */
+.brief-legend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.leg-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+.leg-req { color: var(--crimson); font-size: 15px; line-height: 1 }
+
+@media (max-width: 640px) {
+  .fr { grid-template-columns: 1fr }
+  .fr-label { border-right: none; border-bottom: 1px solid var(--bdr); padding-bottom: 6px }
+  .spec-mosaic { grid-template-columns: repeat(2, 1fr) }
+}
+
+/* ─── Focus / a11y ───────────────────────────────────────────────── */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--crimson);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ─── Mobile header ──────────────────────────────────────────────── */
+.mob-header {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 16px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--bdr);
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  flex-shrink: 0;
+}
+.mob-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mob-logo-text {
+  display: flex;
+  flex-direction: column;
+}
+.mob-logo-name {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--text);
+  line-height: 1.2;
+}
+.mob-logo-sub {
+  font-size: 10px;
+  color: var(--text-3);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.mob-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mob-theme-btn {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--bdr);
+  background: var(--bg);
+  color: var(--text-3);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .2s, color .2s;
+}
+.mob-theme-btn:hover { border-color: var(--crimson); color: var(--crimson) }
+.mob-burger {
+  width: 40px; height: 40px;
+  border-radius: 8px;
+  border: 1px solid var(--bdr);
+  background: var(--bg);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0;
+  transition: border-color .2s, background .2s;
+}
+.mob-burger:hover { border-color: var(--crimson) }
+.mob-burger.is-open { background: var(--crimson); border-color: var(--crimson) }
+.mob-burger span {
+  display: block;
+  width: 18px; height: 1.5px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: transform .28s cubic-bezier(.4,0,.2,1), opacity .2s ease;
+}
+.mob-burger.is-open span { background: #f3eddf }
+.mob-burger.is-open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg) }
+.mob-burger.is-open span:nth-child(2) { opacity: 0; transform: scaleX(0) }
+.mob-burger.is-open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg) }
+
+/* Backdrop */
+.mob-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(28,28,27,.55);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: 300;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease;
+}
+.mob-backdrop.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Drawer */
+.mob-drawer {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: min(288px, 82vw);
+  background: var(--bg-surface);
+  border-right: 1px solid var(--bdr);
+  z-index: 400;
+  transform: translateX(-100%);
+  transition: transform .32s cubic-bezier(.4,0,.2,1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.mob-drawer.is-open {
+  transform: translateX(0);
+  box-shadow: 4px 0 40px rgba(28,28,27,.18);
+}
+.mob-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 14px 16px;
+  border-bottom: 1px solid var(--bdr);
+  flex-shrink: 0;
+}
+.mob-close {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--bdr);
+  background: var(--bg);
+  color: var(--text-3);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .2s, color .2s;
+}
+.mob-close:hover { border-color: var(--crimson); color: var(--crimson) }
+.mob-nav {
+  padding: 10px 0 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* ─── Brief Generator ───────────────────────────────────────────── */
+.bm-open-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--crimson); color: #f3eddf;
+  border: none; border-radius: 8px;
+  padding: 9px 16px; font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+  margin: 12px 0 0;
+  transition: background .2s;
+}
+.bm-open-btn:hover { background: var(--crimson-hi) }
+.bm-open-btn svg { flex-shrink: 0 }
+
+.bm-overlay {
+  position: fixed; inset: 0;
+  background: rgba(28,28,27,.62);
+  backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  z-index: 500;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 20px 14px; overflow-y: auto;
+  opacity: 0; pointer-events: none;
+  transition: opacity .24s ease;
+}
+.bm-overlay.is-open { opacity: 1; pointer-events: auto }
+
+.bm-modal {
+  background: var(--bg); border: 1px solid var(--bdr);
+  border-radius: 12px; width: 100%; max-width: 560px;
+  margin: auto;
+  transform: translateY(22px);
+  transition: transform .28s cubic-bezier(.4,0,.2,1);
+}
+.bm-overlay.is-open .bm-modal { transform: translateY(0) }
+
+.bm-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 15px 18px; border-bottom: 1px solid var(--bdr);
+}
+.bm-title { font-size: 14px; font-weight: 700; color: var(--text) }
+.bm-close-btn {
+  width: 30px; height: 30px; border-radius: 7px;
+  border: 1px solid var(--bdr); background: var(--bg-surface);
+  color: var(--text-3); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .2s, color .2s;
+}
+.bm-close-btn:hover { border-color: var(--crimson); color: var(--crimson) }
+
+.bm-body { padding: 16px 18px }
+.bm-group {
+  font-size: 10px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--text-3);
+  margin: 18px 0 8px;
+}
+.bm-group:first-child { margin-top: 0 }
+.bm-row { margin-bottom: 9px }
+.bm-lbl {
+  font-size: 12px; font-weight: 600; color: var(--text);
+  display: block; margin-bottom: 4px;
+}
+.bm-req { color: var(--crimson); margin-left: 1px }
+.bm-input, .bm-textarea {
+  width: 100%; box-sizing: border-box;
+  background: var(--bg-surface); border: 1px solid var(--bdr);
+  border-radius: 6px; padding: 8px 10px;
+  font-size: 13px; color: var(--text); font-family: inherit;
+  transition: border-color .2s;
+}
+.bm-input:focus, .bm-textarea:focus { outline: none; border-color: var(--crimson) }
+.bm-input.err, .bm-textarea.err {
+  border-color: var(--crimson);
+  background: color-mix(in srgb, var(--crimson) 5%, var(--bg-surface));
+}
+.bm-textarea { resize: vertical; min-height: 70px }
+.bm-two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px }
+.bm-four { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px }
+
+.bm-checklist {
+  margin-top: 18px; background: var(--bg-surface);
+  border: 1px solid var(--bdr); border-radius: 8px; padding: 14px 16px;
+}
+.bm-cl-title {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--text-3); margin-bottom: 10px;
+}
+.bm-cl-item {
+  display: flex; align-items: flex-start; gap: 9px;
+  margin-bottom: 8px; cursor: pointer;
+}
+.bm-cl-item:last-child { margin-bottom: 0 }
+.bm-checkbox {
+  width: 16px; height: 16px; border-radius: 4px;
+  border: 1.5px solid var(--bdr); background: var(--bg);
+  flex-shrink: 0; margin-top: 2px;
+  appearance: none; -webkit-appearance: none; cursor: pointer;
+  transition: background .15s, border-color .15s; position: relative;
+}
+.bm-checkbox:checked { background: var(--crimson); border-color: var(--crimson) }
+.bm-checkbox:checked::after {
+  content: ''; position: absolute;
+  top: 2px; left: 4px; width: 5px; height: 8px;
+  border: 1.5px solid #f3eddf; border-top: none; border-left: none;
+  transform: rotate(45deg);
+}
+.bm-cl-label { font-size: 13px; color: var(--text-2); line-height: 1.45 }
+
+.bm-foot {
+  padding: 13px 18px; border-top: 1px solid var(--bdr);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.bm-foot-hint { font-size: 12px; color: var(--text-3); line-height: 1.4 }
+.bm-copy-btn {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--crimson); color: #f3eddf;
+  border: none; border-radius: 8px;
+  padding: 9px 18px; font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+  transition: background .2s, opacity .2s; white-space: nowrap; flex-shrink: 0;
+}
+.bm-copy-btn:hover:not(:disabled) { background: var(--crimson-hi) }
+.bm-copy-btn:disabled { opacity: .38; cursor: not-allowed }
+
+.bm-toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(70px);
+  background: #1c1c1b; color: #f3eddf;
+  padding: 11px 20px; border-radius: 10px;
+  font-size: 13px; font-weight: 500;
+  z-index: 700; white-space: nowrap;
+  transition: transform .3s cubic-bezier(.4,0,.2,1), opacity .3s;
+  opacity: 0; pointer-events: none;
+}
+.bm-toast.show { transform: translateX(-50%) translateY(0); opacity: 1 }
+
+/* Restored badge */
+.bm-restored {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 18px; gap: 12px;
+  background: color-mix(in srgb, var(--gold) 12%, var(--bg-surface));
+  border-bottom: 1px solid color-mix(in srgb, var(--gold) 30%, var(--bdr));
+  font-size: 12px; color: var(--text-2);
+}
+.bm-restored-clear {
+  font-size: 11.5px; font-weight: 600; color: var(--text-3);
+  background: none; border: none; cursor: pointer; padding: 2px 6px;
+  border-radius: 4px; transition: color .15s;
+}
+.bm-restored-clear:hover { color: var(--crimson) }
+
+/* ─── Desktop: right panel instead of modal ──────────────────────── */
+@media (min-width: 1100px) {
+  .bm-overlay {
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: auto;
+    width: 500px;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 0;
+    display: block;
+    overflow: hidden;
+    opacity: 1 !important;
+    transform: translateX(100%);
+    transition: transform .32s cubic-bezier(.4, 0, .2, 1);
+    pointer-events: none;
+  }
+  .bm-overlay.is-open {
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+  .bm-modal {
+    height: 100%; max-width: 100%;
+    border-radius: 0;
+    border-top: none; border-bottom: none; border-right: none;
+    border-left: 1px solid var(--bdr);
+    transform: none !important;
+    display: flex; flex-direction: column;
+    box-shadow: -6px 0 40px rgba(28,28,27,.1);
+  }
+  .bm-overlay.is-open .bm-modal { transform: none !important }
+  .bm-body { flex: 1; overflow-y: auto }
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 800px) {
+  .mob-header { display: flex }
+  .sidebar { display: none }
+  .main { padding: 20px 16px 60px }
+  .mat-grid { grid-template-columns: 1fr }
+  .brief-2 { grid-template-columns: 1fr }
+  .section { scroll-margin-top: 68px }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition-duration: 0ms !important }
+}
+
+@media print {
+  .sidebar, .theme-btn { display: none }
+  .layout { display: block }
+  .section { break-inside: avoid }
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ════ Sidebar ════════════════════════════════════════════════════ -->
+<!-- ─── Mobile sticky header ─────────────────────────────────── -->
+<header class="mob-header" id="mobHeader">
+  <div class="mob-logo">
+    <div class="logo-mark"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4bWxuczppbmtzY2FwZT0iaHR0cDovL3d3dy5pbmtzY2FwZS5vcmcvbmFtZXNwYWNlcy9pbmtzY2FwZSIgdmVyc2lvbj0iMS4xIiB3aWR0aD0iNDc4LjA4OCIgaGVpZ2h0PSI0MzcuMjAyIiB2aWV3Qm94PSIwIDAgNDc4LjA4OCA0MzcuMjAyIj4NCjxkZWZzPg0KPGNsaXBQYXRoIGlkPSJjbGlwXzEiPg0KPHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMCw0MzcuMjAyKSIgZD0iTTAgNDM3LjIwMkg0NzguMDg4VjBIMFoiLz4NCjwvY2xpcFBhdGg+DQo8L2RlZnM+DQo8ZyBpbmtzY2FwZTpncm91cG1vZGU9ImxheWVyIiBpbmtzY2FwZTpsYWJlbD0iTGF5ZXIgMSI+DQo8ZyBjbGlwLXBhdGg9InVybCgjY2xpcF8xKSI+DQo8cGF0aCB0cmFuc2Zvcm09Im1hdHJpeCgxLDAsMCwtMSwyMTMuMjMzNCwyNTAuNjE5OCkiIGQ9Ik0wIDBDMy42ODQgNi4zMzQgNy4wNTQgMTIuNzYyIDEwLjIzIDE4LjgxNSAxNy4wOTUgMzEuODkzIDI0Ljc3MyA0OC4zMDMgMzEuOTMxIDY0LjQxMSAyNi4xMzMgNjEuNjQ1IDE4LjgxMyA1OC4zMzIgMTMuODI5IDU2LjMxMyA2LjgxMSAzNy4yNjctLjg5NiAxOC41ODEtMTEuMzA0IDEuOTUzLTcuNTUgMS40MS0zLjUwNiAuNjk3IDAgMCIgZmlsbD0iI2FkOTI4MSIvPg0KPHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMTEzLjAxMjcsMzMxLjAwNzUpIiBkPSJNMCAwQy00OS4xOTctNi4xNDMtNDYuMzc4LTU5LjE2My0xLjItODQuMzY3IC4xOTQtODUuMTQ1IDEuNjA5LTg1LjkwMyAzLjAzNC04Ni42NTEgNS40OTUtODUuODg1IDcuOTk4LTg1IDEwLjM2Ni04NC4wNjEgNi4yNDktODEuNjc1IDIuMjQ5LTc5LjA0Mi0xLjYtNzYuMTc2LTI2LTU4LjAwNS0yOC4xMzEtMjQuNDM2IDAgMCIgZmlsbD0iI2FkOTI4MSIvPg0KPHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMzI1LjIyMzYsMzAuOTgwMTk1KSIgZD0iTTAgMEMxLjM5OCAxLjYxMyAyLjgxNSAzLjIxOCA0LjI3NSA0LjgwNCAxMi44NDUgMTQuMTE3IDI4LjU4MSAyOS40NjMgMjcuNzA1IDI5Ljc1NCAyNC4zIDMwLjg4NiAyNC40NCAyOS45NDcgMjEuMTQ1IDI3LjgzNSAxMi44NTEgMjIuNTIxIDIuNzQxIDE0LjA4OC04LjM0MSAyLjIxNy01LjU4MSAxLjUxNy0yLjcwMSAuNzUxIDAgMCIgZmlsbD0iI2FkOTI4MSIvPg0KPHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMTM5LjM2NDMsNDE4LjU2MDgpIiBkPSJNMCAwQzIwLjU4OSA5LjMxOCAzOS45NjQgMjIuNTIyIDU1LjI4OCAzNy41NjggODEuNzI3IDYzLjUyOCAxMDEuODEyIDk5Ljk5MyAxMTcuODQyIDEzNS41NDYgMTE5LjY1MyAxMzkuNjI0IDEyMS44MzIgMTQ0LjU2NSAxMjMuNTg5IDE0OC42MiAxMjQuNTIzIDE1MC44MDEgMTI1LjQ0MyAxNTIuOTcyIDEyNi4zNDkgMTU1LjEzMyAxMjYuNDA2IDE1NS4yNzcgMTI2LjQ2MSAxNTUuNDE0IDEyNi41MDggMTU1LjUzNSAxMjYuNTE0IDE1NS41NTEgMTI2LjUyOCAxNTUuNTYxIDEyNi41MzUgMTU1LjU3NiAxMzMuNjI0IDE3Mi41MDMgMTM5Ljg1OCAxODguNzA2IDE0NS40OSAyMDIuODYxIDE2NC44MTkgMjUxLjQ0MSAxNzQuMjcyIDI5MS4xODMgMjE1LjE3IDMzNy45NDMgMjEyLjEwMyAzMzkuNzE4IDIxMC4zNyAzMzYuNTc4IDIwNi45MDMgMzM0LjM5NCAxOTguNjIxIDMyOS4zNjkgMTg4LjA1NiAzMTUuNjM1IDE3Ni44OTcgMjk3LjY0OSAxNTkuNjg5IDI4MS4yMjQgMTM3LjI0MSAyNjUuOTIxIDExNS4wNzIgMjUzLjY5NSAxMTUuMDc3IDI1My43MDcgMTE1LjA4MiAyNTMuNzE5IDExNS4wODcgMjUzLjczMSAxMDkuMjE2IDI1MC41MDggMTAwLjkxMiAyNDYuMjEgOTQuNTIxIDI0My4yMTggOTQuNTE2IDI0My4yMDQgOTQuNTExIDI0My4xOSA5NC41MDYgMjQzLjE3NiA4OSAyNDAuNTggODMuNjIyIDIzOC4yMiA3OC40NzggMjM2LjE0NSA1Ny41NDYgMjI3LjcwNCAyNi4wODUgMjE4LjExNyA2LjU1NyAyMzQuNzk5LTEwLjE2OCAyNDkuMDg2LTEwLjUgMjczLjkyMy01LjIwMiAyOTMuODMgNy4wNTkgMzM5LjkwMSA0OS43NzYgMzcxLjMxNyA5My43MzMgMzgxLjA3IDExNC42MDkgMzg1LjcwMSAxMzguMzA2IDM4Ni40IDE2MS4yNzkgMzgyLjUzNSAxNjcuMjc2IDM4MS43NDEgMTc2LjkwMyAzNzkuNDQzIDE4My4xMTIgMzc3LjM2NCAyMDguMTEyIDM2OS41ODggMjMwLjczMyAzNTUuNyAyNDUuODM3IDMzNC42NjQgMjY0LjE1MiAzMDkuMTU0IDI2Ny44NzIgMjc1LjExIDI2NC4xNzIgMjQ0LjEyNSAyNTguNzY5IDE5OC44OTYgMjI3LjYwMiAxNTQuNzQ4IDE4My44MDkgMTQzLjM2NSAxODIuODA3IDE0My4xMDQgMTgxLjgwOCAxNDIuODU3IDE4MC44MTIgMTQyLjYyMSAxNzkuNTkgMTM4LjA3IDE3OC4xNSAxMzIuMjk5IDE3Ni45NjggMTI3LjQ0NiAyMDIuMzI0IDEyOS40MzEgMjI2LjY5MSAxMzkuMzM3IDI0NS40MjggMTU4LjIzOSAyNzQuNDggMTg3LjU0OCAyODkuMTI1IDIyNS43ODcgMjg2LjY2MyAyNjcuNjM1IDI4NC4zNzggMzA2LjQ4IDI2Ni40MzcgMzQyLjUwNiAyMzQuMDY0IDM2My41OTYgMjIxLjA4NCAzNzIuMDUzIDIwNi40NTEgMzc4LjcwMiAxOTAuOTU2IDM4My41NTIgMTkwLjc5NCAzODMuNjAxIDE5MC42MzMgMzgzLjY1IDE5MC40NjcgMzgzLjcgMTg5LjQ0MyAzODQuMDE4IDE4OC40MDYgMzg0LjMwNiAxODcuMzc1IDM4NC42MDcgMTgzLjcwNSAzODUuNjU3IDE3OS40ODcgMzg2Ljc4MyAxNzUuNjI0IDM4Ny43NDcgMTc1LjYxMSAzODcuNzMzIDE3NS41OTkgMzg3LjcyIDE3NS41ODYgMzg3LjcwNyAxMzguNzg5IDM5Ni4xNzUgOTguNzYxIDM5NS4wNzQgNjUuMDcyIDM4NC4zMjIgMjMuMzQgMzcxLjAwMy0xNi40MjkgMzM3LjUxMy0yNS4zMzcgMjkxLjg1OC0yOS4zNzkgMjcxLjE0Ni0yNi4zMDEgMjQ4LjM3Ny05LjUzNiAyMzQuMzQ3IDcuMDQzIDIyMC40NzMgMzAuNjA3IDIxNy4wNzkgNTEuMzMxIDIxOC43MzUgNjQuMjc4IDIxOS43NyA3Ni43NDQgMjIyLjc5NSA4OC42OTkgMjI3LjMxNiA5NC44MyAyMjkuODg5IDEwMy4zNDIgMjMzLjgyNyAxMDguNzA5IDIzNi40ODggMTMwLjQ0IDI0OC4xNzQgMTUwLjE5NCAyNjQuNDI3IDE2Ny42NzQgMjgyLjA4IDE0Ny41NzMgMjQ2LjcyNyAxMjcuMDU5IDIwMS44NTYgMTE1LjUgMTcyLjE1MyAxMTMuNjYgMTY3LjQyMyAxMTEuODY3IDE2Mi43ODMgMTEwLjA3OCAxNTguMjAyIDEwNy45MTUgMTUyLjIzNSAxMDQuNDM0IDE0My41ODcgMTAxLjkyOCAxMzcuOTggODkuNzIzIDEwOC45OTUgNzQuOTE2IDgxIDQ1LjQ0NyA0Ni45MjQgMzAuODEzIDMwLjAwMiAxMi44MTggMTQuNjg2LTcuMDA5IDQuOTMyLTExLjU1NyAyLjQyMS0xOC41MTUtLjMwMy0yNC44MDctMi4xLTQ5LjE0OC05LjMwNi03NS40MDYtNy4yNDItMTAxLjE0NiAxMC41NTgtMTY3LjkyIDY0LjUzNy03NS40NDggMTY5Ljk5NC0yOC45MTEgMTQyLjE3Mi04My4xNzkgMjAyLjM4MS0xNjQuNDA1IDk0LjA0NC0xMjguNTU5IDI1LjY3Mi0xMDUuNDY3LTE4LjM3Mi01Ny4xMjktMjEuNjMtMTEuOTM3LTQuOTE0LTcuNjkzLTMuMjg1LTMuNDM4LTEuNTE2IDAgMCIgZmlsbD0iI2FkOTI4MSIvPg0KPHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMjYzLjkwNTgsMjczLjg5MTc5KSIgZD0iTTAgMEMtMS4yNzItMi45MS0yLjY0NS02LjAyNC0zLjg5My04LjgzOSA2Ljc2Ni0xMi45MzEgMTcuODg2LTE1LjYyNiAyOS4wOTctMTYuODQ2IDMwLjYyNy0xMy4xMDggMzIuMjAyLTguOTcxIDMzLjQ4NS01LjM5OCAyMS44OTctNS44OTYgMTAuNzQ0LTQuMzA1IDAgMCIgZmlsbD0iI2FkOTI4MSIvPg0KPHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMzU3Ljg2MDQsMjk4LjI4NDkpIiBkPSJNMCAwQy41MTkgMi4xOTEgMS4wMzEgNC4zOSAxLjUzNCA2LjU5NCAxLjY5MyA3LjI5LTEuNTk1IDguMjAyLTEuOTE1IDcuNTY3LTEuOTY5IDcuNDYtMi4wMjEgNy4zNTMtMi4wNzYgNy4yNDYtMi4xMjcgNy4yNTUtMi4xNyA3LjI2Ni0yLjE5OCA3LjI3Ny0yLjQ3OSA2LjYzNS0yLjc0MyA2LjAwNC0zLjAxNyA1LjM2Ny0yOC4xODItNjQuODU0LTQ5LjM2Mi0xMjkuMjAyLTY2Ljg2LTEyOC4wMDgtNzQuNzAxLTEyNy40NzMtNjAuMzMzLTU4LjQyMy00NC4xMjggNi45Ny00NC4xMTggNi45NzEtNDQuMTA4IDYuOTcyLTQ0LjEgNi45NzItNDIuOTgzIDExLjU2Mi00MS42MDQgMTcuMTE0LTQwLjM4NSAyMS43MjYtNDAuMzg3IDIxLjcyNi00MC4zOSAyMS43MjUtNDAuMzkyIDIxLjcyNS0zNC43NzEgNDMuNDQ4LTI4LjgzNCA2NC4yNzItMjMuMTU0IDgxLjUyMy0xMi4yNzggMTA4LjE4NC0yLjg2MiAxMjUuNzM5LS4wNjUgMTMyLjMyNi04LjA2NCAxMzAuNjg4LTMzLjk4MiA4OC41OTctNTEuMjYyIDM3LjU4My01My40MTkgMzEuMjEzLTU1LjU5OSAyNS4wODMtNTcuNzk0IDE5LjE0NC01Ny44IDE5LjE0My01Ny44MDUgMTkuMTQzLTU3LjgxMSAxOS4xNDMtNTkuMTAxIDE1LjQ5OC02MC43MzYgMTEuMTYyLTYyLjM1NCA3LjE4Ni0xMTMuMjQtMTIyLjMyOS0xNzIuOTcyLTE0Mi4zMDItMjIwLjI1Ni0xMjMuNzA5LTIyMi4yODEtMTI0LjU3Mi0yMjQuNDc1LTEyNS40NzktMjI2LjcyLTEyNi4zNy0xODAuNzcyLTE0NC43NC0xMjMuMjA5LTE0MC4yMjYtNzEuNzYxLTQxLjM4NS04NS4zMDEtOTMuMTA1LTg5LjgyNy0xMzUuOTY2LTc1LjcyOC0xMzUuOTg5LTU0LjIyNi0xMzYuMDIzLTM2LjIwNS0xMDkuNzg2LTIxLjU0Ny03Mi4wMDgtMjAuMDMzLTE2OS4yNjQgMTExLjE5LTE0OC4yMDMgMTE2LjcyNy02OC44OTkgNzUuNjQzLTE0OS40MjQtMjguMTg5LTE3Ny40OTUgMCAwIiBmaWxsPSIjYWQ5MjgxIi8+DQo8cGF0aCB0cmFuc2Zvcm09Im1hdHJpeCgxLDAsMCwtMSwxNzkuNTUxOCwyNTAuMjQ1NzkpIiBkPSJNMCAwQy0yNy40MTItMi4zOTktNDYuNTUtMjAuMTI1LTQ1LjA3LTMwLjU2Mi00My45NDYtMzguNDgxLTM3Ljk2NC00MS41NTItMzEuMzk1LTQyLjcwMy0xOS4yMjEtNDQuODM1LTMuOTk0LTQwLjU2NyA2LjA0NC0zMy41MzIgMTQuNDE4LTI3LjY2NCAyMS4zNS0xOS40NzUgMjcuMzc2LTEwLjUxMyAyMy43NzktOS4zNjEgMTkuNzE4LTguMzg3IDE1Ljk3MS03LjkxNiAxMy43MzUtMTAuOTY4IDExLjM4OS0xMy45MzUgOC45MDMtMTYuNzkzLTguMi0zNi40NjUtMjMuNzY4LTM1LjE3OS0yNi43MDktMzAuNzA4LTM0LjQ0MS0xOC45NTItMjAuNjE4LTEwLjU1Ni05Ljg0LTcuMTk3LS41NDQtNC4zIDguNjU5LTQuMTMyIDE3LjYxMy01LjY0MSAxNy42MDYtNS42NTEgMTcuNTk4LTUuNjYyIDE3LjU5MS01LjY3MiAyMS4zNDctNi4yNDYgMjUuMzA0LTcuMjQ1IDI4Ljc3OS04LjM5MyAyOC43ODYtOC4zODMgMjguNzkyLTguMzc0IDI4Ljc5OC04LjM2NCA0MC41NDItMTIuMDYzIDUxLjcwOS0xOC4wMjQgNjEuOTE5LTIzLjcyMSA2My4yMzItMjAuNTc0IDY0LjYwMS0xNy4xNiA2NS44MTYtMTQuMDA0IDU2LjA5LTkuMTQ3IDQ0LjI2Ny01LjE0MSAzMi4zODEtMi42MTlMMzIuMzgyLTIuNjE2QzI3Ljk4Ny0xLjc1OCAyMi44NzktLjg5OCAxOC42MzktLjM5NiAxNy4xODYtLjIzNiAxNS43NDgtLjEwNyAxNC4zMjMtLjAwMyAxNC4xNyAuMDA1IDE0LjAwNSAuMDE4IDEzLjg1OCAuMDIzIDEzLjg0NSAuMDI0IDEzLjgzNCAuMDMyIDEzLjgyMSAuMDMzIDguOTc1IC4zNjYgNC4zMTIgLjM3NyAwIDAiIGZpbGw9IiNhZDkyODEiLz4NCjxwYXRoIHRyYW5zZm9ybT0ibWF0cml4KDEsMCwwLC0xLDMxNi4zMjYyLDQxLjkwNjAwNykiIGQ9Ik0wIDBDLTIuOTMgLjgwNi02LjEwNCAxLjU4MS05LjA4MyAyLjIxMy0yNi44NjMtMTkuMDc0LTQ2LjM4Ni00OC43MTUtNjQuNjEyLTg3LjkwOC03MC44MzktMTAxLjI5OS03Ni4wOTEtMTE1LjY0NC04MS4yNzYtMTMwLjE3My03NC4xNy0xMjYuNzU0LTY1LjQ3NC0xMjIuMTc1LTYwLjMxOS0xMTkuMjUtNTkuMDQtMTE2LjIxNS01Ny44MDctMTEzLjI2OC01Ni42NDYtMTEwLjQ1OS00MC4zMDQtNzAuOTMyLTI1LjMtMzMuMDkgMCAwIiBmaWxsPSIjYWQ5MjgxIi8+DQo8L2c+DQo8L2c+DQo8L3N2Zz4NCg==" width="30" height="27" alt="РМД"></div>
+    <div class="mob-logo-text">
+      <span class="mob-logo-name">Русский Монетный Двор</span>
+      <span class="mob-logo-sub">Digital · Регламент</span>
+    </div>
+  </div>
+  <div class="mob-actions">
+    <button class="mob-theme-btn" onclick="toggleTheme()" aria-label="Сменить тему">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    </button>
+    <button class="mob-burger" id="mobBurger" onclick="openDrawer()" aria-label="Открыть навигацию" aria-expanded="false" aria-controls="mobDrawer">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ─── Backdrop ──────────────────────────────────────────────── -->
+<div class="mob-backdrop" id="mobBackdrop" onclick="closeDrawer()" aria-hidden="true"></div>
+
+<!-- ─── Navigation drawer ────────────────────────────────────── -->
+<nav class="mob-drawer" id="mobDrawer" role="dialog" aria-modal="true" aria-label="Разделы документа">
+  <div class="mob-drawer-head">
+    <div class="mob-logo">
+      <div class="logo-mark"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4bWxuczppbmtzY2FwZT0iaHR0cDovL3d3dy5pbmtzY2FwZS5vcmcvbmFtZXNwYWNlcy9pbmtzY2FwZSIgdmVyc2lvbj0iMS4xIiB3aWR0aD0iNDc4LjA4OCIgaGVpZ2h0PSI0MzcuMjAyIiB2aWV3Qm94PSIwIDAgNDc4LjA4OCA0MzcuMjAyIj4NCjxkZWZzPg0KPGNsaXBQYXRoIGlkPSJjbGlwXzEiPg0KPHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMCw0MzcuMjAyKSIgZD0iTTAgNDM3LjIwMkg0NzguMDg4VjBIMFoiLz4NCjwvY2xpcFBhdGg+DQo8L2RlZnM+DQo8ZyBpbmtzY2FwZTpncm91cG1vZGU9ImxheWVyIiBpbmtzY2FwZTpsYWJlbD0iTGF5ZXIgMSI+DQo8ZyBjbGlwLXBhdGg9InVybCgjY2xpcF8xKSI+DQo8cGF0aCB0cmFuc2Zvcm09Im1hdHJpeCgxLDAsMCwtMSwyMTMuMjMzNCwyNTAuNjE5OCkiIGQ9Ik0wIDBDMy42ODQgNi4zMzQgNy4wNTQgMTIuNzYyIDEwLjIzIDE4LjgxNSAxNy4wOTUgMzEuODkzIDI0Ljc3MyA0OC4zMDMgMzEuOTMxIDY0LjQxMSAyNi4xMzMgNjEuNjQ1IDE4LjgxMyA1OC4zMzIgMTMuODI5IDU2LjMxMyA2LjgxMSAzNy4yNjctLjg5NiAxOC41ODEtMTEuMzA0IDEuOTUzLTcuNTUgMS40MS0zLjUwNiAuNjk3IDAgMCIgZmlsbD0iI2FkOTI4MSIvPg0KPHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMTEzLjAxMjcsMzMxLjAwNzUpIiBkPSJNMCAwQy00OS4xOTctNi4xNDMtNDYuMzc4LTU5LjE2My0xLjItODQuMzY3IC4xOTQtODUuMTQ1IDEuNjA5LTg1LjkwMyAzLjAzNC04Ni42NTEgNS40OTUtODUuODg1IDcuOTk4LTg1IDEwLjM2Ni04NC4wNjEgNi4yNDktODEuNjc1IDIuMjQ5LTc5LjA0Mi0xLjYtNzYuMTc2LTI2LTU4LjAwNS0yOC4xMzEtMjQuNDM2IDAgMCIgZmlsbD0iI2FkOTI4MSIvPg0KPHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMzI1LjIyMzYsMzAuOTgwMTk1KSIgZD0iTTAgMEMxLjM5OCAxLjYxMyAyLjgxNSAzLjIxOCA0LjI3NSA0LjgwNCAxMi44NDUgMTQuMTE3IDI4LjU4MSAyOS40NjMgMjcuNzA1IDI5Ljc1NCAyNC4zIDMwLjg4NiAyNC40NCAyOS45NDcgMjEuMTQ1IDI3LjgzNSAxMi44NTEgMjIuNTIxIDIuNzQxIDE0LjA4OC04LjM0MSAyLjIxNy01LjU4MSAxLjUxNy0yLjcwMSAuNzUxIDAgMCIgZmlsbD0iI2FkOTI4MSIvPg0KPHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMTM5LjM2NDMsNDE4LjU2MDgpIiBkPSJNMCAwQzIwLjU4OSA5LjMxOCAzOS45NjQgMjIuNTIyIDU1LjI4OCAzNy41NjggODEuNzI3IDYzLjUyOCAxMDEuODEyIDk5Ljk5MyAxMTcuODQyIDEzNS41NDYgMTE5LjY1MyAxMzkuNjI0IDEyMS44MzIgMTQ0LjU2NSAxMjMuNTg5IDE0OC42MiAxMjQuNTIzIDE1MC44MDEgMTI1LjQ0MyAxNTIuOTcyIDEyNi4zNDkgMTU1LjEzMyAxMjYuNDA2IDE1NS4yNzcgMTI2LjQ2MSAxNTUuNDE0IDEyNi41MDggMTU1LjUzNSAxMjYuNTE0IDE1NS41NTEgMTI2LjUyOCAxNTUuNTYxIDEyNi41MzUgMTU1LjU3NiAxMzMuNjI0IDE3Mi41MDMgMTM5Ljg1OCAxODguNzA2IDE0NS40OSAyMDIuODYxIDE2NC44MTkgMjUxLjQ0MSAxNzQuMjcyIDI5MS4xODMgMjE1LjE3IDMzNy45NDMgMjEyLjEwMyAzMzkuNzE4IDIxMC4zNyAzMzYuNTc4IDIwNi45MDMgMzM0LjM5NCAxOTguNjIxIDMyOS4zNjkgMTg4LjA1NiAzMTUuNjM1IDE3Ni44OTcgMjk3LjY0OSAxNTkuNjg5IDI4MS4yMjQgMTM3LjI0MSAyNjUuOTIxIDExNS4wNzIgMjUzLjY5NSAxMTUuMDc3IDI1My43MDcgMTE1LjA4MiAyNTMuNzE5IDExNS4wODcgMjUzLjczMSAxMDkuMjE2IDI1MC41MDggMTAwLjkxMiAyNDYuMjEgOTQuNTIxIDI0My4yMTggOTQuNTE2IDI0My4yMDQgOTQuNTExIDI0My4xOSA5NC41MDYgMjQzLjE3NiA4OSAyNDAuNTggODMuNjIyIDIzOC4yMiA3OC40NzggMjM2LjE0NSA1Ny41NDYgMjI3LjcwNCAyNi4wODUgMjE4LjExNyA2LjU1NyAyMzQuNzk5LTEwLjE2OCAyNDkuMDg2LTEwLjUgMjczLjkyMy01LjIwMiAyOTMuODMgNy4wNTkgMzM5LjkwMSA0OS43NzYgMzcxLjMxNyA5My43MzMgMzgxLjA3IDExNC42MDkgMzg1LjcwMSAxMzguMzA2IDM4Ni40IDE2MS4yNzkgMzgyLjUzNSAxNjcuMjc2IDM4MS43NDEgMTc2LjkwMyAzNzkuNDQzIDE4My4xMTIgMzc3LjM2NCAyMDguMTEyIDM2OS41ODggMjMwLjczMyAzNTUuNyAyNDUuODM3IDMzNC42NjQgMjY0LjE1MiAzMDkuMTU0IDI2Ny44NzIgMjc1LjExIDI2NC4xNzIgMjQ0LjEyNSAyNTguNzY5IDE5OC44OTYgMjI3LjYwMiAxNTQuNzQ4IDE4My44MDkgMTQzLjM2NSAxODIuODA3IDE0My4xMDQgMTgxLjgwOCAxNDIuODU3IDE4MC44MTIgMTQyLjYyMSAxNzkuNTkgMTM4LjA3IDE3OC4xNSAxMzIuMjk5IDE3Ni45NjggMTI3LjQ0NiAyMDIuMzI0IDEyOS40MzEgMjI2LjY5MSAxMzkuMzM3IDI0NS40MjggMTU4LjIzOSAyNzQuNDggMTg3LjU0OCAyODkuMTI1IDIyNS43ODcgMjg2LjY2MyAyNjcuNjM1IDI4NC4zNzggMzA2LjQ4IDI2Ni40MzcgMzQyLjUwNiAyMzQuMDY0IDM2My41OTYgMjIxLjA4NCAzNzIuMDUzIDIwNi40NTEgMzc4LjcwMiAxOTAuOTU2IDM4My41NTIgMTkwLjc5NCAzODMuNjAxIDE5MC42MzMgMzgzLjY1IDE5MC40NjcgMzgzLjcgMTg5LjQ0MyAzODQuMDE4IDE4OC40MDYgMzg0LjMwNiAxODcuMzc1IDM4NC42MDcgMTgzLjcwNSAzODUuNjU3IDE3OS40ODcgMzg2Ljc4MyAxNzUuNjI0IDM4Ny43NDcgMTc1LjYxMSAzODcuNzMzIDE3NS41OTkgMzg3LjcyIDE3NS41ODYgMzg3LjcwNyAxMzguNzg5IDM5Ni4xNzUgOTguNzYxIDM5NS4wNzQgNjUuMDcyIDM4NC4zMjIgMjMuMzQgMzcxLjAwMy0xNi40MjkgMzM3LjUxMy0yNS4zMzcgMjkxLjg1OC0yOS4zNzkgMjcxLjE0Ni0yNi4zMDEgMjQ4LjM3Ny05LjUzNiAyMzQuMzQ3IDcuMDQzIDIyMC40NzMgMzAuNjA3IDIxNy4wNzkgNTEuMzMxIDIxOC43MzUgNjQuMjc4IDIxOS43NyA3Ni43NDQgMjIyLjc5NSA4OC42OTkgMjI3LjMxNiA5NC44MyAyMjkuODg5IDEwMy4zNDIgMjMzLjgyNyAxMDguNzA5IDIzNi40ODggMTMwLjQ0IDI0OC4xNzQgMTUwLjE5NCAyNjQuNDI3IDE2Ny42NzQgMjgyLjA4IDE0Ny41NzMgMjQ2LjcyNyAxMjcuMDU5IDIwMS44NTYgMTE1LjUgMTcyLjE1MyAxMTMuNjYgMTY3LjQyMyAxMTEuODY3IDE2Mi43ODMgMTEwLjA3OCAxNTguMjAyIDEwNy45MTUgMTUyLjIzNSAxMDQuNDM0IDE0My41ODcgMTAxLjkyOCAxMzcuOTggODkuNzIzIDEwOC45OTUgNzQuOTE2IDgxIDQ1LjQ0NyA0Ni45MjQgMzAuODEzIDMwLjAwMiAxMi44MTggMTQuNjg2LTcuMDA5IDQuOTMyLTExLjU1NyAyLjQyMS0xOC41MTUtLjMwMy0yNC44MDctMi4xLTQ5LjE0OC05LjMwNi03NS40MDYtNy4yNDItMTAxLjE0NiAxMC41NTgtMTY3LjkyIDY0LjUzNy03NS40NDggMTY5Ljk5NC0yOC45MTEgMTQyLjE3Mi04My4xNzkgMjAyLjM4MS0xNjQuNDA1IDk0LjA0NC0xMjguNTU5IDI1LjY3Mi0xMDUuNDY3LTE4LjM3Mi01Ny4xMjktMjEuNjMtMTEuOTM3LTQuOTE0LTcuNjkzLTMuMjg1LTMuNDM4LTEuNTE2IDAgMCIgZmlsbD0iI2FkOTI4MSIvPg0KPHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMjYzLjkwNTgsMjczLjg5MTc5KSIgZD0iTTAgMEMtMS4yNzItMi45MS0yLjY0NS02LjAyNC0zLjg5My04LjgzOSA2Ljc2Ni0xMi45MzEgMTcuODg2LTE1LjYyNiAyOS4wOTctMTYuODQ2IDMwLjYyNy0xMy4xMDggMzIuMjAyLTguOTcxIDMzLjQ4NS01LjM5OCAyMS44OTctNS44OTYgMTAuNzQ0LTQuMzA1IDAgMCIgZmlsbD0iI2FkOTI4MSIvPg0KPHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMzU3Ljg2MDQsMjk4LjI4NDkpIiBkPSJNMCAwQy41MTkgMi4xOTEgMS4wMzEgNC4zOSAxLjUzNCA2LjU5NCAxLjY5MyA3LjI5LTEuNTk1IDguMjAyLTEuOTE1IDcuNTY3LTEuOTY5IDcuNDYtMi4wMjEgNy4zNTMtMi4wNzYgNy4yNDYtMi4xMjcgNy4yNTUtMi4xNyA3LjI2Ni0yLjE5OCA3LjI3Ny0yLjQ3OSA2LjYzNS0yLjc0MyA2LjAwNC0zLjAxNyA1LjM2Ny0yOC4xODItNjQuODU0LTQ5LjM2Mi0xMjkuMjAyLTY2Ljg2LTEyOC4wMDgtNzQuNzAxLTEyNy40NzMtNjAuMzMzLTU4LjQyMy00NC4xMjggNi45Ny00NC4xMTggNi45NzEtNDQuMTA4IDYuOTcyLTQ0LjEgNi45NzItNDIuOTgzIDExLjU2Mi00MS42MDQgMTcuMTE0LTQwLjM4NSAyMS43MjYtNDAuMzg3IDIxLjcyNi00MC4zOSAyMS43MjUtNDAuMzkyIDIxLjcyNS0zNC43NzEgNDMuNDQ4LTI4LjgzNCA2NC4yNzItMjMuMTU0IDgxLjUyMy0xMi4yNzggMTA4LjE4NC0yLjg2MiAxMjUuNzM5LS4wNjUgMTMyLjMyNi04LjA2NCAxMzAuNjg4LTMzLjk4MiA4OC41OTctNTEuMjYyIDM3LjU4My01My40MTkgMzEuMjEzLTU1LjU5OSAyNS4wODMtNTcuNzk0IDE5LjE0NC01Ny44IDE5LjE0My01Ny44MDUgMTkuMTQzLTU3LjgxMSAxOS4xNDMtNTkuMTAxIDE1LjQ5OC02MC43MzYgMTEuMTYyLTYyLjM1NCA3LjE4Ni0xMTMuMjQtMTIyLjMyOS0xNzIuOTcyLTE0Mi4zMDItMjIwLjI1Ni0xMjMuNzA5LTIyMi4yODEtMTI0LjU3Mi0yMjQuNDc1LTEyNS40NzktMjI2LjcyLTEyNi4zNy0xODAuNzcyLTE0NC43NC0xMjMuMjA5LTE0MC4yMjYtNzEuNzYxLTQxLjM4NS04NS4zMDEtOTMuMTA1LTg5LjgyNy0xMzUuOTY2LTc1LjcyOC0xMzUuOTg5LTU0LjIyNi0xMzYuMDIzLTM2LjIwNS0xMDkuNzg2LTIxLjU0Ny03Mi4wMDgtMjAuMDMzLTE2OS4yNjQgMTExLjE5LTE0OC4yMDMgMTE2LjcyNy02OC44OTkgNzUuNjQzLTE0OS40MjQtMjguMTg5LTE3Ny40OTUgMCAwIiBmaWxsPSIjYWQ5MjgxIi8+DQo8cGF0aCB0cmFuc2Zvcm09Im1hdHJpeCgxLDAsMCwtMSwxNzkuNTUxOCwyNTAuMjQ1NzkpIiBkPSJNMCAwQy0yNy40MTItMi4zOTktNDYuNTUtMjAuMTI1LTQ1LjA3LTMwLjU2Mi00My45NDYtMzguNDgxLTM3Ljk2NC00MS41NTItMzEuMzk1LTQyLjcwMy0xOS4yMjEtNDQuODM1LTMuOTk0LTQwLjU2NyA2LjA0NC0zMy41MzIgMTQuNDE4LTI3LjY2NCAyMS4zNS0xOS40NzUgMjcuMzc2LTEwLjUxMyAyMy43NzktOS4zNjEgMTkuNzE4LTguMzg3IDE1Ljk3MS03LjkxNiAxMy43MzUtMTAuOTY4IDExLjM4OS0xMy45MzUgOC45MDMtMTYuNzkzLTguMi0zNi40NjUtMjMuNzY4LTM1LjE3OS0yNi43MDktMzAuNzA4LTM0LjQ0MS0xOC45NTItMjAuNjE4LTEwLjU1Ni05Ljg0LTcuMTk3LS41NDQtNC4zIDguNjU5LTQuMTMyIDE3LjYxMy01LjY0MSAxNy42MDYtNS42NTEgMTcuNTk4LTUuNjYyIDE3LjU5MS01LjY3MiAyMS4zNDctNi4yNDYgMjUuMzA0LTcuMjQ1IDI4Ljc3OS04LjM5MyAyOC43ODYtOC4zODMgMjguNzkyLTguMzc0IDI4Ljc5OC04LjM2NCA0MC41NDItMTIuMDYzIDUxLjcwOS0xOC4wMjQgNjEuOTE5LTIzLjcyMSA2My4yMzItMjAuNTc0IDY0LjYwMS0xNy4xNiA2NS44MTYtMTQuMDA0IDU2LjA5LTkuMTQ3IDQ0LjI2Ny01LjE0MSAzMi4zODEtMi42MTlMMzIuMzgyLTIuNjE2QzI3Ljk4Ny0xLjc1OCAyMi44NzktLjg5OCAxOC42MzktLjM5NiAxNy4xODYtLjIzNiAxNS43NDgtLjEwNyAxNC4zMjMtLjAwMyAxNC4xNyAuMDA1IDE0LjAwNSAuMDE4IDEzLjg1OCAuMDIzIDEzLjg0NSAuMDI0IDEzLjgzNCAuMDMyIDEzLjgyMSAuMDMzIDguOTc1IC4zNjYgNC4zMTIgLjM3NyAwIDAiIGZpbGw9IiNhZDkyODEiLz4NCjxwYXRoIHRyYW5zZm9ybT0ibWF0cml4KDEsMCwwLC0xLDMxNi4zMjYyLDQxLjkwNjAwNykiIGQ9Ik0wIDBDLTIuOTMgLjgwNi02LjEwNCAxLjU4MS05LjA4MyAyLjIxMy0yNi44NjMtMTkuMDc0LTQ2LjM4Ni00OC43MTUtNjQuNjEyLTg3LjkwOC03MC44MzktMTAxLjI5OS03Ni4wOTEtMTE1LjY0NC04MS4yNzYtMTMwLjE3My03NC4xNy0xMjYuNzU0LTY1LjQ3NC0xMjIuMTc1LTYwLjMxOS0xMTkuMjUtNTkuMDQtMTE2LjIxNS01Ny44MDctMTEzLjI2OC01Ni42NDYtMTEwLjQ1OS00MC4zMDQtNzAuOTMyLTI1LjMtMzMuMDkgMCAwIiBmaWxsPSIjYWQ5MjgxIi8+DQo8L2c+DQo8L2c+DQo8L3N2Zz4NCg==" width="30" height="27" alt="РМД"></div>
+      <div class="mob-logo-text">
+        <span class="mob-logo-name">Русский Монетный Двор</span>
+        <span class="mob-logo-sub">Digital · Регламент</span>
+      </div>
+    </div>
+    <button class="mob-close" onclick="closeDrawer()" aria-label="Закрыть">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="mob-nav">
+    <div class="nav-group">Постановка</div>
+    <a class="nav-link mob-nav-link" href="#rules" onclick="closeDrawer()">Правила задачи</a>
+    <a class="nav-link mob-nav-link" href="#lifecycle" onclick="closeDrawer()">Жизненный цикл</a>
+    <div class="nav-group">Исполнение</div>
+    <a class="nav-link mob-nav-link" href="#smart" onclick="closeDrawer()">7 принципов работы</a>
+    <a class="nav-link mob-nav-link" href="#deadlines" onclick="closeDrawer()">Сроки</a>
+    <div class="nav-group">Материалы</div>
+    <a class="nav-link mob-nav-link" href="#brief-landing" onclick="closeDrawer()">Бриф: лендинг</a>
+    <a class="nav-link mob-nav-link" href="#brief-product" onclick="closeDrawer()">Бриф: продукт</a>
+    <a class="nav-link mob-nav-link" href="#files" onclick="closeDrawer()">Требования к файлам</a>
+    <div class="nav-group">Email</div>
+    <a class="nav-link mob-nav-link" href="#email" onclick="closeDrawer()">Email-рассылки</a>
+  </div>
+</nav>
+
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <div class="logo-mark"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4bWxuczppbmtzY2FwZT0iaHR0cDovL3d3dy5pbmtzY2FwZS5vcmcvbmFtZXNwYWNlcy9pbmtzY2FwZSIgdmVyc2lvbj0iMS4xIiB3aWR0aD0iNDc4LjA4OCIgaGVpZ2h0PSI0MzcuMjAyIiB2aWV3Qm94PSIwIDAgNDc4LjA4OCA0MzcuMjAyIj4NCjxkZWZzPg0KPGNsaXBQYXRoIGlkPSJjbGlwXzEiPg0KPHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMCw0MzcuMjAyKSIgZD0iTTAgNDM3LjIwMkg0NzguMDg4VjBIMFoiLz4NCjwvY2xpcFBhdGg+DQo8L2RlZnM+DQo8ZyBpbmtzY2FwZTpncm91cG1vZGU9ImxheWVyIiBpbmtzY2FwZTpsYWJlbD0iTGF5ZXIgMSI+DQo8ZyBjbGlwLXBhdGg9InVybCgjY2xpcF8xKSI+DQo8cGF0aCB0cmFuc2Zvcm09Im1hdHJpeCgxLDAsMCwtMSwyMTMuMjMzNCwyNTAuNjE5OCkiIGQ9Ik0wIDBDMy42ODQgNi4zMzQgNy4wNTQgMTIuNzYyIDEwLjIzIDE4LjgxNSAxNy4wOTUgMzEuODkzIDI0Ljc3MyA0OC4zMDMgMzEuOTMxIDY0LjQxMSAyNi4xMzMgNjEuNjQ1IDE4LjgxMyA1OC4zMzIgMTMuODI5IDU2LjMxMyA2LjgxMSAzNy4yNjctLjg5NiAxOC41ODEtMTEuMzA0IDEuOTUzLTcuNTUgMS40MS0zLjUwNiAuNjk3IDAgMCIgZmlsbD0iI2FkOTI4MSIvPg0KPHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMTEzLjAxMjcsMzMxLjAwNzUpIiBkPSJNMCAwQy00OS4xOTctNi4xNDMtNDYuMzc4LTU5LjE2My0xLjItODQuMzY3IC4xOTQtODUuMTQ1IDEuNjA5LTg1LjkwMyAzLjAzNC04Ni42NTEgNS40OTUtODUuODg1IDcuOTk4LTg1IDEwLjM2Ni04NC4wNjEgNi4yNDktODEuNjc1IDIuMjQ5LTc5LjA0Mi0xLjYtNzYuMTc2LTI2LTU4LjAwNS0yOC4xMzEtMjQuNDM2IDAgMCIgZmlsbD0iI2FkOTI4MSIvPg0KPHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMzI1LjIyMzYsMzAuOTgwMTk1KSIgZD0iTTAgMEMxLjM5OCAxLjYxMyAyLjgxNSAzLjIxOCA0LjI3NSA0LjgwNCAxMi44NDUgMTQuMTE3IDI4LjU4MSAyOS40NjMgMjcuNzA1IDI5Ljc1NCAyNC4zIDMwLjg4NiAyNC40NCAyOS45NDcgMjEuMTQ1IDI3LjgzNSAxMi44NTEgMjIuNTIxIDIuNzQxIDE0LjA4OC04LjM0MSAyLjIxNy01LjU4MSAxLjUxNy0yLjcwMSAuNzUxIDAgMCIgZmlsbD0iI2FkOTI4MSIvPg0KPHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMTM5LjM2NDMsNDE4LjU2MDgpIiBkPSJNMCAwQzIwLjU4OSA5LjMxOCAzOS45NjQgMjIuNTIyIDU1LjI4OCAzNy41NjggODEuNzI3IDYzLjUyOCAxMDEuODEyIDk5Ljk5MyAxMTcuODQyIDEzNS41NDYgMTE5LjY1MyAxMzkuNjI0IDEyMS44MzIgMTQ0LjU2NSAxMjMuNTg5IDE0OC42MiAxMjQuNTIzIDE1MC44MDEgMTI1LjQ0MyAxNTIuOTcyIDEyNi4zNDkgMTU1LjEzMyAxMjYuNDA2IDE1NS4yNzcgMTI2LjQ2MSAxNTUuNDE0IDEyNi41MDggMTU1LjUzNSAxMjYuNTE0IDE1NS41NTEgMTI2LjUyOCAxNTUuNTYxIDEyNi41MzUgMTU1LjU3NiAxMzMuNjI0IDE3Mi41MDMgMTM5Ljg1OCAxODguNzA2IDE0NS40OSAyMDIuODYxIDE2NC44MTkgMjUxLjQ0MSAxNzQuMjcyIDI5MS4xODMgMjE1LjE3IDMzNy45NDMgMjEyLjEwMyAzMzkuNzE4IDIxMC4zNyAzMzYuNTc4IDIwNi45MDMgMzM0LjM5NCAxOTguNjIxIDMyOS4zNjkgMTg4LjA1NiAzMTUuNjM1IDE3Ni44OTcgMjk3LjY0OSAxNTkuNjg5IDI4MS4yMjQgMTM3LjI0MSAyNjUuOTIxIDExNS4wNzIgMjUzLjY5NSAxMTUuMDc3IDI1My43MDcgMTE1LjA4MiAyNTMuNzE5IDExNS4wODcgMjUzLjczMSAxMDkuMjE2IDI1MC41MDggMTAwLjkxMiAyNDYuMjEgOTQuNTIxIDI0My4yMTggOTQuNTE2IDI0My4yMDQgOTQuNTExIDI0My4xOSA5NC41MDYgMjQzLjE3NiA4OSAyNDAuNTggODMuNjIyIDIzOC4yMiA3OC40NzggMjM2LjE0NSA1Ny41NDYgMjI3LjcwNCAyNi4wODUgMjE4LjExNyA2LjU1NyAyMzQuNzk5LTEwLjE2OCAyNDkuMDg2LTEwLjUgMjczLjkyMy01LjIwMiAyOTMuODMgNy4wNTkgMzM5LjkwMSA0OS43NzYgMzcxLjMxNyA5My43MzMgMzgxLjA3IDExNC42MDkgMzg1LjcwMSAxMzguMzA2IDM4Ni40IDE2MS4yNzkgMzgyLjUzNSAxNjcuMjc2IDM4MS43NDEgMTc2LjkwMyAzNzkuNDQzIDE4My4xMTIgMzc3LjM2NCAyMDguMTEyIDM2OS41ODggMjMwLjczMyAzNTUuNyAyNDUuODM3IDMzNC42NjQgMjY0LjE1MiAzMDkuMTU0IDI2Ny44NzIgMjc1LjExIDI2NC4xNzIgMjQ0LjEyNSAyNTguNzY5IDE5OC44OTYgMjI3LjYwMiAxNTQuNzQ4IDE4My44MDkgMTQzLjM2NSAxODIuODA3IDE0My4xMDQgMTgxLjgwOCAxNDIuODU3IDE4MC44MTIgMTQyLjYyMSAxNzkuNTkgMTM4LjA3IDE3OC4xNSAxMzIuMjk5IDE3Ni45NjggMTI3LjQ0NiAyMDIuMzI0IDEyOS40MzEgMjI2LjY5MSAxMzkuMzM3IDI0NS40MjggMTU4LjIzOSAyNzQuNDggMTg3LjU0OCAyODkuMTI1IDIyNS43ODcgMjg2LjY2MyAyNjcuNjM1IDI4NC4zNzggMzA2LjQ4IDI2Ni40MzcgMzQyLjUwNiAyMzQuMDY0IDM2My41OTYgMjIxLjA4NCAzNzIuMDUzIDIwNi40NTEgMzc4LjcwMiAxOTAuOTU2IDM4My41NTIgMTkwLjc5NCAzODMuNjAxIDE5MC42MzMgMzgzLjY1IDE5MC40NjcgMzgzLjcgMTg5LjQ0MyAzODQuMDE4IDE4OC40MDYgMzg0LjMwNiAxODcuMzc1IDM4NC42MDcgMTgzLjcwNSAzODUuNjU3IDE3OS40ODcgMzg2Ljc4MyAxNzUuNjI0IDM4Ny43NDcgMTc1LjYxMSAzODcuNzMzIDE3NS41OTkgMzg3LjcyIDE3NS41ODYgMzg3LjcwNyAxMzguNzg5IDM5Ni4xNzUgOTguNzYxIDM5NS4wNzQgNjUuMDcyIDM4NC4zMjIgMjMuMzQgMzcxLjAwMy0xNi40MjkgMzM3LjUxMy0yNS4zMzcgMjkxLjg1OC0yOS4zNzkgMjcxLjE0Ni0yNi4zMDEgMjQ4LjM3Ny05LjUzNiAyMzQuMzQ3IDcuMDQzIDIyMC40NzMgMzAuNjA3IDIxNy4wNzkgNTEuMzMxIDIxOC43MzUgNjQuMjc4IDIxOS43NyA3Ni43NDQgMjIyLjc5NSA4OC42OTkgMjI3LjMxNiA5NC44MyAyMjkuODg5IDEwMy4zNDIgMjMzLjgyNyAxMDguNzA5IDIzNi40ODggMTMwLjQ0IDI0OC4xNzQgMTUwLjE5NCAyNjQuNDI3IDE2Ny42NzQgMjgyLjA4IDE0Ny41NzMgMjQ2LjcyNyAxMjcuMDU5IDIwMS44NTYgMTE1LjUgMTcyLjE1MyAxMTMuNjYgMTY3LjQyMyAxMTEuODY3IDE2Mi43ODMgMTEwLjA3OCAxNTguMjAyIDEwNy45MTUgMTUyLjIzNSAxMDQuNDM0IDE0My41ODcgMTAxLjkyOCAxMzcuOTggODkuNzIzIDEwOC45OTUgNzQuOTE2IDgxIDQ1LjQ0NyA0Ni45MjQgMzAuODEzIDMwLjAwMiAxMi44MTggMTQuNjg2LTcuMDA5IDQuOTMyLTExLjU1NyAyLjQyMS0xOC41MTUtLjMwMy0yNC44MDctMi4xLTQ5LjE0OC05LjMwNi03NS40MDYtNy4yNDItMTAxLjE0NiAxMC41NTgtMTY3LjkyIDY0LjUzNy03NS40NDggMTY5Ljk5NC0yOC45MTEgMTQyLjE3Mi04My4xNzkgMjAyLjM4MS0xNjQuNDA1IDk0LjA0NC0xMjguNTU5IDI1LjY3Mi0xMDUuNDY3LTE4LjM3Mi01Ny4xMjktMjEuNjMtMTEuOTM3LTQuOTE0LTcuNjkzLTMuMjg1LTMuNDM4LTEuNTE2IDAgMCIgZmlsbD0iI2FkOTI4MSIvPg0KPHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMjYzLjkwNTgsMjczLjg5MTc5KSIgZD0iTTAgMEMtMS4yNzItMi45MS0yLjY0NS02LjAyNC0zLjg5My04LjgzOSA2Ljc2Ni0xMi45MzEgMTcuODg2LTE1LjYyNiAyOS4wOTctMTYuODQ2IDMwLjYyNy0xMy4xMDggMzIuMjAyLTguOTcxIDMzLjQ4NS01LjM5OCAyMS44OTctNS44OTYgMTAuNzQ0LTQuMzA1IDAgMCIgZmlsbD0iI2FkOTI4MSIvPg0KPHBhdGggdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsLTEsMzU3Ljg2MDQsMjk4LjI4NDkpIiBkPSJNMCAwQy41MTkgMi4xOTEgMS4wMzEgNC4zOSAxLjUzNCA2LjU5NCAxLjY5MyA3LjI5LTEuNTk1IDguMjAyLTEuOTE1IDcuNTY3LTEuOTY5IDcuNDYtMi4wMjEgNy4zNTMtMi4wNzYgNy4yNDYtMi4xMjcgNy4yNTUtMi4xNyA3LjI2Ni0yLjE5OCA3LjI3Ny0yLjQ3OSA2LjYzNS0yLjc0MyA2LjAwNC0zLjAxNyA1LjM2Ny0yOC4xODItNjQuODU0LTQ5LjM2Mi0xMjkuMjAyLTY2Ljg2LTEyOC4wMDgtNzQuNzAxLTEyNy40NzMtNjAuMzMzLTU4LjQyMy00NC4xMjggNi45Ny00NC4xMTggNi45NzEtNDQuMTA4IDYuOTcyLTQ0LjEgNi45NzItNDIuOTgzIDExLjU2Mi00MS42MDQgMTcuMTE0LTQwLjM4NSAyMS43MjYtNDAuMzg3IDIxLjcyNi00MC4zOSAyMS43MjUtNDAuMzkyIDIxLjcyNS0zNC43NzEgNDMuNDQ4LTI4LjgzNCA2NC4yNzItMjMuMTU0IDgxLjUyMy0xMi4yNzggMTA4LjE4NC0yLjg2MiAxMjUuNzM5LS4wNjUgMTMyLjMyNi04LjA2NCAxMzAuNjg4LTMzLjk4MiA4OC41OTctNTEuMjYyIDM3LjU4My01My40MTkgMzEuMjEzLTU1LjU5OSAyNS4wODMtNTcuNzk0IDE5LjE0NC01Ny44IDE5LjE0My01Ny44MDUgMTkuMTQzLTU3LjgxMSAxOS4xNDMtNTkuMTAxIDE1LjQ5OC02MC43MzYgMTEuMTYyLTYyLjM1NCA3LjE4Ni0xMTMuMjQtMTIyLjMyOS0xNzIuOTcyLTE0Mi4zMDItMjIwLjI1Ni0xMjMuNzA5LTIyMi4yODEtMTI0LjU3Mi0yMjQuNDc1LTEyNS40NzktMjI2LjcyLTEyNi4zNy0xODAuNzcyLTE0NC43NC0xMjMuMjA5LTE0MC4yMjYtNzEuNzYxLTQxLjM4NS04NS4zMDEtOTMuMTA1LTg5LjgyNy0xMzUuOTY2LTc1LjcyOC0xMzUuOTg5LTU0LjIyNi0xMzYuMDIzLTM2LjIwNS0xMDkuNzg2LTIxLjU0Ny03Mi4wMDgtMjAuMDMzLTE2OS4yNjQgMTExLjE5LTE0OC4yMDMgMTE2LjcyNy02OC44OTkgNzUuNjQzLTE0OS40MjQtMjguMTg5LTE3Ny40OTUgMCAwIiBmaWxsPSIjYWQ5MjgxIi8+DQo8cGF0aCB0cmFuc2Zvcm09Im1hdHJpeCgxLDAsMCwtMSwxNzkuNTUxOCwyNTAuMjQ1NzkpIiBkPSJNMCAwQy0yNy40MTItMi4zOTktNDYuNTUtMjAuMTI1LTQ1LjA3LTMwLjU2Mi00My45NDYtMzguNDgxLTM3Ljk2NC00MS41NTItMzEuMzk1LTQyLjcwMy0xOS4yMjEtNDQuODM1LTMuOTk0LTQwLjU2NyA2LjA0NC0zMy41MzIgMTQuNDE4LTI3LjY2NCAyMS4zNS0xOS40NzUgMjcuMzc2LTEwLjUxMyAyMy43NzktOS4zNjEgMTkuNzE4LTguMzg3IDE1Ljk3MS03LjkxNiAxMy43MzUtMTAuOTY4IDExLjM4OS0xMy45MzUgOC45MDMtMTYuNzkzLTguMi0zNi40NjUtMjMuNzY4LTM1LjE3OS0yNi43MDktMzAuNzA4LTM0LjQ0MS0xOC45NTItMjAuNjE4LTEwLjU1Ni05Ljg0LTcuMTk3LS41NDQtNC4zIDguNjU5LTQuMTMyIDE3LjYxMy01LjY0MSAxNy42MDYtNS42NTEgMTcuNTk4LTUuNjYyIDE3LjU5MS01LjY3MiAyMS4zNDctNi4yNDYgMjUuMzA0LTcuMjQ1IDI4Ljc3OS04LjM5MyAyOC43ODYtOC4zODMgMjguNzkyLTguMzc0IDI4Ljc5OC04LjM2NCA0MC41NDItMTIuMDYzIDUxLjcwOS0xOC4wMjQgNjEuOTE5LTIzLjcyMSA2My4yMzItMjAuNTc0IDY0LjYwMS0xNy4xNiA2NS44MTYtMTQuMDA0IDU2LjA5LTkuMTQ3IDQ0LjI2Ny01LjE0MSAzMi4zODEtMi42MTlMMzIuMzgyLTIuNjE2QzI3Ljk4Ny0xLjc1OCAyMi44NzktLjg5OCAxOC42MzktLjM5NiAxNy4xODYtLjIzNiAxNS43NDgtLjEwNyAxNC4zMjMtLjAwMyAxNC4xNyAuMDA1IDE0LjAwNSAuMDE4IDEzLjg1OCAuMDIzIDEzLjg0NSAuMDI0IDEzLjgzNCAuMDMyIDEzLjgyMSAuMDMzIDguOTc1IC4zNjYgNC4zMTIgLjM3NyAwIDAiIGZpbGw9IiNhZDkyODEiLz4NCjxwYXRoIHRyYW5zZm9ybT0ibWF0cml4KDEsMCwwLC0xLDMxNi4zMjYyLDQxLjkwNjAwNykiIGQ9Ik0wIDBDLTIuOTMgLjgwNi02LjEwNCAxLjU4MS05LjA4MyAyLjIxMy0yNi44NjMtMTkuMDc0LTQ2LjM4Ni00OC43MTUtNjQuNjEyLTg3LjkwOC03MC44MzktMTAxLjI5OS03Ni4wOTEtMTE1LjY0NC04MS4yNzYtMTMwLjE3My03NC4xNy0xMjYuNzU0LTY1LjQ3NC0xMjIuMTc1LTYwLjMxOS0xMTkuMjUtNTkuMDQtMTE2LjIxNS01Ny44MDctMTEzLjI2OC01Ni42NDYtMTEwLjQ1OS00MC4zMDQtNzAuOTMyLTI1LjMtMzMuMDkgMCAwIiBmaWxsPSIjYWQ5MjgxIi8+DQo8L2c+DQo8L2c+DQo8L3N2Zz4NCg==" width="30" height="27" alt="РМД"></div>
+      <div class="logo-text">Русский<br>Монетный Двор</div>
+    </div>
+    <div class="sidebar-meta">Digital · Регламент</div>
+  </div>
+
+  <nav class="nav" aria-label="Разделы">
+    <div class="nav-group">Постановка</div>
+    <a class="nav-link active" href="#rules">Правила задачи</a>
+    <a class="nav-link" href="#lifecycle">Жизненный цикл</a>
+
+    <div class="nav-group">Исполнение</div>
+    <a class="nav-link" href="#smart">7 принципов работы</a>
+    <a class="nav-link" href="#deadlines">Сроки</a>
+
+    <div class="nav-group">Материалы</div>
+    <a class="nav-link" href="#brief-landing">Бриф: лендинг</a>
+    <a class="nav-link" href="#brief-product">Бриф: продукт</a>
+    <a class="nav-link" href="#files">Требования к файлам</a>
+
+    <div class="nav-group">Email</div>
+    <a class="nav-link" href="#email">Email-рассылки</a>
+  </nav>
+
+  <div class="sidebar-foot">
+    <button class="theme-btn" onclick="toggleTheme()" aria-label="Переключить тему">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      Тема
+    </button>
+  </div>
+</aside>
+
+<!-- ════ Main ════════════════════════════════════════════════════════ -->
+<main class="main">
+
+  <div class="page-intro">
+    <div class="page-eyebrow">Внутренний документ · Digital</div>
+    <h1 class="page-title">Как работать с Digital-командой РМД</h1>
+    <p class="page-desc">Руководство для всех, кто ставит задачи Digital-отделу — продакт-менеджеров, контент-команды, руководителей. Чем точнее задача — тем быстрее результат.</p>
+    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+      <span class="version-badge">Версия 1.0 · Август 2026</span>
+      <span style="font-size:12px; color:var(--text-3)">Инструмент: YouGile</span>
+    </div>
+  </div>
+
+  <!-- ─── 1. Правила постановки ─────────────────────────────────── -->
+  <section class="section" id="rules">
+    <h2 class="section-heading">Как ставить задачу</h2>
+    <p class="section-sub">8 условий, которые нужны для того, чтобы задача ушла в работу</p>
+
+    <ol class="rules">
+
+      <li class="rule">
+        <span class="rule-num">01</span>
+        <div>
+          <div class="rule-title">Только через YouGile</div>
+          <div class="rule-desc">Задача ставится в колонку <strong>«To Do»</strong> на доске Digital-команды. Устная просьба, сообщение в мессенджере — не задача. Нет карточки в YouGile — нет работы.</div>
+        </div>
+      </li>
+
+      <li class="rule">
+        <span class="rule-num">02</span>
+        <div>
+          <div class="rule-title">Понятное название</div>
+          <div class="rule-desc">Из темы карточки сразу ясно: что делаем, для какого продукта.<br>
+          <span style="color:var(--text-3); font-size:13px">✓ «Лендинг — Медаль Победы, серебро 925»<br>✗ «Лендинг», «Задача от 5 августа»</span></div>
+        </div>
+      </li>
+
+      <li class="rule">
+        <span class="rule-num">03</span>
+        <div>
+          <div class="rule-title">Техническое задание в описании</div>
+          <div class="rule-desc">ТЗ — это описание цели, структуры и нужного результата. Без ТЗ исполнитель уточняет, а не берёт задачу в работу.</div>
+          <span class="rule-note">Шаблоны брифов → разделы ниже</span>
+        </div>
+      </li>
+
+      <li class="rule">
+        <span class="rule-num">04</span>
+        <div>
+          <div class="rule-title">Дедлайн по таблице сроков</div>
+          <div class="rule-desc">Выбираем дедлайн из <a href="#deadlines" style="color:var(--crimson)">таблицы сроков</a>. Срок считается с момента получения финального ТЗ и всех материалов. Нужно раньше — договариваемся с исполнителем в чате карточки заранее.</div>
+        </div>
+      </li>
+
+      <li class="rule">
+        <span class="rule-num">05</span>
+        <div>
+          <div class="rule-title">Материалы — до старта</div>
+          <div class="rule-desc">Пэкшоты, тексты, ссылки на облако — прикладываем к карточке перед постановкой. Материалы появились позже → дедлайн сдвигается на срок их ожидания.</div>
+          <span class="rule-note">Требования к файлам → раздел «Требования к файлам»</span>
+        </div>
+      </li>
+
+      <li class="rule">
+        <span class="rule-num">06</span>
+        <div>
+          <div class="rule-title">Роли заполнены</div>
+          <div class="rule-desc">В карточке всегда указаны: <strong>Исполнитель</strong> (кто делает), <strong>Ответственный</strong> (кто следит за задачей), <strong>Поручитель</strong> (кто поставил задачу и принимает результат).</div>
+        </div>
+      </li>
+
+      <li class="rule">
+        <span class="rule-num">07</span>
+        <div>
+          <div class="rule-title">«Важно» — только для реально срочных</div>
+          <div class="rule-desc">Метка «Важно» помогает выйти из очереди при критическом сроке. Если ставить её на каждую задачу — она теряет смысл и срочные задачи перестают выделяться.</div>
+        </div>
+      </li>
+
+      <li class="rule">
+        <span class="rule-num">08</span>
+        <div>
+          <div class="rule-title">Все обсуждения — в чате карточки</div>
+          <div class="rule-desc">Правки, уточнения, согласования — только внутри карточки задачи. Так история сохраняется и не теряется в мессенджерах. Договорённость в Telegram не считается зафиксированной.</div>
+        </div>
+      </li>
+
+    </ol>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── 2. Жизненный цикл ─────────────────────────────────────── -->
+  <section class="section" id="lifecycle">
+    <h2 class="section-heading">Жизненный цикл задачи</h2>
+    <p class="section-sub">Исполнитель двигает карточку — Поручитель закрывает</p>
+
+    <div class="workflow" role="img" aria-label="Путь задачи: To Do → In Progress → In Review → Approved">
+      <div class="wf-step">
+        <div class="wf-badge">To Do</div>
+        <div class="wf-label">Поставлена, ждёт</div>
+      </div>
+      <div class="wf-arrow" aria-hidden="true">›</div>
+      <div class="wf-step">
+        <div class="wf-badge b-work">In Progress</div>
+        <div class="wf-label">Активная разработка</div>
+      </div>
+      <div class="wf-arrow" aria-hidden="true">›</div>
+      <div class="wf-step">
+        <div class="wf-badge b-review">In Review</div>
+        <div class="wf-label">Готово — нужна проверка</div>
+      </div>
+      <div class="wf-arrow" aria-hidden="true">›</div>
+      <div class="wf-step">
+        <div class="wf-badge b-done">Approved</div>
+        <div class="wf-label">Принято</div>
+      </div>
+    </div>
+
+    <div class="roles-grid">
+      <div class="role-card">
+        <strong>Исполнитель</strong>
+        Двигает карточку: To Do → In Progress → In Review. Пишет в чате карточки, что именно сделано и что надо проверить. Если пауза — возвращает в To Do с комментарием.
+      </div>
+      <div class="role-card">
+        <strong>Поручитель</strong>
+        Проверяет в In Review. Если всё хорошо — переводит в Approved. Если нужна доработка — пишет конкретно, что и почему. Размытое «не то» — не комментарий.
+      </div>
+      <div class="role-card">
+        <strong>Ответственный</strong>
+        Следит, что задача не зависает. Помогает снять блокеры. В исполнение не вмешивается.
+      </div>
+    </div>
+
+    <div class="callout c-info" style="margin-top:14px">
+      <i class="callout-icon">💡</i>
+      <div>Задачу в статусе <strong>In Review</strong> нужно проверить в течение рабочего дня. Долгое ожидание в этой колонке — это потери и для заказчика, и для команды.</div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── 3. 7 принципов ───────────────────────────────────────── -->
+  <section class="section" id="smart">
+    <h2 class="section-heading">7 принципов работы над задачей</h2>
+    <p class="section-sub">Для исполнителей — как работать правильно; для поручителей — что ожидать</p>
+
+    <div class="smart-list">
+
+      <div class="smart-item">
+        <div class="smart-n">1</div>
+        <div>
+          <div class="smart-title">Разобраться до старта</div>
+          <div class="smart-body">Прежде чем начать — понять задачу до конца. Что неясно? Уточнить через чат карточки, не угадывать. Договорённости фиксировать там же письменно.</div>
+        </div>
+      </div>
+
+      <div class="smart-item">
+        <div class="smart-n">2</div>
+        <div>
+          <div class="smart-title">Сдавать в срок</div>
+          <div class="smart-body">Если исполнитель подтвердил дедлайн — делает всё, чтобы его выдержать. Если задержка неизбежна — сообщить заранее, не в день сдачи. Молчание до дедлайна — потеря времени для всех.</div>
+        </div>
+      </div>
+
+      <div class="smart-item">
+        <div class="smart-n">3</div>
+        <div>
+          <div class="smart-title">Предлагать решения, не только проблемы</div>
+          <div class="smart-body">Обнаружил препятствие — приходи с 1–2 вариантами выхода. «Не могу» без альтернатив — не ответ.</div>
+        </div>
+      </div>
+
+      <div class="smart-item">
+        <div class="smart-n">4</div>
+        <div>
+          <div class="smart-title">Сообщать о блокерах сразу</div>
+          <div class="smart-body">Столкнулся с проблемой — сразу пишешь в чат карточки. Исправить на раннем этапе в разы проще, чем переделывать готовое.</div>
+        </div>
+      </div>
+
+      <div class="smart-item">
+        <div class="smart-n">5</div>
+        <div>
+          <div class="smart-title">Факты вместо предположений</div>
+          <div class="smart-body">«Мне кажется» — не аргумент. «Я проверил три источника, данные недоступны» — аргумент. Спорные вопросы решаем через проверку.</div>
+        </div>
+      </div>
+
+      <div class="smart-item">
+        <div class="smart-n">6</div>
+        <div>
+          <div class="smart-title">Уточнять по ходу</div>
+          <div class="smart-body">В процессе появились вопросы? Задать их поручителю, не тратить час на поиск самому. Пример: непонятно, откуда брать текст — спросить, а не додумывать.</div>
+        </div>
+      </div>
+
+      <div class="smart-item">
+        <div class="smart-n">7</div>
+        <div>
+          <div class="smart-title">Улучшения — после согласования</div>
+          <div class="smart-body">Видишь возможность сделать лучше, чем в ТЗ? Сначала предложи поручителю — это может сдвинуть сроки или противоречить другому решению. Самодеятельность без согласования — риск переделки.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── 4. Сроки ──────────────────────────────────────────────── -->
+  <section class="section" id="deadlines">
+    <h2 class="section-heading">Сроки выполнения задач</h2>
+    <p class="section-sub">Минимальный дедлайн от момента постановки финальной задачи (рабочие дни)</p>
+
+    <div class="callout c-info">
+      <i class="callout-icon">ℹ</i>
+      <div>В дедлайн уже включено время на рассмотрение задачи (до 3 р.д. на стандартные, до 5 р.д. на разработку). Срок считается с момента получения <strong>финального ТЗ со всеми материалами</strong>.</div>
+    </div>
+
+    <div class="sub-heading">Лендинги</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Действие</th>
+            <th>Объём задачи</th>
+            <th>Дедлайн, р.д.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-c">Создать</span></td>
+            <td>Лендинг — 1 товар</td>
+            <td class="days">до 8</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-c">Создать</span></td>
+            <td>Лендинг — 2–3 товара</td>
+            <td class="days">до 13</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-c">Создать</span></td>
+            <td>Лендинг — 4–8 товаров</td>
+            <td class="days">до 18</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-c">Создать</span></td>
+            <td>Лендинг — более 8 товаров</td>
+            <td class="days-ind">≥ 18, согласуется</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-c">Создать</span></td>
+            <td>Лендинг + Email (1–3 товара)</td>
+            <td class="days">до 13</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-e">Изменить</span></td>
+            <td>Текст / цена / условие (1–10 лендингов)</td>
+            <td class="days">до 8</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-e">Изменить</span></td>
+            <td>Изображение на лендинге</td>
+            <td class="days">до 8</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-f">Функционал</span></td>
+            <td>Разработать / изменить (1 задача)</td>
+            <td class="days-ind">≥ 13, согласуется</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub-heading">Email-рассылки</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Действие</th>
+            <th>Объём задачи</th>
+            <th>Дедлайн, р.д.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-c">Создать</span></td>
+            <td>Email — 1 товар</td>
+            <td class="days">до 8</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-c">Создать</span></td>
+            <td>Email — 2–3 товара</td>
+            <td class="days">до 13</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-c">Создать</span></td>
+            <td>Email — 4–8 товаров</td>
+            <td class="days">до 18</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-f">Функционал</span></td>
+            <td>Разработать / изменить (1 задача)</td>
+            <td class="days-ind">≥ 13, согласуется</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sub-heading">Баннеры и изображения</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Действие</th>
+            <th>Объём задачи</th>
+            <th>Дедлайн, р.д.</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-c">Создать</span></td>
+            <td>1 баннер (все форматы)</td>
+            <td class="days">до 8</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-c">Создать</span></td>
+            <td>2–3 баннера</td>
+            <td class="days">до 13</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-c">Создать</span></td>
+            <td>4–8 баннеров</td>
+            <td class="days">до 18</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-e">Изменить</span></td>
+            <td>1–2 баннера</td>
+            <td class="days">до 8</td>
+          </tr>
+          <tr>
+            <td style="color:var(--text-3)">Нестандартная</td>
+            <td>Задача без чёткого объёма</td>
+            <td class="days-ind">≥ 13, согласуется</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout c-warn">
+      <i class="callout-icon">⚠</i>
+      <div><strong>Нестандартные задачи</strong> оцениваются только после получения полного ТЗ и всех материалов. Дедлайн согласовывается с исполнителем до его установки в карточке.</div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── 5. Бриф: лендинг ─────────────────────────────────────── -->
+  <section class="section" id="brief-landing">
+    <h2 class="section-heading">Бриф: лендинг</h2>
+    <p class="section-sub">Заполнить и прикрепить к карточке YouGile вместе с материалами</p>
+    <button class="bm-open-btn" onclick="openBrief('landing')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Заполнить ТЗ онлайн
+    </button>
+
+    <!-- Что прикладываем -->
+    <div style="font-size:12px; font-weight:700; color:var(--text-3); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:8px">Прикладываем к задаче</div>
+    <div class="brief-attach">
+      <div class="b-chip"><div class="b-chip-dot"></div>Этот бриф (заполненный)</div>
+      <div class="b-chip"><div class="b-chip-dot"></div>Пэкшоты товара</div>
+      <div class="b-chip"><div class="b-chip-dot"></div>Текст описания</div>
+      <div class="b-chip"><div class="b-chip-dot"></div>Название рекламной кампании</div>
+    </div>
+
+    <!-- Legend -->
+    <div class="brief-legend">
+      <div class="leg-item"><span class="leg-req">*</span> Обязательное поле</div>
+      <div class="leg-item" style="color:var(--text-3)">Остальные — по наличию</div>
+    </div>
+
+    <!-- Шаг 1 -->
+    <div class="b-step">
+      <div class="b-step-hd">
+        <div class="b-num">1</div>
+        <div class="b-step-title">Основное</div>
+      </div>
+      <div class="form-block">
+        <div class="fr">
+          <div class="fr-label">Название товара<span class="fr-req">*</span></div>
+          <div class="fr-hint">Точное, как будет отображаться на лендинге</div>
+        </div>
+        <div class="fr">
+          <div class="fr-label">Тип<span class="fr-req">*</span></div>
+          <div class="fr-hint">Единичный товар / Серия / Набор</div>
+        </div>
+        <div class="fr">
+          <div class="fr-label">Цена обычная<span class="fr-req">*</span></div>
+          <div class="fr-hint">В рублях</div>
+        </div>
+        <div class="fr">
+          <div class="fr-label">Цена специальная</div>
+          <div class="fr-hint">Если есть скидка или акционная цена</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Шаг 2 -->
+    <div class="b-step">
+      <div class="b-step-hd">
+        <div class="b-num">2</div>
+        <div class="b-step-title">Контент</div>
+      </div>
+      <div class="form-block">
+        <div class="fr">
+          <div class="fr-label">Заголовок<span class="fr-req">*</span></div>
+          <div class="fr-hint">До 40 символов с пробелами</div>
+        </div>
+        <div class="fr">
+          <div class="fr-label">Подзаголовок</div>
+          <div class="fr-hint">До 60 символов с пробелами</div>
+        </div>
+        <div class="fr">
+          <div class="fr-label">УТП<span class="fr-req">*</span></div>
+          <div class="fr-hint">
+            3–4 строки, каждая до 60 символов
+            <span class="fr-ex">Пример: «Серебро 925 пробы» · «Тираж — 1000 экз.» · «Сертификат в комплекте»</span>
+          </div>
+        </div>
+        <div class="fr">
+          <div class="fr-label">Описание товара<span class="fr-req">*</span></div>
+          <div class="fr-hint">
+            От 1200 символов с пробелами
+            <span class="fr-ex">Уникальность ≥85% — проверить на <a href="https://text.ru" target="_blank" style="color:var(--crimson)">text.ru</a> до отправки</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Шаг 3 -->
+    <div class="b-step">
+      <div class="b-step-hd">
+        <div class="b-num">3</div>
+        <div class="b-step-title">Спецификация товара</div>
+      </div>
+      <div class="spec-mosaic">
+        <div class="sm"><div class="sm-k">Металл <span style="color:var(--crimson)">*</span></div><div class="sm-v">Серебро / Медь / Томпак…</div></div>
+        <div class="sm"><div class="sm-k">Проба / Исполнение</div><div class="sm-v">925, позолота, антик…</div></div>
+        <div class="sm"><div class="sm-k">Размер</div><div class="sm-v">Диаметр, мм</div></div>
+        <div class="sm"><div class="sm-k">Вес</div><div class="sm-v">Граммы</div></div>
+        <div class="sm"><div class="sm-k">Тираж</div><div class="sm-v">Кол-во экземпляров</div></div>
+        <div class="sm"><div class="sm-k">Год выпуска</div><div class="sm-v"></div></div>
+        <div class="sm"><div class="sm-k">В комплекте</div><div class="sm-v">Коробка, сертификат…</div></div>
+        <div class="sm"><div class="sm-k">Особенности</div><div class="sm-v">Гравировка, нумерация…</div></div>
+      </div>
+    </div>
+
+    <!-- Шаг 4 -->
+    <div class="b-step">
+      <div class="b-step-hd">
+        <div class="b-num">4</div>
+        <div class="b-step-title">Реклама</div>
+      </div>
+      <div class="form-block">
+        <div class="fr">
+          <div class="fr-label">Название РК<span class="fr-req">*</span></div>
+          <div class="fr-hint">
+            Для utm_campaign и передачи в CRM (imdcampaign_name)
+          </div>
+        </div>
+        <div class="fr">
+          <div class="fr-label">Дата запуска</div>
+          <div class="fr-hint">Планируемая дата старта рекламы</div>
+        </div>
+        <div class="fr">
+          <div class="fr-label">Тема / рубрика</div>
+          <div class="fr-hint">История / Религия / ВОВ / Известные люди / Патриотизм…</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── 6. Бриф: продукт ─────────────────────────────────────── -->
+  <section class="section" id="brief-product">
+    <h2 class="section-heading">Бриф: карточка продукта</h2>
+    <p class="section-sub">Дополнительные данные для серийных товаров — сверх стандартного брифа лендинга</p>
+    <button class="bm-open-btn" onclick="openBrief('product')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Заполнить ТЗ онлайн
+    </button>
+
+    <div class="callout c-info">
+      <i class="callout-icon">📦</i>
+      <div>Для серий нужны <strong>два описания</strong>: о первой медали серии и об общей коллекции. Каждое — от 1200 символов. Заполняются отдельно.</div>
+    </div>
+
+    <!-- Что прикладываем -->
+    <div style="font-size:12px; font-weight:700; color:var(--text-3); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:8px; margin-top:16px">Прикладываем к задаче</div>
+    <div class="brief-attach">
+      <div class="b-chip"><div class="b-chip-dot"></div>Описание первой медали</div>
+      <div class="b-chip"><div class="b-chip-dot"></div>Описание коллекции</div>
+      <div class="b-chip"><div class="b-chip-dot"></div>Пэкшоты (аверсы 3+ медалей)</div>
+    </div>
+
+    <div class="brief-legend">
+      <div class="leg-item"><span class="leg-req">*</span> Обязательное поле</div>
+    </div>
+
+    <!-- Шаг 1 -->
+    <div class="b-step">
+      <div class="b-step-hd">
+        <div class="b-num">1</div>
+        <div class="b-step-title">Контент серии</div>
+      </div>
+      <div class="form-block">
+        <div class="fr">
+          <div class="fr-label">Описание первой медали<span class="fr-req">*</span></div>
+          <div class="fr-hint">
+            От 1200 симв., уникальность ≥85%
+            <span class="fr-ex">Вкладка «Описание» на карточке товара в каталоге</span>
+          </div>
+        </div>
+        <div class="fr">
+          <div class="fr-label">Описание коллекции<span class="fr-req">*</span></div>
+          <div class="fr-hint">
+            От 1200 симв., уникальность ≥85%
+            <span class="fr-ex">Вкладка «Коллекция» на карточке товара</span>
+          </div>
+        </div>
+        <div class="fr">
+          <div class="fr-label">Сюжет серии</div>
+          <div class="fr-hint">Краткое описание темы коллекции для постановщика задачи</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Шаг 2 -->
+    <div class="b-step">
+      <div class="b-step-hd">
+        <div class="b-num">2</div>
+        <div class="b-step-title">Параметры серии</div>
+      </div>
+      <div class="spec-mosaic" style="grid-template-columns: repeat(3, 1fr)">
+        <div class="sm"><div class="sm-k">Количество медалей</div><div class="sm-v">Всего штук / полных коллекций</div></div>
+        <div class="sm"><div class="sm-k">Обычная цена медали</div><div class="sm-v">Стандартная цена одной</div></div>
+        <div class="sm"><div class="sm-k">Спец. цена первой</div><div class="sm-v">Вступительная если есть</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── 7. Файлы ──────────────────────────────────────────────── -->
+  <section class="section" id="files">
+    <h2 class="section-heading">Требования к материалам</h2>
+    <p class="section-sub">Без правильных файлов задача задерживается на срок их ожидания</p>
+
+    <!-- Пэкшоты -->
+    <div class="b-step">
+      <div class="b-step-hd">
+        <div class="b-num" style="background:var(--gold)">📷</div>
+        <div class="b-step-title">Пэкшоты (фото товара)</div>
+      </div>
+      <div class="form-block">
+        <div class="fr">
+          <div class="fr-label">Размер</div>
+          <div class="fr-hint">Минимум 1000 × 1000 пикселей</div>
+        </div>
+        <div class="fr">
+          <div class="fr-label">Формат и фон</div>
+          <div class="fr-hint">PNG · прозрачный фон · без теней, бликов, свечений</div>
+        </div>
+        <div class="fr">
+          <div class="fr-label">Состав</div>
+          <div class="fr-hint">Аверс и реверс — отдельными файлами</div>
+        </div>
+        <div class="fr">
+          <div class="fr-label">Для серий</div>
+          <div class="fr-hint">Дополнительно — аверсы каждой медали коллекции, минимум 3 штуки</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Баннеры -->
+    <div class="b-step">
+      <div class="b-step-hd">
+        <div class="b-num" style="background:var(--gold)">🖼</div>
+        <div class="b-step-title">Баннеры на сайт — 3 формата</div>
+      </div>
+      <div class="spec-mosaic" style="grid-template-columns: repeat(3, 1fr); margin-bottom:8px">
+        <div class="sm">
+          <div class="sm-k">Десктоп</div>
+          <div class="sm-v" style="font-size:14px; font-weight:600; color:var(--text); margin-bottom:2px">1350 × 460 px</div>
+          <div class="sm-v">JPEG</div>
+        </div>
+        <div class="sm">
+          <div class="sm-k">Планшет</div>
+          <div class="sm-v" style="font-size:14px; font-weight:600; color:var(--text); margin-bottom:2px">1024 × 420 px</div>
+          <div class="sm-v">JPEG</div>
+        </div>
+        <div class="sm">
+          <div class="sm-k">Мобильный</div>
+          <div class="sm-v" style="font-size:14px; font-weight:600; color:var(--text); margin-bottom:2px">500 × 650 px</div>
+          <div class="sm-v">JPEG</div>
+        </div>
+      </div>
+      <div class="callout c-info" style="margin-top:0">
+        <i class="callout-icon">💡</i>
+        <div>Учитывать зону стрелок и точек навигации — текст и ценовые плашки не должны попадать в эти зоны. На мобильной версии: текст крупнее, количество элементов меньше.</div>
+      </div>
+    </div>
+
+    <!-- Тексты + передача -->
+    <div class="b-step">
+      <div class="b-step-hd">
+        <div class="b-num" style="background:var(--gold)">📄</div>
+        <div class="b-step-title">Тексты и как передавать</div>
+      </div>
+      <div class="form-block">
+        <div class="fr">
+          <div class="fr-label">Формат</div>
+          <div class="fr-hint">DOCX или Google Docs — ссылка с открытым доступом для исполнителя</div>
+        </div>
+        <div class="fr">
+          <div class="fr-label">Уникальность</div>
+          <div class="fr-hint">≥85% по <a href="https://text.ru" target="_blank" style="color:var(--crimson)">text.ru</a> — проверить до отправки</div>
+        </div>
+        <div class="fr">
+          <div class="fr-label">Структура</div>
+          <div class="fr-hint">Заголовок, подзаголовок и описание — отдельными блоками в одном документе</div>
+        </div>
+        <div class="fr">
+          <div class="fr-label">Где прикрепить</div>
+          <div class="fr-hint">Вложением в карточке YouGile или ссылкой на Google Drive / Яндекс.Диск</div>
+        </div>
+        <div class="fr">
+          <div class="fr-label" style="color:var(--crimson)">«Будет позже»</div>
+          <div class="fr-hint">= дедлайн сдвигается на время ожидания материала</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─── 8. Email ─────────────────────────────────────────────── -->
+  <section class="section" id="email">
+    <h2 class="section-heading">Email-рассылки</h2>
+
+    <p class="section-sub">При использовании — заменить все реквизиты, ссылки, изображения и домен отправителя на <strong>@rusdvor.ru</strong></p>
+
+    <div class="sub-heading">Лидбастинг (единичный товар)</div>
+    <div class="email-group">
+      <a class="email-card" href="https://viewstripo.email/94c5bdb0-1c12-45b8-92e4-7f151b5439581752661166670" target="_blank" rel="noopener noreferrer">
+        <div>
+          <div class="email-meta">Основное письмо</div>
+          <div class="email-name">Лидбастинг · Main</div>
+        </div>
+        <span class="email-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="email-card" href="https://viewstripo.email/db902489-f599-4753-ae92-961ddf61034e1752661154817" target="_blank" rel="noopener noreferrer">
+        <div>
+          <div class="email-meta">Напоминание</div>
+          <div class="email-name">Лидбастинг · Reminder</div>
+        </div>
+        <span class="email-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+
+    <div class="sub-heading">Серия</div>
+    <div class="email-group">
+      <a class="email-card" href="https://viewstripo.email/3a851098-c0df-4fc8-b9e3-182dc27ef5211749634137526" target="_blank" rel="noopener noreferrer">
+        <div>
+          <div class="email-meta">Тизер</div>
+          <div class="email-name">Серия · Teaser</div>
+        </div>
+        <span class="email-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="email-card" href="https://viewstripo.email/79f314c8-6a01-4bc1-80c5-ce252bfab3a01750074202029" target="_blank" rel="noopener noreferrer">
+        <div>
+          <div class="email-meta">Основное письмо</div>
+          <div class="email-name">Серия · Main</div>
+        </div>
+        <span class="email-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="email-card" href="https://viewstripo.email/f4cf2a6e-1286-4880-be46-1a9b163d4f9a1750081409495" target="_blank" rel="noopener noreferrer">
+        <div>
+          <div class="email-meta">Напоминание</div>
+          <div class="email-name">Серия · Reminder</div>
+        </div>
+        <span class="email-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+
+    <div class="sub-heading">NNA (повторные продажи)</div>
+    <div class="email-group">
+      <a class="email-card" href="https://viewstripo.email/17e6b5e1-a6a6-453d-91a8-047410a024431739529583291" target="_blank" rel="noopener noreferrer">
+        <div>
+          <div class="email-meta">Основное письмо</div>
+          <div class="email-name">NNA · Main</div>
+        </div>
+        <span class="email-arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="email-card" href="https://viewstripo.email/5587ad97-97c5-4fa3-a135-629a2ee1df371739536762653" target="_blank" rel="noopener noreferrer">
+        <div>
+          <div class="email-meta">Напоминание</div>
+          <div class="email-name">NNA · Reminder</div>
+        </div>
+        <span class="email-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ─── Footer ───────────────────────────────────────────────── -->
+  <footer style="max-width:var(--content-max); padding-top:24px; border-top:1px solid var(--bdr); display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap">
+    <div style="font-size:12px; color:var(--text-3); line-height:1.6">
+      ООО «Русский Монетный Двор» · Digital-команда<br>
+      Документ актуален на август 2026 · обновляется по мере изменений
+    </div>
+    <div style="font-size:12px; color:var(--text-3)">
+      <strong style="color:var(--text-2)">rusdvor.ru</strong>
+    </div>
+  </footer>
+
+</main>
+</div>
+
+<!-- ═══ Модаль: Бриф лендинг ════════════════════════════════════ -->
+<div class="bm-overlay" id="bm-landing" role="dialog" aria-modal="true" aria-label="ТЗ: лендинг">
+  <div class="bm-modal">
+    <div class="bm-head">
+      <span class="bm-title">📋 ТЗ: Лендинг</span>
+      <button class="bm-close-btn" onclick="closeBrief('landing')" aria-label="Закрыть">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="bm-restored" id="bm-landing-restored" style="display:none">
+      <span>💾 Черновик восстановлен — данные не потерялись</span>
+      <button class="bm-restored-clear" onclick="clearBrief('landing')">Очистить</button>
+    </div>
+    <div class="bm-body">
+
+      <div class="bm-group">1 · Основное</div>
+      <div class="bm-row">
+        <label class="bm-lbl">Название товара<span class="bm-req">*</span></label>
+        <input class="bm-input" id="l-name" placeholder="напр. Медаль «Владимирская Богоматерь»">
+      </div>
+      <div class="bm-two">
+        <div class="bm-row">
+          <label class="bm-lbl">Тип<span class="bm-req">*</span></label>
+          <input class="bm-input" id="l-type" placeholder="медаль / монета / серия">
+        </div>
+        <div class="bm-row">
+          <label class="bm-lbl">Цена обычная<span class="bm-req">*</span></label>
+          <input class="bm-input" id="l-price" placeholder="4 990 ₽">
+        </div>
+      </div>
+      <div class="bm-row">
+        <label class="bm-lbl">Цена специальная</label>
+        <input class="bm-input" id="l-price-s" placeholder="3 490 ₽ (если есть)">
+      </div>
+
+      <div class="bm-group">2 · Контент страницы</div>
+      <div class="bm-row">
+        <label class="bm-lbl">Заголовок<span class="bm-req">*</span></label>
+        <input class="bm-input" id="l-h1" placeholder="Главный заголовок лендинга">
+      </div>
+      <div class="bm-row">
+        <label class="bm-lbl">Подзаголовок</label>
+        <input class="bm-input" id="l-h2" placeholder="Дополнительная строка под заголовком">
+      </div>
+      <div class="bm-row">
+        <label class="bm-lbl">УТП (уникальное торговое предложение)<span class="bm-req">*</span></label>
+        <input class="bm-input" id="l-utp" placeholder="Что делает товар особенным">
+      </div>
+      <div class="bm-row">
+        <label class="bm-lbl">Описание товара<span class="bm-req">*</span></label>
+        <textarea class="bm-textarea" id="l-desc" placeholder="Текст для блока описания на лендинге"></textarea>
+      </div>
+
+      <div class="bm-group">3 · Спецификация</div>
+      <div class="bm-two">
+        <div class="bm-row">
+          <label class="bm-lbl">Металл / проба<span class="bm-req">*</span></label>
+          <input class="bm-input" id="l-metal" placeholder="серебро 925">
+        </div>
+        <div class="bm-row">
+          <label class="bm-lbl">Исполнение</label>
+          <input class="bm-input" id="l-probe" placeholder="пруф / пруф-лайк">
+        </div>
+      </div>
+      <div class="bm-four">
+        <div class="bm-row">
+          <label class="bm-lbl">Размер</label>
+          <input class="bm-input" id="l-size" placeholder="40 мм">
+        </div>
+        <div class="bm-row">
+          <label class="bm-lbl">Вес</label>
+          <input class="bm-input" id="l-weight" placeholder="31 г">
+        </div>
+        <div class="bm-row">
+          <label class="bm-lbl">Тираж</label>
+          <input class="bm-input" id="l-qty" placeholder="3000 шт.">
+        </div>
+        <div class="bm-row">
+          <label class="bm-lbl">Год</label>
+          <input class="bm-input" id="l-year" placeholder="2026">
+        </div>
+      </div>
+      <div class="bm-two">
+        <div class="bm-row">
+          <label class="bm-lbl">В комплекте</label>
+          <input class="bm-input" id="l-kit" placeholder="футляр, сертификат">
+        </div>
+        <div class="bm-row">
+          <label class="bm-lbl">Особенности</label>
+          <input class="bm-input" id="l-feat" placeholder="голограмма, нумерация">
+        </div>
+      </div>
+
+      <div class="bm-group">4 · Реклама</div>
+      <div class="bm-two">
+        <div class="bm-row">
+          <label class="bm-lbl">Название РК<span class="bm-req">*</span></label>
+          <input class="bm-input" id="l-rk" placeholder="vladimirskaya_sep26">
+        </div>
+        <div class="bm-row">
+          <label class="bm-lbl">Дата запуска</label>
+          <input class="bm-input" id="l-date" placeholder="01.09.2026" type="text">
+        </div>
+      </div>
+      <div class="bm-row">
+        <label class="bm-lbl">Тема / рубрика</label>
+        <input class="bm-input" id="l-topic" placeholder="православие, коллекционирование">
+      </div>
+
+      <!-- Чеклист -->
+      <div class="bm-checklist">
+        <div class="bm-cl-title">Чеклист перед постановкой задачи</div>
+        <label class="bm-cl-item">
+          <input type="checkbox" class="bm-checkbox" data-brief="landing">
+          <span class="bm-cl-label">Пэкшоты товара готовы и будут приложены к карточке (аверс + реверс, PNG, от 1000×1000)</span>
+        </label>
+        <label class="bm-cl-item">
+          <input type="checkbox" class="bm-checkbox" data-brief="landing">
+          <span class="bm-cl-label">Текст описания написан и вычитан — уникальность ≥85% проверена на text.ru</span>
+        </label>
+        <label class="bm-cl-item">
+          <input type="checkbox" class="bm-checkbox" data-brief="landing">
+          <span class="bm-cl-label">Дата запуска рекламной кампании согласована с ответственным</span>
+        </label>
+      </div>
+    </div>
+    <div class="bm-foot">
+      <span class="bm-foot-hint">Заполни обязательные поля<br>и чеклист — кнопка активируется</span>
+      <button class="bm-copy-btn" id="bm-landing-copy" disabled onclick="copyBrief('landing')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Скопировать ТЗ
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Модаль: Бриф продукт ════════════════════════════════════ -->
+<div class="bm-overlay" id="bm-product" role="dialog" aria-modal="true" aria-label="ТЗ: карточка продукта">
+  <div class="bm-modal">
+    <div class="bm-head">
+      <span class="bm-title">📦 ТЗ: Карточка продукта</span>
+      <button class="bm-close-btn" onclick="closeBrief('product')" aria-label="Закрыть">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="bm-restored" id="bm-product-restored" style="display:none">
+      <span>💾 Черновик восстановлен — данные не потерялись</span>
+      <button class="bm-restored-clear" onclick="clearBrief('product')">Очистить</button>
+    </div>
+    <div class="bm-body">
+
+      <div class="bm-group">1 · Контент серии</div>
+      <div class="bm-row">
+        <label class="bm-lbl">Описание первой медали (открывает серию)<span class="bm-req">*</span></label>
+        <textarea class="bm-textarea" id="p-medal" placeholder="Подробное описание первой медали коллекции, от 1200 символов"></textarea>
+      </div>
+      <div class="bm-row">
+        <label class="bm-lbl">Описание коллекции в целом<span class="bm-req">*</span></label>
+        <textarea class="bm-textarea" id="p-collection" placeholder="О серии в целом — история, концепция, что объединяет медали, от 1200 символов"></textarea>
+      </div>
+      <div class="bm-row">
+        <label class="bm-lbl">Сюжет / концепция</label>
+        <input class="bm-input" id="p-plot" placeholder="напр. Православные святыни России">
+      </div>
+
+      <div class="bm-group">2 · Параметры серии</div>
+      <div class="bm-two">
+        <div class="bm-row">
+          <label class="bm-lbl">Количество медалей в серии</label>
+          <input class="bm-input" id="p-count" placeholder="12 шт.">
+        </div>
+        <div class="bm-row">
+          <label class="bm-lbl">Обычная цена первой медали</label>
+          <input class="bm-input" id="p-price" placeholder="4 990 ₽">
+        </div>
+      </div>
+      <div class="bm-row">
+        <label class="bm-lbl">Спец. цена первой медали</label>
+        <input class="bm-input" id="p-price-s" placeholder="3 490 ₽ (если есть)">
+      </div>
+
+      <!-- Чеклист -->
+      <div class="bm-checklist">
+        <div class="bm-cl-title">Чеклист перед постановкой задачи</div>
+        <label class="bm-cl-item">
+          <input type="checkbox" class="bm-checkbox" data-brief="product">
+          <span class="bm-cl-label">Пэкшоты всех медалей готовы — аверс + реверс для каждой, минимум 3 шт. (PNG, прозрачный фон)</span>
+        </label>
+        <label class="bm-cl-item">
+          <input type="checkbox" class="bm-checkbox" data-brief="product">
+          <span class="bm-cl-label">Оба описания написаны и вычитаны (каждое ≥1200 символов)</span>
+        </label>
+        <label class="bm-cl-item">
+          <input type="checkbox" class="bm-checkbox" data-brief="product">
+          <span class="bm-cl-label">Структура серии (количество медалей, сюжет) согласована с ответственным</span>
+        </label>
+      </div>
+    </div>
+    <div class="bm-foot">
+      <span class="bm-foot-hint">Заполни обязательные поля<br>и чеклист — кнопка активируется</span>
+      <button class="bm-copy-btn" id="bm-product-copy" disabled onclick="copyBrief('product')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Скопировать ТЗ
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="bm-toast" id="bm-toast">✓ Скопировано — вставьте в карточку YouGile</div>
+
+<script>
+// ── Theme ────────────────────────────────────────────────────────
+function toggleTheme() {
+  var root = document.documentElement;
+  var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  try { localStorage.setItem('rmd-reg-theme', next) } catch(e) {}
+}
+
+(function() {
+  try {
+    var t = localStorage.getItem('rmd-reg-theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  } catch(e) {}
+})();
+
+// ── Brief Generator ──────────────────────────────────────────────
+var _currentBrief = null;
+var _briefBound = {};
+
+function isDesktop() { return window.innerWidth >= 1100; }
+
+function openBrief(type) {
+  _currentBrief = type;
+  var overlay = document.getElementById('bm-' + type);
+  overlay.classList.add('is-open');
+  if (!isDesktop()) document.body.style.overflow = 'hidden';
+
+  // Restore draft from localStorage
+  var restored = restoreBriefDraft(type);
+  var badge = document.getElementById('bm-' + type + '-restored');
+  if (badge) badge.style.display = restored ? 'flex' : 'none';
+
+  // Bind input events once per brief type
+  if (!_briefBound[type]) {
+    overlay.querySelectorAll('.bm-input, .bm-textarea, .bm-checkbox').forEach(function(el) {
+      el.addEventListener('input',  function() { saveBriefDraft(type); validateBrief(type); });
+      el.addEventListener('change', function() { saveBriefDraft(type); validateBrief(type); });
+    });
+    _briefBound[type] = true;
+  }
+
+  validateBrief(type);
+  var first = overlay.querySelector('.bm-input, .bm-textarea');
+  if (first) setTimeout(function() { first.focus(); }, 280);
+}
+
+function closeBrief(type) {
+  document.getElementById('bm-' + type).classList.remove('is-open');
+  if (!isDesktop()) document.body.style.overflow = '';
+  _currentBrief = null;
+}
+
+function clearBrief(type) {
+  var overlay = document.getElementById('bm-' + type);
+  overlay.querySelectorAll('.bm-input, .bm-textarea').forEach(function(el) { el.value = ''; });
+  overlay.querySelectorAll('.bm-checkbox').forEach(function(cb) { cb.checked = false; });
+  clearBriefDraft(type);
+  var badge = document.getElementById('bm-' + type + '-restored');
+  if (badge) badge.style.display = 'none';
+  validateBrief(type);
+}
+
+// ── localStorage ─────────────────────────────────────────────────
+function saveBriefDraft(type) {
+  var data = {};
+  document.getElementById('bm-' + type).querySelectorAll('input[id], textarea[id]').forEach(function(el) {
+    data[el.id] = el.value;
+  });
+  try { localStorage.setItem('rmd-brief-' + type, JSON.stringify(data)); } catch(e) {}
+}
+
+function restoreBriefDraft(type) {
+  try {
+    var raw = localStorage.getItem('rmd-brief-' + type);
+    if (!raw) return false;
+    var data = JSON.parse(raw);
+    var anyFilled = false;
+    Object.keys(data).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && data[id]) { el.value = data[id]; anyFilled = true; }
+    });
+    return anyFilled;
+  } catch(e) { return false; }
+}
+
+function clearBriefDraft(type) {
+  try { localStorage.removeItem('rmd-brief-' + type); } catch(e) {}
+}
+
+// ── Validation ───────────────────────────────────────────────────
+function val(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+
+function validateBrief(type) {
+  var required = type === 'landing'
+    ? ['l-name','l-type','l-price','l-h1','l-utp','l-desc','l-metal','l-rk']
+    : ['p-medal','p-collection'];
+  var filled  = required.every(function(id) { return val(id).length > 0; });
+  var overlay = document.getElementById('bm-' + type);
+  var checked = Array.from(overlay.querySelectorAll('.bm-checkbox')).every(function(cb) { return cb.checked; });
+  document.getElementById('bm-' + type + '-copy').disabled = !(filled && checked);
+}
+
+// ── Copy ─────────────────────────────────────────────────────────
+function copyBrief(type) {
+  var text = type === 'landing' ? buildLandingText() : buildProductText();
+  var done = function() { showToast(); clearBriefDraft(type); closeBrief(type); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(function() { fallbackCopy(text, done); });
+  } else { fallbackCopy(text, done); }
+}
+
+function fallbackCopy(text, cb) {
+  var ta = document.createElement('textarea');
+  ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(ta);
+  if (cb) cb();
+}
+
+function showToast() {
+  var t = document.getElementById('bm-toast');
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 3200);
+}
+
+// Close on ESC / backdrop click (mobile only)
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && _currentBrief) closeBrief(_currentBrief);
+});
+document.querySelectorAll('.bm-overlay').forEach(function(ov) {
+  ov.addEventListener('click', function(e) {
+    if (e.target === ov && !isDesktop()) closeBrief(ov.id.replace('bm-', ''));
+  });
+});
+
+// ── Text builders ─────────────────────────────────────────────────
+function fld(label, id) { var v = val(id); return v ? label + ': ' + v + '\n' : ''; }
+
+function buildLandingText() {
+  var name = val('l-name') || 'Без названия';
+  return ('📋 ТЗ: ЛЕНДИНГ — ' + name + '\n' +
+    '══════════════════════════════\n\n' +
+    'ОСНОВНОЕ\n' +
+    fld('Название',           'l-name') +
+    fld('Тип товара',         'l-type') +
+    fld('Цена обычная',       'l-price') +
+    fld('Цена специальная',   'l-price-s') +
+    '\nКОНТЕНТ СТРАНИЦЫ\n' +
+    fld('Заголовок',          'l-h1') +
+    fld('Подзаголовок',       'l-h2') +
+    fld('УТП',                'l-utp') +
+    (val('l-desc') ? 'Описание товара:\n' + val('l-desc') + '\n' : '') +
+    '\nСПЕЦИФИКАЦИЯ\n' +
+    fld('Металл / проба',     'l-metal') +
+    fld('Исполнение',         'l-probe') +
+    fld('Размер',             'l-size') +
+    fld('Вес',                'l-weight') +
+    fld('Тираж',              'l-qty') +
+    fld('Год выпуска',        'l-year') +
+    fld('В комплекте',        'l-kit') +
+    fld('Особенности',        'l-feat') +
+    '\nРЕКЛАМА\n' +
+    fld('Название РК',        'l-rk') +
+    fld('Дата запуска',       'l-date') +
+    fld('Тема / рубрика',     'l-topic') +
+    '\n══════════════════════════════\n' +
+    '✅ Чеклист пройден: пэкшоты ✓ · текст вычитан ✓ · дата согласована ✓'
+  ).replace(/\n{3,}/g, '\n\n').trimEnd();
+}
+
+function buildProductText() {
+  return ('📦 ТЗ: КАРТОЧКА ПРОДУКТА (СЕРИЯ)\n' +
+    '══════════════════════════════\n\n' +
+    'ОПИСАНИЕ ПЕРВОЙ МЕДАЛИ\n' + val('p-medal') + '\n\n' +
+    'ОПИСАНИЕ КОЛЛЕКЦИИ\n' + val('p-collection') + '\n\n' +
+    'ПАРАМЕТРЫ СЕРИИ\n' +
+    fld('Сюжет / концепция',  'p-plot') +
+    fld('Количество медалей', 'p-count') +
+    fld('Цена обычная',       'p-price') +
+    fld('Цена специальная',   'p-price-s') +
+    '\n══════════════════════════════\n' +
+    '✅ Чеклист пройден: пэкшоты ✓ · описания вычитаны ✓ · структура согласована ✓'
+  ).replace(/\n{3,}/g, '\n\n').trimEnd();
+}
+
+// ── Drawer ───────────────────────────────────────────────────────
+function openDrawer() {
+  var drawer = document.getElementById('mobDrawer');
+  var backdrop = document.getElementById('mobBackdrop');
+  var burger = document.getElementById('mobBurger');
+  drawer.classList.add('is-open');
+  backdrop.classList.add('is-open');
+  burger.classList.add('is-open');
+  burger.setAttribute('aria-expanded', 'true');
+  document.body.style.overflow = 'hidden';
+  drawer.querySelector('.mob-close').focus();
+}
+function closeDrawer() {
+  var drawer = document.getElementById('mobDrawer');
+  var backdrop = document.getElementById('mobBackdrop');
+  var burger = document.getElementById('mobBurger');
+  drawer.classList.remove('is-open');
+  backdrop.classList.remove('is-open');
+  burger.classList.remove('is-open');
+  burger.setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeDrawer();
+});
+
+// ── Scrollspy ────────────────────────────────────────────────────
+(function() {
+  var links = document.querySelectorAll('.nav-link');
+  var sections = [];
+  // Собираем уникальные секции (sidebar + mob-drawer ссылаются на одни id)
+  var seen = {};
+  links.forEach(function(link) {
+    var id = link.getAttribute('href').slice(1);
+    if (!seen[id]) {
+      var el = document.getElementById(id);
+      if (el) { sections.push({ id: id, el: el }); seen[id] = true; }
+    }
+  });
+
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        var id = entry.target.getAttribute('id');
+        links.forEach(function(l) {
+          var match = l.getAttribute('href') === '#' + id;
+          l.classList.toggle('active', match);
+        });
+      }
+    });
+  }, { rootMargin: '-8% 0px -82% 0px' });
+
+  sections.forEach(function(s) { io.observe(s.el); });
+})();
+</script>
+</body>
+</html>
